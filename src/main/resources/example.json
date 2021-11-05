@@ -1,0 +1,528 @@
+{
+  "resourceType": "Bundle",
+  "id": "antibiogramIsNegativeAsBundleCollection",
+  "identifier": {
+    "system": "urn:ietf:rfc:3986",
+    "value": "urn:uuid:0c3201bd-1cbf-4d64-b04d-cd9187a4c6e0"
+  },
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae18-48abcadd8d90",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "diagnosticreport60",
+        "meta": {
+          "versionId": "1",
+          "profile": [
+            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-laboratory-report"
+          ]
+        },
+        "language": "en",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\t\t\t\t\t\t<p>This example is presented as a Collection bundle for ease of understanding. It makes no assumption towards any final implementation of using FHIR technically. </p>\n\t\t\t\t\t\t<p>Download and open this as XML in an editor to view XML annotations.</p>\n\t\t\t\t\t\t<p>ALL LOINC, SNOMED-CT CODES ETC. ARE USED FOR ILLUSTRATIVE PURPOSES AND DO NOT NECESSARILY PRESENT A CLINICALLY CORRECT REAL LIFE LABORATORY REPORT</p>\n\t\t\t\t\t\t<h2>A narrative SHALL be included</h2>\n\t\t\t\t\t\t<p>Specifically, the strong recommendation of HL7 concerning the use of the narrative &quot;to support human-consumption as a fallback&quot; is important in the context of the laboratory report. Indeed, this &quot;human-consumption&quot; aspect actually concerns the inclusion of limited xhtml content and as such an effortless implementation to visualize the content of the report by consuming systems is guarantueed. Also, for systems that might not initially choose to consume reports in a structured way, this guarantuees a way to at least visualize and present the content to the user.</p>\n\t\t\t\t\t\t<p>The exact presentation is left at the discretion of the providing party.</p>\n\t\t\t\t\t\t<pre>Specimen\t\t\tIntubation Aspirate\nMacroscopic observation\t\tMatig purulent\nCulture\t\t\t\tCommensalen +-</pre>\n\t\t\t\t\t</div>"
+        },
+        "identifier": [
+          {
+            "system": "http://acme.com/lab/reports",
+            "value": "11530231003.2015110413180000000"
+          }
+        ],
+        "basedOn": [
+          {
+            "reference": "ServiceRequest/servicerequest60"
+          }
+        ],
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              },
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "MB",
+                "display": "Microbiology"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "18769-0",
+              "display": "Microbial susceptibility tests Set"
+            }
+          ],
+          "text": "Microbial susceptibility tests"
+        },
+        "subject": {
+          "reference": "Patient/patient1"
+        },
+        "effectiveDateTime": "2015-11-03T13:18:00+01:00",
+        "issued": "2015-11-04T13:18:00+01:00",
+        "performer": [
+          {
+            "reference": "Organization/organization10"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/practitioner11"
+          }
+        ],
+        "specimen": [
+          {
+            "reference": "Specimen/specimen60"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/mac60"
+          },
+          {
+            "reference": "Observation/cult60"
+          }
+        ],
+        "conclusion": "This is our conclusion"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae18-48abcadd8d91",
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "specimen60",
+        "meta": {
+          "versionId": "1",
+          "profile": [
+            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-specimen-laboratory"
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p><b>identifier</b>: id: 1</p><p><b>status</b>: available</p><p><b>type</b>: <span title=\"Codes: {http://snomed.info/sct 119295008}\">A string can be added to nuance or explain.</span></p><p><b>receivedTime</b>: 2015-11-04</p><p><b>note</b>: Some extra relevant information concerning the specimen</p></div>"
+        },
+        "identifier": [
+          {
+            "system": "https://www.GTL-LABO.be/",
+            "value": "1"
+          }
+        ],
+        "status": "available",
+        "type": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "119295008",
+              "display": "Aspirate"
+            }
+          ],
+          "text": "A string can be added to nuance or explain."
+        },
+        "receivedTime": "2015-11-04",
+        "note": [
+          {
+            "text": "Some extra relevant information concerning the specimen"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae09-48abcadd9d92",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "mac60",
+        "meta": {
+          "profile": [
+            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-observation-laboratory"
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p></p><p><b>code</b>: <span title=\"Codes: {http://loinc.org 74574-5}\">Macroscopic observation</span></p><p><b>subject</b>: <a href=\"#Patient_patient1\">See above (Patient/patient1)</a></p><p><b>effective</b>: Nov 4, 2015, 2:16:00 PM</p><p><b>issued</b>: Nov 4, 2015, 2:16:00 PM</p><p><b>performer</b>: <a href=\"#Practitioner_practitioner11\">See above (Practitioner/practitioner11)</a></p><p><b>value</b>: matig purulent</p></div>"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "74574-5",
+              "display": "Macroscopic observation [Interpretation] in Unspecified specimen Narrative"
+            }
+          ],
+          "text": "Macroscopic observation"
+        },
+        "subject": {
+          "reference": "Patient/patient1"
+        },
+        "effectiveDateTime": "2015-11-04T09:16:00-05:00",
+        "issued": "2015-11-04T09:16:00-05:00",
+        "performer": [
+          {
+            "reference": "Practitioner/practitioner11"
+          }
+        ],
+        "valueString": "matig purulent"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae09-48abcadd9d93",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "cult60",
+        "meta": {
+          "profile": [
+            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-observation-laboratory"
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p></p><p><b>code</b>: <span title=\"Codes: {http://loinc.org 43411-8}\">Culture</span></p><p><b>subject</b>: <a href=\"#Patient_patient1\">See above (Patient/patient1)</a></p><p><b>effective</b>: Nov 4, 2015, 2:16:00 PM</p><p><b>issued</b>: Nov 4, 2015, 2:16:00 PM</p><p><b>performer</b>: <a href=\"#Practitioner_practitioner11\">See above (Practitioner/practitioner11)</a></p><p><b>value</b>: Commensalen +-</p></div>"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "43411-8",
+              "display": "Bacteria identified in Aspirate by Culture"
+            }
+          ],
+          "text": "Culture"
+        },
+        "subject": {
+          "reference": "Patient/patient1"
+        },
+        "effectiveDateTime": "2015-11-04T09:16:00-05:00",
+        "issued": "2015-11-04T09:16:00-05:00",
+        "performer": [
+          {
+            "reference": "Practitioner/practitioner11"
+          }
+        ],
+        "valueString": "Commensalen +-"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae18-48abcadd8d94",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "organization10",
+        "meta": {
+          "profile": [
+            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-organization"
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p><b>identifier</b>: Medical License number: 81165343998 (OFFICIAL)</p><p><b>active</b>: true</p><p><b>type</b>: <span title=\"Codes: {https://www.ehealth.fgov.be/standards/fhir/CodeSystem/cd-hcparty orglaboratory}\">Independent laboratory</span></p><p><b>name</b>: GTL - General Testing Laboratory</p><p><b>telecom</b>: ph: 322675199(WORK)</p><p><b>address</b>: Vulcansstraat 120, 1000 Brussel(WORK)</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MD",
+                  "display": "Medical License number"
+                }
+              ]
+            },
+            "system": "https://www.ehealth.fgov.be/standards/fhir/NamingSystem/nihdi",
+            "value": "81165343998"
+          }
+        ],
+        "active": true,
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://www.ehealth.fgov.be/standards/fhir/CodeSystem/cd-hcparty",
+                "code": "orglaboratory"
+              }
+            ]
+          }
+        ],
+        "name": "GTL - General Testing Laboratory",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "322675199",
+            "use": "work"
+          }
+        ],
+        "address": [
+          {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/language",
+                "valueCode": "nl"
+              }
+            ],
+            "use": "work",
+            "type": "both",
+            "text": "Vulcansstraat 120, 1000 Brussel",
+            "line": [
+              "Vulcansstraat 120"
+            ],
+            "_line": [
+              {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName",
+                    "valueString": "Vulcansstraat"
+                  },
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumber",
+                    "valueString": "120"
+                  }
+                ]
+              }
+            ],
+            "city": "Brussel",
+            "postalCode": "1000",
+            "country": "BE"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae18-48abcadd8d95",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "practitioner11",
+        "meta": {
+          "profile": [
+            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-practitioner"
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p><b>identifier</b>: id: 554488997 (OFFICIAL)</p><p><b>name</b>: Nicolas Davoust (OFFICIAL)</p><p><b>telecom</b>: <a href=\"mailto:nicolas.davoust@gtl.be\">nicolas.davoust@gtl.be</a>, ph: 022675198(WORK), fax: 022675209(WORK)</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "system": "https://www.ehealth.fgov.be/standards/fhir/NamingSystem/nihdi",
+            "value": "554488997"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Davoust",
+            "given": [
+              "Nicolas"
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "email",
+            "value": "nicolas.davoust@gtl.be",
+            "use": "work"
+          },
+          {
+            "system": "phone",
+            "value": "022675198",
+            "use": "work"
+          },
+          {
+            "system": "fax",
+            "value": "022675209",
+            "use": "work"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae18-48abcadd8d96",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "patient1",
+        "meta": {
+          "profile": [
+            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-patient"
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p><b>identifier</b>: id: 79121137740 (OFFICIAL)</p><p><b>active</b>: true</p><p><b>name</b>: Josephine Nessa La Paradisio </p><p><b>telecom</b>: <a href=\"mailto:nessa.laparadisio@belgium.be\">nessa.laparadisio@belgium.be</a>, <a href=\"tel:+322476792979\">+322476792979</a>, <a href=\"tel:+3226718655\">+3226718655</a>, <a href=\"tel:+322476799\">+322476799</a></p><p><b>gender</b>: female</p><p><b>birthDate</b>: 1979-12-11</p><p><b>address</b>: Sloordelle 42, 1160 Oudergem(HOME)</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "system": "https://www.ehealth.fgov.be/standards/fhir/NamingSystem/ssin",
+            "value": "79121137740"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "family": "La Paradisio",
+            "given": [
+              "Josephine",
+              "Nessa"
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "email",
+            "value": "nessa.laparadisio@belgium.be"
+          },
+          {
+            "system": "phone",
+            "value": "+322476792979",
+            "use": "mobile"
+          },
+          {
+            "system": "phone",
+            "value": "+3226718655",
+            "use": "home"
+          },
+          {
+            "system": "phone",
+            "value": "+322476799",
+            "use": "work"
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1979-12-11",
+        "_birthDate": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+              "valueDateTime": "1979-12-11T13:28:17-05:00"
+            }
+          ]
+        },
+        "address": [
+          {
+            "use": "home",
+            "type": "both",
+            "text": "Sloordelle 42, 1160 Oudergem",
+            "line": [
+              "Sloordelle 42"
+            ],
+            "city": "Oudergem",
+            "postalCode": "1160",
+            "country": "BE"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae18-48abcadd8d97",
+      "resource": {
+        "resourceType": "ServiceRequest",
+        "id": "servicerequest60",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p><b>identifier</b>: id: 12334546</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>category</b>: <span title=\"Codes: {http://snomed.info/sct 108252007}\">Laboratory procedure</span></p><p><b>subject</b>: <a href=\"#Patient_patient1\">See above (Patient/patient1)</a></p><p><b>authoredOn</b>: Nov 1, 2015, 1:41:00 PM</p><p><b>requester</b>: <a href=\"#Practitioner_practitioner1\">See above (Practitioner/practitioner1)</a></p><p><b>specimen</b>: <a href=\"#Specimen_specimen60\">See above (Specimen/specimen60)</a></p></div>"
+        },
+        "identifier": [
+          {
+            "system": "https://www.GTL-LABO.be/orderingsystem",
+            "value": "12334546"
+          }
+        ],
+        "status": "active",
+        "intent": "order",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "108252007",
+                "display": "Laboratory procedure"
+              }
+            ]
+          }
+        ],
+        "subject": {
+          "reference": "Patient/patient1"
+        },
+        "authoredOn": "2015-11-01T14:41:00+01:00",
+        "requester": {
+          "reference": "Practitioner/practitioner1"
+        },
+        "specimen": [
+          {
+            "reference": "Specimen/specimen60"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7c16c9c0-c471-4098-ae18-48abcadd8d98",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "practitioner1",
+        "meta": {
+          "profile": [
+            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-practitioner"
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p><b>identifier</b>: id: 18749704477 (OFFICIAL)</p><p><b>name</b>: Katherine Pulaski (OFFICIAL)</p><p><b>telecom</b>: <a href=\"mailto:katherine.pulaski@enterprisehospital.be\">katherine.pulaski@enterprisehospital.be</a>, ph: 022675198(WORK), fax: 022675209(WORK)</p><p><b>address</b>: Jupiterlaan 5, 1853 Grimbergen(HOME)</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "system": "https://www.ehealth.fgov.be/standards/fhir/NamingSystem/nihdi",
+            "value": "18749704477"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Pulaski",
+            "given": [
+              "Katherine"
+            ],
+            "suffix": [
+              "MD"
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "email",
+            "value": "katherine.pulaski@enterprisehospital.be",
+            "use": "work"
+          },
+          {
+            "system": "phone",
+            "value": "022675198",
+            "use": "work"
+          },
+          {
+            "system": "fax",
+            "value": "022675209",
+            "use": "work"
+          }
+        ],
+        "address": [
+          {
+            "use": "home",
+            "text": "Jupiterlaan 5, 1853 Grimbergen",
+            "line": [
+              "Jupiterlaan 5"
+            ],
+            "city": "Grimbergen",
+            "postalCode": "1853",
+            "country": "BE"
+          }
+        ]
+      }
+    }
+  ]
+}
