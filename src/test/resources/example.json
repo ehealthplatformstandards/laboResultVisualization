@@ -83,13 +83,13 @@
         ],
         "result": [
           {
-            "reference": "Observation/mac60"
+            "reference": "urn:uuid:7c16c9c0-c471-4098-ae09-48abcadd9d92"
           },
           {
-            "reference": "Observation/cult60"
+            "reference": "urn:uuid:7c16c9c0-c471-4098-ae09-48abcadd9d93"
           }
         ],
-        "conclusion": "This is our conclusion"
+        "conclusion": "The conclustion of this example"
       }
     },
     {
