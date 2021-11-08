@@ -4,6 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.CustomThymeleafNarrativeGenerator;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.parser.IParser;
+import org.apache.commons.io.IOUtils;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.utilities.xhtml.XhtmlComposer;
@@ -16,8 +17,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.Objects;
 
 public class HtmlPreview implements BundleProcessor {
     private final Visualization visualization;
@@ -43,12 +46,16 @@ public class HtmlPreview implements BundleProcessor {
 
         final XhtmlComposer doc = new XhtmlComposer(false, true);
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try {
-            doc.compose(bos, ((DiagnosticReport) reparsed.getEntry().get(0).getResource()).getText().getDiv());
+        try(OutputStreamWriter sw = new OutputStreamWriter(bos, StandardCharsets.UTF_8)) {
+            sw.append("<html><head><style>");
+            sw.append(new String(IOUtils.toByteArray(Objects.requireNonNull(this.getClass().getResourceAsStream("/narratives/narrative.css")))));
+            sw.append("</style></head><body>\r\n");
+            sw.append(((DiagnosticReport) reparsed.getEntry().get(0).getResource()).getText().getDiv().toString());
+            sw.append("</body></html>\r\n");
         } catch (IOException e) {
-            System.err.println(MessageFormat.format("Cannot generate HTML: {0}", e));
-            return 1;
+            e.printStackTrace();
         }
+
 
         byte[] bytes = bos.toByteArray();
         visualization.getOutput().println(new String(bytes, StandardCharsets.UTF_8));
