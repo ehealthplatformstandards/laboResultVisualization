@@ -50,7 +50,10 @@ public class HtmlPreview implements BundleProcessor {
             sw.append("<html><head><style>");
             sw.append(new String(IOUtils.toByteArray(Objects.requireNonNull(this.getClass().getResourceAsStream("/narratives/narrative.css")))));
             sw.append("</style></head><body>\r\n");
-            sw.append(((DiagnosticReport) reparsed.getEntry().get(0).getResource()).getText().getDiv().toString());
+            sw.append(((DiagnosticReport) reparsed.getEntry().stream()
+                    .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
+                    .getResource()).getText().getDiv().toString());
             sw.append("</body></html>\r\n");
         } catch (IOException e) {
             e.printStackTrace();

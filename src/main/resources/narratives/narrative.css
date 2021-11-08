@@ -32,11 +32,11 @@ table.hapiTableOfValues tbody tr td {
 
 /* Even and odd row formatting */
 tr.hapiTableOfValuesRowOdd td {
-    background: #C0C0C0;
+    background: rgba(192, 192, 192, 0.2);
 }
 
 tr.hapiTableOfValuesRowEven td {
-    background: #F0F0F0;
+    background: rgba(240, 240, 240, 0.2);
 }
 
 /********************************************************
