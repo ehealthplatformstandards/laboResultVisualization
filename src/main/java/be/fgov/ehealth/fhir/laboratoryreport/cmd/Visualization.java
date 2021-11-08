@@ -23,10 +23,13 @@ import static java.nio.file.Paths.get;
 @Command(name = "Visualization", mixinStandardHelpOptions = true)
 public class Visualization implements Callable<Integer> {
     @Option(names = { "-s", "--style" }, description = "Style")
-    File css;
+    protected File css;
 
-    @Parameters(index = "0") Action action;
-    @Parameters(index = "1") File bundleFile;
+    @Option(names = { "-d", "--display" }, description = "Display generated document in visualizer")
+    protected Boolean display = false;
+
+    @Parameters(index = "0") private Action action;
+    @Parameters(index = "1") private File bundleFile;
 
     private final PrintStream output;
 
@@ -37,9 +40,10 @@ public class Visualization implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         final FhirContext ctx = FhirContext.forR4();
-        final IParser parser = ctx.newJsonParser().setPrettyPrint(true);
+        final IParser parser = ctx.newJsonParser().setPrettyPrint(true).setSuppressNarratives(true);
 
-        final Bundle bundle = parser.setSuppressNarratives(true).parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8));
+        final Bundle bundle = parser.parseResource(Bundle.class, parser.encodeResourceToString(parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8))));
+
         return action.execute(this, ctx, bundle);
     }
 
