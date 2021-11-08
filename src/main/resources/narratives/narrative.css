@@ -1,9 +1,9 @@
 
-BODY {
+body {
     font-family: sans-serif;
 }
 
-DIV.hapiHeaderText {
+div.hapiHeaderText {
     font-size: 1.3em;
 }
 
@@ -12,7 +12,12 @@ DIV.hapiHeaderText {
 * with multiple columns (e.g. the table of Observations
 * in a Diagnostic Report for a lab test)
 ********************************************************/
-TABLE.hapiTableOfValues THEAD TR TD {
+table.hapiTableOfValues {
+    width: 800px;
+    margin-top: 24px;
+}
+
+table.hapiTableOfValues thead tr td {
     background: #A0A0F0;
     color: #000080;
     font-size: 1.2em;
@@ -20,16 +25,17 @@ TABLE.hapiTableOfValues THEAD TR TD {
     padding: 5px;
 }
 
-TABLE.hapiTableOfValues TBODY TR TD {
+table.hapiTableOfValues tbody tr td {
     padding-left: 5px;
     padding-right: 5px;
 }
 
 /* Even and odd row formatting */
-TR.hapiTableOfValuesRowOdd TD {
+tr.hapiTableOfValuesRowOdd td {
     background: #C0C0C0;
 }
-TR.hapiTableOfValuesRowEven TD {
+
+tr.hapiTableOfValuesRowEven td {
     background: #F0F0F0;
 }
 
@@ -38,14 +44,23 @@ TR.hapiTableOfValuesRowEven TD {
 * tables have two columns, one for the property name, and
 * one for the property value
 ********************************************************/
+table.hapiPropertyTable {
+    width: 800px;
+    margin-top: 24px;
+}
 
-TABLE.hapiPropertyTable TBODY TR TD:FIRST-CHILD {
+table.hapiPropertyTable thead tr td {
+    background: #C0C0C0;
+    padding-top: 1em;
+}
+
+table.hapiPropertyTable tbody tr td:first-child {
     text-align: right;
     background: #C0C0C0;
     border-top: 1px solid #EEE;
 }
 
-TABLE.hapiPropertyTable TBODY TR TD {
+table.hapiPropertyTable tbody tr td {
     vertical-align: top;
     padding: 4px;
     margin: 1px;

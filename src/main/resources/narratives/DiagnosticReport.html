@@ -13,13 +13,19 @@
         display value on the first coding, and if that's missing too show a default "Untitled"
         value
         */-->
-        <th:block th:if="${not resource.code.textElement.empty} or ${resource.code.coding.empty}" th:text="${resource.code.textElement.value}"/>
-        <th:block th:if="${not resource.code.coding.empty} and ${resource.code.textElement.empty} and ${not resource.code.coding[0].displayElement.empty}" th:text="${resource.code.coding[0].display}"/>
-        <th:block th:if="${not resource.code.coding.empty} and ${resource.code.textElement.empty} and ${resource.code.coding[0].displayElement.empty}" th:text="'Untitled Diagnostic Report'"/>
+        <th:block th:if="${not resource.code.textElement.empty} or ${resource.code.coding.empty}"
+                  th:text="${resource.code.textElement.value}"/>
+        <th:block
+                th:if="${not resource.code.coding.empty} and ${resource.code.textElement.empty} and ${not resource.code.coding[0].displayElement.empty}"
+                th:text="${resource.code.coding[0].display}"/>
+        <th:block
+                th:if="${not resource.code.coding.empty} and ${resource.code.textElement.empty} and ${resource.code.coding[0].displayElement.empty}"
+                th:text="'Untitled Diagnostic Report'"/>
         <!--/*--> Complete Blood Count <!--*/-->
     </div>
 
     <table class="hapiPropertyTable">
+        <thead><tr><td colspan="2">Result information</td></tr></thead>
         <tbody>
         <tr th:if="${not resource.statusElement.empty}">
             <td>Status</td>
@@ -34,6 +40,31 @@
             <td th:narrative="${resource.conclusionElement}">No conclusion was integrated in this report</td>
         </tr>
         </tbody>
+
+        <th:block th:if="${not resource.subject.resource.empty}">
+            <thead><tr><td colspan="2">Patient details</td></tr></thead>
+            <tbody>
+            <tr th:if="${not resource.subject.resource.identifier.empty}">
+                <td>Identifier</td>
+                <td th:narrative="${resource.subject.resource.identifier[0]}"></td>
+            </tr>
+            <tr th:if="${not resource.subject.resource.name.empty}">
+                <td>Patient name</td>
+                <td th:text="${resource.subject.resource.name[0].nameAsSingleString}">--</td>
+            </tr>
+            <tr th:if="${not resource.subject.resource.birthDateElement.empty}">
+                <td>Date of birth</td>
+                <td><span
+                        th:text="${#dates.format(resource.subject.resource.birthDateElement.value,'dd MMMM yyyy')}"></span>
+                </td>
+            </tr>
+            <tr th:if="${not resource.subject.resource.address.empty}">
+                <td>Address</td>
+                <td th:narrative="${resource.subject.resource.address[0]}"></td>
+            </tr>
+            </tbody>
+        </th:block>
+
     </table>
 
     <table class="hapiTableOfValues" th:if="${not #lists.isEmpty(resource.result)}">
@@ -48,21 +79,32 @@
         </thead>
         <tbody>
         <th:block th:each="result,rowStat : ${resource.result}">
-            <tr th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'" class="hapiTableOfValuesRowOdd">
+            <tr th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
+                class="hapiTableOfValuesRowOdd">
                 <td>
-                    <th:block th:if="${not result.resource.code.textElement.empty}" th:text="${result.resource.code.textElement.value}"/>
-                    <th:block th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${not result.resource.code.coding[0].displayElement.empty}" th:text="${result.resource.code.coding[0].display}"/>
-                    <th:block th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${result.resource.code.coding[0].displayElement.empty}" th:text="'?'"/>
+                    <th:block th:if="${not result.resource.code.textElement.empty}"
+                              th:text="${result.resource.code.textElement.value}"/>
+                    <th:block
+                            th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${not result.resource.code.coding[0].displayElement.empty}"
+                            th:text="${result.resource.code.coding[0].display}"/>
+                    <th:block
+                            th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${result.resource.code.coding[0].displayElement.empty}"
+                            th:text="'?'"/>
                     <!--/*--> Hb <!--*/-->
                 </td>
                 <td th:narrative="${result.resource.value}">--</td>
                 <td>
-                    <th:block th:if="${not result.resource.interpretation.empty} and ${not result.resource.interpretation[0].textElement.empty}" th:text="${result.resource.interpretation[0].text}"/>
-                    <th:block th:if="${not result.resource.interpretation.empty} and ${result.resource.interpretation[0].textElement.empty} and ${not result.resource.interpretation[0].coding.empty} and ${not result.resource.interpretation[0].coding[0].displayElement.empty}" th:text="${result.resource.interpretation.coding[0].display}"/>
+                    <th:block
+                            th:if="${not result.resource.interpretation.empty} and ${not result.resource.interpretation[0].textElement.empty}"
+                            th:text="${result.resource.interpretation[0].text}"/>
+                    <th:block
+                            th:if="${not result.resource.interpretation.empty} and ${result.resource.interpretation[0].textElement.empty} and ${not result.resource.interpretation[0].coding.empty} and ${not result.resource.interpretation[0].coding[0].displayElement.empty}"
+                            th:text="${result.resource.interpretation.coding[0].display}"/>
                     <!--/*--> N <!--*/-->
                 </td>
                 <td>
-                    <th:block th:if="${not result.resource.referenceRange.empty} and ${not result.resource.referenceRange[0].empty}">
+                    <th:block
+                            th:if="${not result.resource.referenceRange.empty} and ${not result.resource.referenceRange[0].empty}">
                         <th:block th:narrative="${result.resource.referenceRange[0].low}">--</th:block>
                         -
                         <th:block th:narrative="${result.resource.referenceRange[0].high}">--</th:block>
@@ -73,35 +115,53 @@
 
             <th:block th:switch="${fhirVersion}">
                 <th:block th:case="'DSTU2'">
-                    <tr th:if="${not result.resource.commentsElement.empty}" th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'" class="hapiTableOfValuesRowOdd">
+                    <tr th:if="${not result.resource.commentsElement.empty}"
+                        th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
+                        class="hapiTableOfValuesRowOdd">
                         <td th:text="${result.resource.commentsElement.value}" colspan="5">This is a comment</td>
                     </tr>
                 </th:block>
                 <th:block th:case="'DSTU2_HL7ORG'">
-                    <tr th:if="${not result.resource.commentElement.empty}" th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'" class="hapiTableOfValuesRowOdd">
+                    <tr th:if="${not result.resource.commentElement.empty}"
+                        th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
+                        class="hapiTableOfValuesRowOdd">
                         <td th:text="${result.resource.commentElement.value}" colspan="5">This is a comment</td>
                     </tr>
                 </th:block>
                 <th:block th:case="'DSTU2_1'">
-                    <tr th:if="${not result.resource.commentElement.empty}" th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'" class="hapiTableOfValuesRowOdd">
+                    <tr th:if="${not result.resource.commentElement.empty}"
+                        th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
+                        class="hapiTableOfValuesRowOdd">
                         <td th:text="${result.resource.commentElement.value}" colspan="5">This is a comment</td>
                     </tr>
                 </th:block>
                 <th:block th:case="'DSTU3'">
-                    <tr th:if="${not result.resource.commentElement.empty}" th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'" class="hapiTableOfValuesRowOdd">
+                    <tr th:if="${not result.resource.commentElement.empty}"
+                        th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
+                        class="hapiTableOfValuesRowOdd">
                         <td th:text="${result.resource.commentElement.value}" colspan="5">This is a comment</td>
                     </tr>
                 </th:block>
                 <th:block th:case="*">
-                    <tr th:if="${not result.resource.note.empty}" th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'" class="hapiTableOfValuesRowOdd">
+                    <tr th:if="${not result.resource.note.empty}"
+                        th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
+                        class="hapiTableOfValuesRowOdd">
                         <td th:text="${result.resource.note[0].text}" colspan="5">This is a comment</td>
                     </tr>
                 </th:block>
             </th:block>
 
             <!--/* The following are just examples that don't appear in the generated narrative -->
-            <tr class="hapiTableOfValuesRowEven"><td>Lkc</td><td>198 g/L</td><td>H</td><td>78 g/L - 99 g/L</td><td>final</td></tr>
-            <tr class="hapiTableOfValuesRowEven"><td colspan="5">Yet another comment</td></tr>
+            <tr class="hapiTableOfValuesRowEven">
+                <td>Lkc</td>
+                <td>198 g/L</td>
+                <td>H</td>
+                <td>78 g/L - 99 g/L</td>
+                <td>final</td>
+            </tr>
+            <tr class="hapiTableOfValuesRowEven">
+                <td colspan="5">Yet another comment</td>
+            </tr>
             <!--*/-->
 
         </th:block>
