@@ -1,24 +1,18 @@
 package be.fgov.ehealth.fhir.laboratoryreport.cmd;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.narrative.CustomThymeleafNarrativeGenerator;
 import ca.uhn.fhir.parser.IParser;
 import org.hl7.fhir.r4.model.Bundle;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 
 import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
 
 @Command(name = "Visualization", mixinStandardHelpOptions = true)
 public class Visualization implements Callable<Integer> {

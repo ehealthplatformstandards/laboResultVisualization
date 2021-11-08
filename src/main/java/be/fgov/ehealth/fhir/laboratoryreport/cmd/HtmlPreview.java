@@ -8,7 +8,6 @@ import org.apache.commons.io.IOUtils;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.utilities.xhtml.XhtmlComposer;
-import org.hl7.fhir.utilities.xhtml.XhtmlDocument;
 
 import java.awt.Desktop;
 import java.io.BufferedOutputStream;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.Objects;
 
 public class HtmlPreview implements BundleProcessor {
@@ -49,7 +47,9 @@ public class HtmlPreview implements BundleProcessor {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try(OutputStreamWriter sw = new OutputStreamWriter(bos, StandardCharsets.UTF_8)) {
             sw.append("<html><head><style>");
-            sw.append(new String(IOUtils.toByteArray(Objects.requireNonNull(visualization.css != null ? new FileInputStream(visualization.css) : this.getClass().getResourceAsStream("/narratives/narrative.css")))));
+            sw.append(new String(IOUtils.toByteArray(Objects.requireNonNull(
+                    visualization.css != null ? new FileInputStream(visualization.css) : this.getClass().getResourceAsStream("/narratives/narrative.css")
+            ))));
             sw.append("</style></head><body>\r\n");
             sw.append(((DiagnosticReport) reparsed.getEntry().stream()
                     .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()

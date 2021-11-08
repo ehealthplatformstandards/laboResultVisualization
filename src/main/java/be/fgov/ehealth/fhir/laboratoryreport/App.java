@@ -3,7 +3,6 @@ package be.fgov.ehealth.fhir.laboratoryreport;
 import be.fgov.ehealth.fhir.laboratoryreport.cmd.Visualization;
 import picocli.CommandLine;
 
-import java.io.IOException;
 import java.io.PrintStream;
 
 public class App
