@@ -14,6 +14,7 @@ import java.awt.Desktop;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -48,7 +49,7 @@ public class HtmlPreview implements BundleProcessor {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try(OutputStreamWriter sw = new OutputStreamWriter(bos, StandardCharsets.UTF_8)) {
             sw.append("<html><head><style>");
-            sw.append(new String(IOUtils.toByteArray(Objects.requireNonNull(this.getClass().getResourceAsStream("/narratives/narrative.css")))));
+            sw.append(new String(IOUtils.toByteArray(Objects.requireNonNull(visualization.css != null ? new FileInputStream(visualization.css) : this.getClass().getResourceAsStream("/narratives/narrative.css")))));
             sw.append("</style></head><body>\r\n");
             sw.append(((DiagnosticReport) reparsed.getEntry().stream()
                     .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
