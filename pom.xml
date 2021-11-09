@@ -5,7 +5,21 @@
   <artifactId>fhir-visualization-tool</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <build>
+<distributionManagement>
+    <repository>
+        <id>maven.taktik.be</id>
+        <url>
+            https://maven.taktik.be/content/repositories/releases/
+        </url>
+    </repository>
+    <snapshotRepository>
+        <id>maven.taktik.be</id>
+        <url>
+            https://maven.taktik.be/content/repositories/snapshots/
+        </url>
+    </snapshotRepository>
+</distributionManagement>
+<build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

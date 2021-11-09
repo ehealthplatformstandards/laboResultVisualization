@@ -1,11 +1,15 @@
-
 body {
     font-family: sans-serif;
+    margin: 48px;
 }
 
 div.hapiHeaderText {
-    font-size: 1.3em;
+    font-size: 1.5em;
+    color: #0484DF;
+    text-transform: capitalize;
 }
+
+
 
 /********************************************************
 * The following section is used for tables of values
@@ -13,30 +17,34 @@ div.hapiHeaderText {
 * in a Diagnostic Report for a lab test)
 ********************************************************/
 table.hapiTableOfValues {
-    width: 800px;
+    width: 100%;
+    max-width: 880px;
     margin-top: 24px;
+    border-spacing: 0;
+    border-collapse: collapse;
+    border: 1px solid #DBDFE3;
 }
 
 table.hapiTableOfValues thead tr td {
-    background: #A0A0F0;
-    color: #000080;
-    font-size: 1.2em;
-    font-weight: bold;
-    padding: 5px;
+    background: #EEF2F6;
+    color: #5D7184;
+    font-size: .8em;
+    padding: 1em;
+    text-transform: uppercase;
+    border: 1px solid #DBDFE3;
 }
 
 table.hapiTableOfValues tbody tr td {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: .5em 1em;
 }
 
-/* Even and odd row formatting */
-tr.hapiTableOfValuesRowOdd td {
-    background: rgba(192, 192, 192, 0.2);
+table.hapiTableOfValues tbody tr.title td {
+    color: #0484DF;
+    background: #EEF2F6 !important;
 }
 
-tr.hapiTableOfValuesRowEven td {
-    background: rgba(240, 240, 240, 0.2);
+table.hapiTableOfValues tbody tr:nth-child(even) td {
+    background: #f7f9fb;
 }
 
 /********************************************************
@@ -45,23 +53,35 @@ tr.hapiTableOfValuesRowEven td {
 * one for the property value
 ********************************************************/
 table.hapiPropertyTable {
-    width: 800px;
+    width: 100%;
+    max-width: 880px;
     margin-top: 24px;
+    border-spacing: 0;
+    border-collapse: collapse;
 }
 
 table.hapiPropertyTable thead tr td {
-    background: #C0C0C0;
-    padding-top: 1em;
+    background: #EEF2F6;
+    color: #5D7184;
+    font-size: .8em;
+    padding: 1em;
+    text-transform: uppercase;
+    border: 1px solid #DBDFE3;
 }
 
 table.hapiPropertyTable tbody tr td:first-child {
     text-align: right;
-    background: #C0C0C0;
-    border-top: 1px solid #EEE;
+    text-transform: uppercase;
+    color: #5D7184;
+    border: 1px solid #DBDFE3;
+    font-size: .8em;
+    vertical-align: baseline;
 }
 
 table.hapiPropertyTable tbody tr td {
     vertical-align: top;
-    padding: 4px;
+    padding: .5em 1em;
     margin: 1px;
+    border: 1px solid #DBDFE3;
+    vertical-align: baseline;
 }

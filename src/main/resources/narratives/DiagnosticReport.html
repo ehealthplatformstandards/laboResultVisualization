@@ -79,7 +79,7 @@
         </thead>
         <tbody>
         <th:block th:each="result,rowStat : ${resource.result}">
-            <tr th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'" class="hapiTableOfValuesRowOdd">
+            <tr th:class="${not result.resource.hasMember.empty }? 'title' : (${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven')" class="hapiTableOfValuesRowOdd">
                 <td>
                     <th:block th:if="${not result.resource.code.textElement.empty}"
                               th:text="${result.resource.code.textElement.value}"/>
