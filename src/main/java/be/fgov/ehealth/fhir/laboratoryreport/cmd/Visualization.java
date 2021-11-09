@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 
 import static java.nio.file.Files.readAllBytes;
 
-@Command(name = "Visualization", mixinStandardHelpOptions = true)
+@Command(name = "fhirpreview", mixinStandardHelpOptions = true)
 public class Visualization implements Callable<Integer> {
     @Option(names = { "-s", "--style" }, description = "Style")
     protected File css;
@@ -22,7 +22,7 @@ public class Visualization implements Callable<Integer> {
     @Option(names = { "-d", "--display" }, description = "Display generated document in visualizer")
     protected Boolean display = false;
 
-    @Parameters(index = "0") private Action action;
+    @Parameters(description = "Action to perform on file. May be one of ${COMPLETION-CANDIDATES}", index = "0") private Action action;
     @Parameters(index = "1") private File bundleFile;
 
     private final PrintStream output;
