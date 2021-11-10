@@ -5,7 +5,7 @@
     <servers>
         <server>
             <id>maven.taktik.be</id>
-            <username>ad_taktik_com</username>
+            <username>${env.MAVEN_TAKTIK_USERNAME}</username>
             <password>${env.MAVEN_TAKTIK_TOKEN}</password>
         </server>
     </servers>
