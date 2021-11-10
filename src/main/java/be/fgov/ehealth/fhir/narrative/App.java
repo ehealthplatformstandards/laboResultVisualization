@@ -1,6 +1,6 @@
-package be.fgov.ehealth.fhir.laboratoryreport;
+package be.fgov.ehealth.fhir.narrative;
 
-import be.fgov.ehealth.fhir.laboratoryreport.cmd.Visualization;
+import be.fgov.ehealth.fhir.narrative.cmd.Visualization;
 import picocli.CommandLine;
 
 import java.io.PrintStream;

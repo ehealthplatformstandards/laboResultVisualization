@@ -1,4 +1,4 @@
-package be.fgov.ehealth.fhir.laboratoryreport.cmd;
+package be.fgov.ehealth.fhir.narrative.cmd;
 
 import org.hl7.fhir.r4.model.Bundle;
 

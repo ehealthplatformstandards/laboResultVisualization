@@ -1,4 +1,4 @@
-package be.fgov.ehealth.fhir.laboratoryreport.cmd;
+package be.fgov.ehealth.fhir.narrative.cmd;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.CustomThymeleafNarrativeGenerator;
@@ -12,7 +12,7 @@ public class HtmlNarrativeEmbed implements BundleProcessor {
     private INarrativeGenerator generator;
 
     public HtmlNarrativeEmbed(Visualization visualization, FhirContext ctx) {
-        this.generator = new CustomThymeleafNarrativeGenerator("file:src/main/resources/narrative.properties");
+        this.generator = new CustomThymeleafNarrativeGenerator("file:src/main/resources/narratives/diagnosticreport/narrative.properties");
         this.visualization = visualization;
         this.ctx = ctx;
     }

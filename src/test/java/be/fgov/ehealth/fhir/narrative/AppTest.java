@@ -1,4 +1,4 @@
-package be.fgov.ehealth.fhir.laboratoryreport;
+package be.fgov.ehealth.fhir.narrative;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

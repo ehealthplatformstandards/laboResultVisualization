@@ -52,7 +52,7 @@
             <configuration>
               <archive>
                 <manifest>
-                  <mainClass>be.fgov.ehealth.fhir.laboratoryreport.App</mainClass>
+                  <mainClass>be.fgov.ehealth.fhir.narrative.App</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>

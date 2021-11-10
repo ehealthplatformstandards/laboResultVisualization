@@ -1,4 +1,4 @@
-package be.fgov.ehealth.fhir.laboratoryreport.cmd;
+package be.fgov.ehealth.fhir.narrative.cmd;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 
+import static be.fgov.ehealth.fhir.narrative.utils.FhirNarrativeUtils.stripNarratives;
 import static java.nio.file.Files.readAllBytes;
 
 @Command(name = "fhirpreview", mixinStandardHelpOptions = true)
@@ -34,13 +35,8 @@ public class Visualization implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         final FhirContext ctx = FhirContext.forR4();
-        final IParser parser = ctx.newJsonParser().setPrettyPrint(true).setSuppressNarratives(true);
-
-        final Bundle bundle = parser.parseResource(Bundle.class,
-                parser.encodeResourceToString(
-                        parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8))
-                )
-        );
+        final IParser parser = ctx.newJsonParser();
+        final Bundle bundle = stripNarratives(ctx, parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8)));
 
         return action.execute(this, ctx, bundle);
     }
