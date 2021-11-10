@@ -12,7 +12,7 @@ public class HtmlNarrativeEmbed implements BundleProcessor {
     private INarrativeGenerator generator;
 
     public HtmlNarrativeEmbed(Visualization visualization, FhirContext ctx) {
-        this.generator = new CustomThymeleafNarrativeGenerator("file:src/main/resources/narratives/diagnosticreport/narrative.properties");
+        this.generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/diagnosticreport/narrative.properties");
         this.visualization = visualization;
         this.ctx = ctx;
     }

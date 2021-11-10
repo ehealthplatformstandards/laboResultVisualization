@@ -18,7 +18,7 @@ public class DiagnosticReportHtmlGenerator {
     private INarrativeGenerator generator;
 
     public DiagnosticReportHtmlGenerator() {
-        this.generator = new CustomThymeleafNarrativeGenerator("file:src/main/resources/narratives/diagnosticreport/narrative.properties");
+        this.generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/diagnosticreport/narrative.properties");
     }
 
     public DiagnosticReportHtmlGenerator(INarrativeGenerator generator) {
