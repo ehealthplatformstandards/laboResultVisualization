@@ -36,7 +36,11 @@ public class Visualization implements Callable<Integer> {
         final FhirContext ctx = FhirContext.forR4();
         final IParser parser = ctx.newJsonParser().setPrettyPrint(true).setSuppressNarratives(true);
 
-        final Bundle bundle = parser.parseResource(Bundle.class, parser.encodeResourceToString(parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8))));
+        final Bundle bundle = parser.parseResource(Bundle.class,
+                parser.encodeResourceToString(
+                        parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8))
+                )
+        );
 
         return action.execute(this, ctx, bundle);
     }
