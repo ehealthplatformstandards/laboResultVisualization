@@ -110,23 +110,4 @@
       <version>4.6.2</version>
     </dependency>
   </dependencies>
-  <!--plugins>
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <version>3.2.0</version>
-      <configuration>
-        <archive>
-          <manifest>
-            <addClassPath>true</addClassPath>
-            <classpathPrefix>lib/</classpathPrefix>
-            <mainClass>laboResultVisualization.App</mainClass>
-          </manifest>
-          <manifestEntries>
-            <Class-Path>.</Class-Path>
-          </manifestEntries>
-        </archive>
-      </configuration>
-    </plugin>
-  </plugins-->
 </project>
