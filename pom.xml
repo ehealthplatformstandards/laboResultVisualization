@@ -77,13 +77,19 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-r4</artifactId>
-      <version>4.1.0</version>
+      <version>5.5.3</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.fhir/ucum -->
+    <dependency>
+      <groupId>org.fhir</groupId>
+      <artifactId>ucum</artifactId>
+      <version>1.0.3</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-base -->
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-base</artifactId>
-      <version>4.1.0</version>
+      <version>5.5.3</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
     <dependency>
