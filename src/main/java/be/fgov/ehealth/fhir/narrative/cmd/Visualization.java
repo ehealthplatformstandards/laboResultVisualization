@@ -46,10 +46,10 @@ public class Visualization implements Callable<Integer> {
     public Integer call() throws Exception {
         if (!StringUtils.isEmpty(validate)) {
             final Pair<Boolean, String> validated = new FhirValidator(bundleFile.getAbsolutePath(), validate).validate();
-            final Boolean errors = validated.getKey();
+            final Boolean errors = validated.getLeft();
             if (errors) {
                 if (display) {
-                    String html = validated.getValue();
+                    String html = validated.getRight();
                     final File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.laboratoryreport.validation", ".html");
                     try (OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
                         os.write(html.getBytes());

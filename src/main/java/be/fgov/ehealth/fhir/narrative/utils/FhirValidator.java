@@ -42,7 +42,7 @@ public class FhirValidator {
         final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
 
         // return hasError and html
-        return new ImmutablePair<>(errors != 0, toHml(records));
+        return Pair.of(errors != 0, toHml(records));
     }
 
     private String toHml(final List<ValidationRecord> records) {
