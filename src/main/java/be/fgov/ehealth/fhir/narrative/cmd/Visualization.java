@@ -1,14 +1,17 @@
 package be.fgov.ehealth.fhir.narrative.cmd;
 
+import be.fgov.ehealth.fhir.narrative.utils.FhirValidator;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import kotlin.Pair;
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.Bundle;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-import java.io.File;
-import java.io.PrintStream;
+import java.awt.*;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 
@@ -23,6 +26,13 @@ public class Visualization implements Callable<Integer> {
     @Option(names = { "-d", "--display" }, description = "Display generated document in visualizer")
     protected Boolean display = false;
 
+    @Option(names = { "-v", "--validate" }, arity = "0..1", fallbackValue = "https://build.fhir.org/ig/hl7-be/hl7-be-fhir-laboratory-report",
+            description = {
+            "Validate the resource.",
+            "If absent, validation is not performed.",
+            "Optionally specify a URL to an implementation guide to be used for validation. (default: ${DEFAULT-VALUE})." })
+    protected String validate;
+
     @Parameters(description = "Action to perform on file. May be one of ${COMPLETION-CANDIDATES}", index = "0") private Action action;
     @Parameters(index = "1") private File bundleFile;
 
@@ -34,6 +44,22 @@ public class Visualization implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        if (!StringUtils.isEmpty(validate)) {
+            final Pair<Boolean, String> validated = new FhirValidator(bundleFile.getAbsolutePath(), validate).validate();
+            final Boolean errors = validated.getFirst();
+            if (errors) {
+                if (display) {
+                    String html = validated.getSecond();
+                    final File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.laboratoryreport.validation", ".html");
+                    try (OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
+                        os.write(html.getBytes());
+                    }
+                    Desktop.getDesktop().browse(tmpFile.toURI());
+                }
+                return 0;
+            }
+        }
+
         final FhirContext ctx = FhirContext.forR4();
         final IParser parser = ctx.newJsonParser();
         final Bundle bundle = stripNarratives(ctx, parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8)));

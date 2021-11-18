@@ -26,11 +26,9 @@ public class HtmlPreview implements BundleProcessor {
 
     @Override
     public Integer process(Bundle bundle) {
-        FhirContext fhirContext = this.ctx;
-
         byte[] html;
         try {
-            html = htmlGenerator.generateHtmlRepresentation(fhirContext, bundle, visualization.css != null ?
+            html = htmlGenerator.generateHtmlRepresentation(ctx, bundle, visualization.css != null ?
                     new String(IOUtils.toByteArray(new FileInputStream(visualization.css)), StandardCharsets.UTF_8)
                     : null);
         } catch (IOException e) {
