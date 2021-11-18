@@ -30,7 +30,7 @@ public class Visualization implements Callable<Integer> {
             description = {
             "Validate the resource.",
             "If absent, validation is not performed.",
-            "Optionally specify a URL to an implementation guide to be used for validation. (default: ${DEFAULT-VALUE})." })
+            "Optionally specify a URL to an implementation guide to be used for validation. (fallback: ${FALLBACK-VALUE})." })
     protected String validate;
 
     @Parameters(description = "Action to perform on file. May be one of ${COMPLETION-CANDIDATES}", index = "0") private Action action;
