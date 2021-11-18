@@ -3,8 +3,8 @@ package be.fgov.ehealth.fhir.narrative.cmd;
 import be.fgov.ehealth.fhir.narrative.utils.FhirValidator;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
-import kotlin.Pair;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hl7.fhir.r4.model.Bundle;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -46,10 +46,10 @@ public class Visualization implements Callable<Integer> {
     public Integer call() throws Exception {
         if (!StringUtils.isEmpty(validate)) {
             final Pair<Boolean, String> validated = new FhirValidator(bundleFile.getAbsolutePath(), validate).validate();
-            final Boolean errors = validated.getFirst();
+            final Boolean errors = validated.getKey();
             if (errors) {
                 if (display) {
-                    String html = validated.getSecond();
+                    String html = validated.getValue();
                     final File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.laboratoryreport.validation", ".html");
                     try (OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
                         os.write(html.getBytes());

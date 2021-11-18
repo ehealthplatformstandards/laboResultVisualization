@@ -1,11 +1,10 @@
 package be.fgov.ehealth.fhir.narrative.utils;
 
-import kotlin.Pair;
 import org.apache.commons.lang3.StringUtils;
-import org.hl7.fhir.r5.model.ImplementationGuide;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hl7.fhir.r5.model.OperationOutcome;
 import org.hl7.fhir.r5.model.Resource;
-import org.hl7.fhir.r5.model.StructureDefinition;
 import org.hl7.fhir.utilities.TimeTracker;
 import org.hl7.fhir.utilities.VersionUtilities;
 import org.hl7.fhir.validation.ValidationEngine;
@@ -43,7 +42,7 @@ public class FhirValidator {
         final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
 
         // return hasError and html
-        return new Pair<>(errors != 0, toHml(records));
+        return new ImmutablePair<>(errors != 0, toHml(records));
     }
 
     private String toHml(final List<ValidationRecord> records) {
