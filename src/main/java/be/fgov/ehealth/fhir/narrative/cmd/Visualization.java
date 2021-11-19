@@ -1,6 +1,6 @@
 package be.fgov.ehealth.fhir.narrative.cmd;
 
-import be.fgov.ehealth.fhir.narrative.utils.FhirValidator;
+import be.fgov.ehealth.fhir.narrative.option.FhirValidator;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import org.apache.commons.lang3.StringUtils;

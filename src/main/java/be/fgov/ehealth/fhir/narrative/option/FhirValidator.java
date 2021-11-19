@@ -1,4 +1,4 @@
-package be.fgov.ehealth.fhir.narrative.utils;
+package be.fgov.ehealth.fhir.narrative.option;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
