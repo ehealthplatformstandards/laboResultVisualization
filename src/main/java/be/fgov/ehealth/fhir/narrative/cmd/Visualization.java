@@ -45,7 +45,7 @@ public class Visualization implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         if (!StringUtils.isEmpty(validate)) {
-            final Pair<Boolean, String> validated = new FhirValidator(bundleFile.getAbsolutePath(), validate).validate();
+            final Pair<Boolean, String> validated = new FhirValidator(output, bundleFile.getAbsolutePath(), validate).validate();
             final Boolean errors = validated.getLeft();
             if (errors) {
                 if (display) {

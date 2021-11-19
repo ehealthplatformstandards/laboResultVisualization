@@ -12,24 +12,35 @@ import org.hl7.fhir.validation.cli.model.CliContext;
 import org.hl7.fhir.validation.cli.services.HTMLOutputGenerator;
 import org.hl7.fhir.validation.cli.services.ValidationService;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FhirValidator {
 
     private final ValidationService validationService = new ValidationService();
-    private final CliContext cliContext;
+    private final String source;
+    private final String ig;
+    private final PrintStream ps;
 
-    public FhirValidator(String source, String ig) {
-        cliContext = new CliContext();
+    public FhirValidator(final PrintStream ps, final String source, final String ig) {
+        this.ps = ps;
+        this.source = source;
+        this.ig = ig;
+    }
+
+    public Pair<Boolean, String> validate() throws Exception {
+        // redirect System.out.println from ValidationService into custom PrintStream
+        final PrintStream old = System.out;
+        System.setOut(ps);
+
+        final CliContext cliContext = new CliContext();
         cliContext.setSv(VersionUtilities.getCurrentPackageVersion("4.0"));
         if (StringUtils.isNotEmpty(ig)) {
             cliContext.addIg(ig);
         }
         cliContext.addSource(source);
-    }
 
-    public Pair<Boolean, String> validate() throws Exception {
         // initialize validator engine
         final List<ValidationRecord> records = new ArrayList<>();
         final TimeTracker tt = new TimeTracker();
@@ -40,7 +51,11 @@ public class FhirValidator {
         final Resource resource = validator.validate(cliContext.getSources(), cliContext.getProfiles(), records);
         final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
 
-        // return hasError and html
+        // put old PrintStream back as System.out
+        System.out.flush();
+        System.setOut(old);
+
+        // return hasErrors and html
         return Pair.of(errors != 0, toHml(records));
     }
 
