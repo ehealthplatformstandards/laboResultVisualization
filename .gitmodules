@@ -1,0 +1,3 @@
+[submodule "hl7-be-fhir-laboratory-report"]
+	path = hl7-be-fhir-laboratory-report
+	url = https://github.com/hl7-be/hl7-be-fhir-laboratory-report.git
