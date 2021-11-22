@@ -3,16 +3,15 @@ package be.fgov.ehealth.fhir.narrative.cmd;
 import be.fgov.ehealth.fhir.narrative.option.FhirValidator;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hl7.fhir.r4.model.Bundle;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
+import picocli.CommandLine.*;
+import picocli.CommandLine.Model.CommandSpec;
 
 import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 import static be.fgov.ehealth.fhir.narrative.utils.FhirNarrativeUtils.stripNarratives;
@@ -30,11 +29,14 @@ public class Visualization implements Callable<Integer> {
             description = {
             "Validate the resource.",
             "If absent, validation is not performed.",
-            "Optionally specify a URL to an implementation guide to be used for validation. (fallback: ${FALLBACK-VALUE})." })
-    protected String validate;
+            "Optionally specify a list of URLs, seperated by a comma, to implementation guides to be used for validation. (fallback: ${FALLBACK-VALUE})." },
+            split = ",")
+    protected String[] validate;
 
     @Parameters(description = "Action to perform on file. May be one of ${COMPLETION-CANDIDATES}", index = "0") private Action action;
     @Parameters(index = "1") private File bundleFile;
+
+    @Spec private CommandSpec spec;
 
     private final PrintStream output;
 
@@ -44,12 +46,15 @@ public class Visualization implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        if (!StringUtils.isEmpty(validate)) {
-            final Pair<Boolean, String> validated = new FhirValidator(output, bundleFile.getAbsolutePath(), validate).validate();
+        final ParseResult pr = spec.commandLine().getParseResult();
+        final boolean shouldValidate = pr.hasMatchedOption('v');
+
+        if (shouldValidate) {
+            final Pair<Boolean, String> validated = new FhirValidator(output, Arrays.asList(validate)).validate(bundleFile.getAbsolutePath());
             final Boolean errors = validated.getLeft();
             if (errors) {
                 if (display) {
-                    String html = validated.getRight();
+                    final String html = validated.getRight();
                     final File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.laboratoryreport.validation", ".html");
                     try (OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
                         os.write(html.getBytes());
