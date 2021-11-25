@@ -50,8 +50,8 @@ public class Visualization implements Callable<Integer> {
         final boolean shouldValidate = pr.hasMatchedOption('v');
 
         if (shouldValidate) {
-            final Pair<Boolean, String> validated = new FhirValidator(output, Arrays.asList(implementationGuideUrls)).validate(bundleFile.getAbsolutePath());
-            final Boolean errors = validated.getLeft();
+            final Pair<Integer, String> validated = new FhirValidator(output, Arrays.asList(implementationGuideUrls)).validate(bundleFile.getAbsolutePath());
+            final boolean errors = validated.getLeft() != null && validated.getLeft() > 0;
             if (errors) {
                 if (display) {
                     final String html = validated.getRight();

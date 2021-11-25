@@ -29,7 +29,7 @@ public class FhirValidator {
         cliContext.setIgs(implementationGuideUrls);
     }
 
-    public Pair<Boolean, String> validate(final String source) throws Exception {
+    public Pair<Integer, String> validate(final String source) throws Exception {
         // initialize validator engine
         final TimeTracker tt = new TimeTracker();
         final String definitions = VersionUtilities.packageForVersion(cliContext.getSv()) + "#" + VersionUtilities.getCurrentVersion(cliContext.getSv());
@@ -44,7 +44,7 @@ public class FhirValidator {
         final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
 
         // return hasErrors and html
-        return Pair.of(errors != 0, toHml(records));
+        return Pair.of(errors, toHml(records));
     }
 
     private String toHml(final List<ValidationRecord> records) {
