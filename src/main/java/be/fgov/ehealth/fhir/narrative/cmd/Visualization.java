@@ -31,7 +31,7 @@ public class Visualization implements Callable<Integer> {
             "If absent, validation is not performed.",
             "Optionally specify a list of URLs, seperated by a comma, to implementation guides to be used for validation. (fallback: ${FALLBACK-VALUE})." },
             split = ",")
-    protected String[] validate;
+    protected String[] implementationGuideUrls;
 
     @Parameters(description = "Action to perform on file. May be one of ${COMPLETION-CANDIDATES}", index = "0") private Action action;
     @Parameters(index = "1") private File bundleFile;
@@ -50,7 +50,7 @@ public class Visualization implements Callable<Integer> {
         final boolean shouldValidate = pr.hasMatchedOption('v');
 
         if (shouldValidate) {
-            final Pair<Boolean, String> validated = new FhirValidator(output, Arrays.asList(validate)).validate(bundleFile.getAbsolutePath());
+            final Pair<Boolean, String> validated = new FhirValidator(output, Arrays.asList(implementationGuideUrls)).validate(bundleFile.getAbsolutePath());
             final Boolean errors = validated.getLeft();
             if (errors) {
                 if (display) {

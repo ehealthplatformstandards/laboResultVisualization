@@ -60,6 +60,8 @@ public class AppTest
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     Path absolutePath = f.toAbsolutePath();
 
+                    System.out.println("Converting "+absolutePath);
+
                     App.commandLine(new String[] {"html", absolutePath.toString()}, new PrintStream(bos));
 
                     byte[] bytes = bos.toByteArray();

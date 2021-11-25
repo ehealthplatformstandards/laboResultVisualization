@@ -13,19 +13,20 @@ import org.hl7.fhir.validation.cli.services.HTMLOutputGenerator;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 public class FhirValidator {
 
     private final BeValidationService validationService;
     private final CliContext cliContext;
 
-    public FhirValidator(final PrintStream ps, final List<String> igs) throws Exception {
+    public FhirValidator(final PrintStream ps, final List<String> implementationGuideUrls) {
         this.validationService = new BeValidationService(ps);
         cliContext = new CliContext();
         cliContext.setSv(VersionUtilities.getCurrentPackageVersion("4.0"));
-        cliContext.setIgs(igs);
+        cliContext.setIgs(implementationGuideUrls);
     }
 
     public Pair<Boolean, String> validate(final String source) throws Exception {
@@ -35,7 +36,7 @@ public class FhirValidator {
         final BeValidationEngine validator = validationService.initializeValidator(cliContext, definitions, tt);
 
         // add source
-        cliContext.setSources(Arrays.asList(source));
+        cliContext.setSources(singletonList(source));
 
         // validate
         final List<ValidationRecord> records = new ArrayList<>();
