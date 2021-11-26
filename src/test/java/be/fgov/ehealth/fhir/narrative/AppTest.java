@@ -114,7 +114,7 @@ public class AppTest
 
         String result = new String(bos.toByteArray(), StandardCharsets.UTF_8);
 
-        assertTrue( result.contains("<html") );
+        assertTrue( result.contains("  Load FHIR v4.0 from hl7.fhir.r4.core#4.0.1") );
     }
 
     /**
