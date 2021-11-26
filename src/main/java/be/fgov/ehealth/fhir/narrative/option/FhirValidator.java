@@ -21,26 +21,36 @@ public class FhirValidator {
 
     private final BeValidationService validationService;
     private final CliContext cliContext;
+    private final BeValidationEngine validator;
+    private final TimeTracker tt = new TimeTracker();
 
-    public FhirValidator(final PrintStream ps, final List<String> implementationGuideUrls) {
+    public FhirValidator(final PrintStream ps, final List<String> implementationGuideUrls) throws Exception {
         this.validationService = new BeValidationService(ps);
         cliContext = new CliContext();
         cliContext.setSv(VersionUtilities.getCurrentPackageVersion("4.0"));
         cliContext.setIgs(implementationGuideUrls);
+
+        final String definitions = VersionUtilities.packageForVersion(cliContext.getSv()) + "#" + VersionUtilities.getCurrentVersion(cliContext.getSv());
+        validator = validationService.initializeValidator(cliContext, definitions, tt);
     }
 
     public Pair<Integer, String> validate(final String source) throws Exception {
-        // initialize validator engine
-        final TimeTracker tt = new TimeTracker();
-        final String definitions = VersionUtilities.packageForVersion(cliContext.getSv()) + "#" + VersionUtilities.getCurrentVersion(cliContext.getSv());
-        final BeValidationEngine validator = validationService.initializeValidator(cliContext, definitions, tt);
-
         // add source
         cliContext.setSources(singletonList(source));
 
         // validate
         final List<ValidationRecord> records = new ArrayList<>();
         final Resource resource = validator.validate(cliContext.getSources(), cliContext.getProfiles(), records);
+        final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
+
+        // return hasErrors and html
+        return Pair.of(errors, toHml(records));
+    }
+
+    public Pair<Integer, String> validate(final byte[] data) throws Exception {
+        // validate
+        final List<ValidationRecord> records = new ArrayList<>();
+        final Resource resource = validator.validateContent(singletonList(data), cliContext.getProfiles(), records);
         final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
 
         // return hasErrors and html

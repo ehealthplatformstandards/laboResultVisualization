@@ -1,5 +1,6 @@
 package org.hl7.fhir.validation;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.hl7.fhir.r5.context.TerminologyCache;
 import org.hl7.fhir.r5.model.FhirPublication;
 import org.hl7.fhir.r5.model.OperationOutcome;
@@ -7,16 +8,18 @@ import org.hl7.fhir.r5.model.StringType;
 import org.hl7.fhir.r5.utils.ToolingExtensions;
 import org.hl7.fhir.utilities.TimeTracker;
 import org.hl7.fhir.utilities.Utilities;
+import org.hl7.fhir.utilities.npm.FilesystemPackageCacheManager;
+import org.hl7.fhir.utilities.npm.ToolsVersion;
 import org.hl7.fhir.utilities.validation.ValidationMessage;
 import org.hl7.fhir.validation.cli.model.CliContext;
 import org.hl7.fhir.validation.cli.services.StandAloneValidatorFetcher;
 import org.hl7.fhir.validation.cli.services.ValidationService;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
 
 public class BeValidationService extends ValidationService {
-
     private final PrintStream ps;
 
     public BeValidationService(PrintStream ps) {
@@ -28,7 +31,6 @@ public class BeValidationService extends ValidationService {
     public BeValidationEngine initializeValidator(CliContext cliContext, String definitions, TimeTracker tt) throws Exception {
         tt.milestone();
 
-
         ps.print("  Load FHIR v" + cliContext.getSv() + " from " + definitions);
         BeValidationEngine validator = new BeValidationEngine(ps, definitions, cliContext.getSv(), tt);
         FhirPublication ver = FhirPublication.fromCode(cliContext.getSv());
@@ -39,10 +41,8 @@ public class BeValidationService extends ValidationService {
         String txver = validator.setTerminologyServer(cliContext.getTxServer(), cliContext.getTxLog(), ver);
         ps.println(" - Version " + txver + " (" + tt.milestone() + ")");
         validator.setDebug(cliContext.isDoDebug());
-        Iterator var9 = cliContext.getIgs().iterator();
 
-        while(var9.hasNext()) {
-            String src = (String)var9.next();
+        for(String src: cliContext.getIgs()) {
             igLoader.loadIg(validator.getIgs(), validator.getBinaries(), src, cliContext.isRecursive());
         }
 
