@@ -1,0 +1,53 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="observations (items)">
+<th:block th:each="result,rowStat : ${items}">
+    <tr th:class="${not result.resource.hasMember.empty }? 'title' : (${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven')" class="hapiTableOfValuesRowOdd">
+        <td>
+            <th:block th:if="${not result.resource.code.textElement.empty}"
+                      th:text="${result.resource.code.textElement.value}"/>
+            <th:block
+                    th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${not result.resource.code.coding[0].displayElement.empty}"
+                    th:text="${result.resource.code.coding[0].display}"/>
+            <th:block
+                    th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${result.resource.code.coding[0].displayElement.empty}"
+                    th:text="'?'"/>
+            <!--/*--> Hb <!--*/-->
+        </td>
+        <td th:narrative="${result.resource.value}">--</td>
+        <td>
+            <th:block
+                    th:if="${not result.resource.interpretation.empty} and ${not result.resource.interpretation[0].textElement.empty}"
+                    th:text="${result.resource.interpretation[0].text}"/>
+            <th:block
+                    th:if="${not result.resource.interpretation.empty} and ${result.resource.interpretation[0].textElement.empty} and ${not result.resource.interpretation[0].coding.empty} and ${not result.resource.interpretation[0].coding[0].displayElement.empty}"
+                    th:text="${result.resource.interpretation.coding[0].display}"/>
+            <!--/*--> N <!--*/-->
+        </td>
+        <td>
+            <th:block
+                    th:if="${not result.resource.referenceRange.empty} and ${not result.resource.referenceRange[0].empty}">
+                <th:block th:narrative="${result.resource.referenceRange[0].low}">--</th:block>
+                -
+                <th:block th:narrative="${result.resource.referenceRange[0].high}">--</th:block>
+            </th:block>
+        </td>
+        <td th:text="${result.resource.statusElement.value}">final</td>
+    </tr>
+    <tr th:replace="@{observations} :: observations (items=${result.resource.hasMember})"></tr>
+    <tr th:if="${not result.resource.note.empty}"
+        th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
+        class="hapiTableOfValuesRowOdd">
+        <td th:text="${result.resource.note[0].text}" colspan="5">This is a comment</td>
+    </tr>
+</th:block>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->
