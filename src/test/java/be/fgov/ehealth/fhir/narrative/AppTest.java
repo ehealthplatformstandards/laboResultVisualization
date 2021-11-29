@@ -130,7 +130,7 @@ public class AppTest
 
                     System.out.println("Converting "+absolutePath);
 
-                    App.commandLine(new String[] {"-d", "html", absolutePath.toString()}, new PrintStream(bos));
+                    App.commandLine(new String[] {"html", absolutePath.toString()}, new PrintStream(bos));
 
                     byte[] bytes = bos.toByteArray();
                     String result = new String(bytes, StandardCharsets.UTF_8);

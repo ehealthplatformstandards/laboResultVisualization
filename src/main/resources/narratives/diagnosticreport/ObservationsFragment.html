@@ -5,10 +5,10 @@
 </head>
 <body>
 <!--*/-->
-<th:block th:fragment="observations (items)">
+<th:block th:fragment="observations (items,level)">
 <th:block th:each="result,rowStat : ${items}">
-    <tr th:class="${not result.resource.hasMember.empty }? 'title' : (${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven')" class="hapiTableOfValuesRowOdd">
-        <td>
+    <tr th:class="'level_'+${level} + ' ' + (${not result.resource.hasMember.empty }? 'title' : (${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'))" class="hapiTableOfValuesRowOdd">
+        <td class="label">
             <th:block th:if="${not result.resource.code.textElement.empty}"
                       th:text="${result.resource.code.textElement.value}"/>
             <th:block
@@ -39,7 +39,7 @@
         </td>
         <td th:text="${result.resource.statusElement.value}">final</td>
     </tr>
-    <tr th:replace="@{observations} :: observations (items=${result.resource.hasMember})"></tr>
+    <tr th:replace="@{observations} :: observations (items=${result.resource.hasMember},level=${level}+1)"></tr>
     <tr th:if="${not result.resource.note.empty}"
         th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
         class="hapiTableOfValuesRowOdd">

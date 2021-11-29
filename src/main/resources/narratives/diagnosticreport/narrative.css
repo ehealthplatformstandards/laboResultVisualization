@@ -40,9 +40,11 @@ table.hapiTableOfValues tbody tr td {
 
 table.hapiTableOfValues tbody tr.title td {
     color: #0484DF;
-    background: #EEF2F6 !important;
 }
 
+table.hapiTableOfValues tbody tr.title.level_0 td {
+    background: #deeeff;
+}
 table.hapiTableOfValues tbody tr:nth-child(even) td {
     background: #f7f9fb;
 }
@@ -84,4 +86,36 @@ table.hapiPropertyTable tbody tr td {
     margin: 1px;
     border: 1px solid #DBDFE3;
     vertical-align: baseline;
+}
+
+tr.level_2 td.label {
+    padding-left: 2em;
+}
+
+tr.level_3 td.label {
+    padding-left: 2em;
+}
+
+tr.level_4 td.label {
+    padding-left: 3em;
+}
+
+tr.level_5 td.label {
+    padding-left: 3em;
+}
+
+tr.level_6 td.label {
+    padding-left: 4em;
+}
+
+tr.level_7 td.label {
+    padding-left: 4em;
+}
+
+tr.level_8 td.label {
+    padding-left: 5em;
+}
+
+tr.level_9 td.label {
+    padding-left: 6em;
 }
