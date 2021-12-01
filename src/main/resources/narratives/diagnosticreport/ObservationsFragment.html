@@ -30,11 +30,16 @@
             <!--/*--> N <!--*/-->
         </td>
         <td>
-            <th:block
-                    th:if="${not result.resource.referenceRange.empty} and ${not result.resource.referenceRange[0].empty}">
-                <th:block th:narrative="${result.resource.referenceRange[0].low}">--</th:block>
-                -
-                <th:block th:narrative="${result.resource.referenceRange[0].high}">--</th:block>
+            <th:block th:each="ref,rowStat : ${result.resource.referenceRange}">
+                <th:block th:if="${not ref.low.empty} and ${not ref.high.empty}">
+                    <th:block th:narrative="${result.resource.referenceRange[0].low}">--</th:block>&nbsp;-&nbsp;<th:block th:narrative="${result.resource.referenceRange[0].high}">--</th:block>
+                </th:block>
+                <th:block th:if="${ref.low.empty} and ${not ref.high.empty}">
+                    &lt;&nbsp;<th:block th:narrative="${result.resource.referenceRange[0].high}"></th:block>
+                </th:block>
+                <th:block th:if="${not ref.low.empty} and ${ref.high.empty}">
+                    &gt;&nbsp;<th:block th:narrative="${result.resource.referenceRange[0].low}"></th:block>
+                </th:block>
             </th:block>
         </td>
         <td th:text="${result.resource.statusElement.value}">final</td>
