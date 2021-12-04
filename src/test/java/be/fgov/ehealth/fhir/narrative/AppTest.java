@@ -59,13 +59,13 @@ public class AppTest
     }
 
     /**
-     * Rigourous Test :-)
+     * Rigorous Test :-)
      */
     public void testValidation() throws Exception {
         PrintStream output = new PrintStream(new ByteArrayOutputStream());
         FhirValidator fhirValidator = new FhirValidator(output, Collections.singletonList("https://build.fhir.org/ig/hl7-be/hl7-be-fhir-laboratory-report"));
         Pair<Integer, String> validated = fhirValidator.validate(IOUtils.toByteArray(new FileInputStream("src/test/resources/example.json")));
-        assertTrue( validated.getLeft() == 1 );
+        assertTrue( validated.getLeft() == 2 );
 
         Long now = System.currentTimeMillis();
         fhirValidator.validate(IOUtils.toByteArray(new FileInputStream("src/test/resources/example.json")));
@@ -74,13 +74,13 @@ public class AppTest
         validated = fhirValidator.validate(IOUtils.toByteArray(new FileInputStream("src/test/resources/example.json")));
         Long then = System.currentTimeMillis();
 
-        assertTrue( validated.getLeft() == 1 );
+        assertTrue( validated.getLeft() == 2 );
         assertTrue( then - now < 5000 );
 
     }
 
     /**
-     * Rigourous Test :-)
+     * Rigorous Test :-)
      */
     public void testParallelValidation() throws Exception {
         PrintStream output = new PrintStream(new ByteArrayOutputStream());
@@ -95,7 +95,7 @@ public class AppTest
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                assertTrue(validated.getLeft() == 1);
+                assertTrue(validated.getLeft() == 2);
             });
             threads.add(thread);
             thread.start();
@@ -106,7 +106,7 @@ public class AppTest
     }
 
     /**
-     * Rigourous Test :-)
+     * Rigorous Test :-)
      */
     public void testAppWithHtmlGenerationAndValidation() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -146,7 +146,7 @@ public class AppTest
     }
 
     /**
-     * Rigourous Test :-)
+     * Rigorous Test :-)
      */
     public void testAppWithFhirGeneration() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
