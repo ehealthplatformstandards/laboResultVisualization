@@ -1,0 +1,26 @@
+<!--/*-->
+<html xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="inlineannotation (annotation)">
+    <th:block th:if="${annotation.hasAuthorStringType} and not ${annotation.hasTimeElement}"
+              th:text="${annotation.authorStringType}+':'"/>
+    <th:block th:if="${annotation.hasAuthorStringType} and ${annotation.hasTimeElement}"
+              th:text="${annotation.authorStringType}"/>
+    <th:block th:if="${not annotation.hasAuthorStringType and annotation.hasAuthor} and not ${annotation.hasTimeElement}"
+              th:text="${annotation.author.resource.name[0].nameAsSingleString}+': '"/>
+    <th:block th:if="${not annotation.hasAuthorStringType and annotation.hasAuthor} and ${annotation.hasTimeElement}"
+              th:text="${annotation.author.resource.name[0].nameAsSingleString}"/>
+    <th:block th:if="${annotation.hasTimeElement}"
+              th:text="${#dates.format(annotation.timeElement.value,'dd MMMM yyyy hh:mm:ss')}+': '"></th:block>
+    <th:block th:if="${annotation.hasTextElement}" th:text="${annotation.textElement.value}">
+
+    </th:block>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->

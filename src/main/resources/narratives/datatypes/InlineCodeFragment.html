@@ -1,0 +1,25 @@
+<!--/*-->
+<html xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="inlinecode (code)">
+    <th:block th:if="${not code.textElement.empty}"
+              th:text="${code.textElement.value}"/>
+    <th:block
+            th:if="${code.textElement.empty} and ${not #lists.isEmpty(code.coding)} and ${not code.coding[0].empty} and ${not code.coding[0].displayElement.empty}"
+            th:text="${code.coding[0].display}"/>
+    <th:block
+            th:if="${code.textElement.empty} and ${not #lists.isEmpty(code.coding)} and ${not code.coding[0].empty} and ${code.coding[0].displayElement.empty}"
+            th:text="'?'"/>
+    <th:block th:if="${not code.empty and not #lists.isEmpty(code.coding)} and ${not code.coding[0].empty} and ${not code.coding[0].systemElement.empty}"
+              th:text="' (' + ${code.coding[0].system} + ')'"> (no system?)</th:block>
+    <th:block th:if="${not code.empty} and ${not #lists.isEmpty(code.coding)} and ${not code.coding[0].empty} and ${not code.coding[0].codeElement.empty}"
+              th:text=" '(' + ${code.coding[0].code} + ')'"> (no code?)</th:block>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->

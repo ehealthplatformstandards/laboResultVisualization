@@ -63,6 +63,133 @@
                 <td th:narrative="${resource.subject.resource.address[0]}"></td>
             </tr>
             </tbody>
+            <!-- Specimen details -->
+            <th:block th:if="${resource.hasSpecimen}" th:each="specimen : ${resource.specimen}">
+                <thead><tr><td colspan="2">Specimen details</td></tr></thead>
+                <tbody>
+                    <!-- Identifier -->
+                    <tr th:if="${specimen.resource.hasIdentifier}">
+                        <td>Identifier</td>
+                        <td th:narrative="${specimen.resource.identifier[0]}"></td>
+                    </tr>
+                    <!-- Status -->
+                    <tr th:if="${specimen.resource.hasStatusElement}">
+                        <td>Status</td>
+                        <td th:narrative="${specimen.resource.statusElement}"></td>
+                    </tr>
+                    <!-- Type -->
+                    <tr th:if="${specimen.resource.hasType}">
+                        <td>Type</td>
+                        <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.type})"></td>
+                    </tr>
+                    <!-- Subject -->
+                    <tr th:if="${specimen.resource.hasSubject}">
+                        <td>Patient</td>
+                        <td>
+                            <th:block th:text="${specimen.resource.subject.resource.name[0].nameAsSingleString}">--</th:block>
+                            <th:block th:text="' (' + ${specimen.resource.subject.resource.identifier[0].value} + ')'"> (--)</th:block>
+                        </td>
+                    </tr>
+                    <!-- Received time -->
+                    <tr th:if="${specimen.resource.hasReceivedTimeElement}">
+                        <td>Received</td>
+                        <td th:text="${#dates.format(specimen.resource.receivedTimeElement.value,'dd MMMM yyyy hh:mm:ss')}"></td>
+                    </tr>
+                    <!-- Requests -->
+                    <th:block th:if="${not specimen.resource.hasRequest}" th:each="request : ${specimen.resource.request}">
+                        <tr th:if="${request.resource.hasIdentifier">
+                            <td>Request</td>
+                            <td th:narrative="${request.resource.identifier[0]}">--</td>
+                        </tr>
+                    </th:block>
+                    <!-- Specimen collection -->
+                    <th:block if="${specimen.resource.hasCollection}">
+                        <!-- Collection collector -->
+                        <tr th:if="${specimen.resource.collection.hasCollector}">
+                            <td>Collector</td>
+                            <td th:text="${specimen.resource.collection.collector.resource.name[0].nameAsSingleString}">--</td>
+                        </tr>
+                        <!-- Collection collected date -->
+                        <tr th:if="${specimen.resource.collection.hasCollectedDateTimeType}">
+                            <td>Collected date</td>
+                            <td th:text="${#dates.format(specimen.resource.collection.collectedDateTimeType.value,'dd MMMM yyyy hh:mm:ss')}"></td>
+                        </tr>
+                        <!-- Collection collected period -->
+                        <tr th:if="${specimen.resource.collection.hasCollectedPeriod}">
+                            <td>Collected period</td>
+                            <td>
+                                <th:block th:if="${specimen.resource.collection.collectedPeriod.hasStart}"
+                                          th:text="${#dates.format(specimen.resource.collection.collectedPeriod.start,'dd MMMM yyyy hh:mm:ss')}">...</th:block>
+                                -
+                                <th:block th:if="${specimen.resource.collection.collectedPeriod.hasEnd}"
+                                          th:text="${#dates.format(specimen.resource.collection.collectedPeriod.end,'dd MMMM yyyy hh:mm:ss')}">...</th:block>
+                            </td>
+                        </tr>
+                        <!-- Collection duration -->
+                        <tr th:if="${specimen.resource.collection.hasDuration}">
+                            <td>Duration</td>
+                            <td th:narrative="${specimen.resource.collection.duration}"></td>
+                        </tr>
+                        <!-- Collection quantity -->
+                        <tr th:if="${specimen.resource.collection.hasQuantity}">
+                            <td>Quantity</td>
+                            <td th:narrative="${specimen.resource.collection.quantity}"></td>
+                        </tr>
+                        <!-- Collection method -->
+                        <tr th:if="${specimen.resource.collection.hasMethod}">
+                            <td>Method</td>
+                            <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.collection.method})"></td>
+                        </tr>
+                        <!-- Collection body site -->
+                        <tr th:if="${specimen.resource.collection.hasBodySite}">
+                            <td>Body site</td>
+                            <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.collection.bodySite})"></td>
+                        </tr>
+                        <!-- Collection fasted status (CodeableConcept)-->
+                        <tr th:if="${specimen.resource.collection.hasFastingStatusCodeableConcept}">
+                            <td>Fasting status</td>
+                            <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.collection.fastingStatusCodeableConcept})"></td>
+                        </tr>
+                        <!-- Fasted status (Duration) -->
+                        <tr th:if="${specimen.resource.collection.hasFastingStatusDuration}">
+                            <td>Fasting status</td>
+                            <td th:narrative="${specimen.resource.collection.fastingStatusDuration}"></td>
+                        </tr>
+                        <!-- Processings -->
+                        <th:block th:if="${specimen.resource.hasProcessing}" th:each="processing : ${specimen.resource.processing}">
+                            <tr>
+                                <td>Processing</td>
+                                <th:block th:if="${processing.hasProcedure}">
+                                    <td th:include="@{inlinecode} :: inlinecode (${processing.procedure})"></td>
+                                </th:block>
+                                <th:block th:if="${not processing.hasProcedure}">
+                                    <td>(processing without procedure?)</td>
+                                </th:block>
+                            </tr>
+                        </th:block>
+                        <!-- Containers -->
+                        <tr th:if="${specimen.resource.hasContainer}"  th:each="container : ${specimen.resource.container}">
+                                <td>Container</td>
+                            <th:block th:if="${container.hasType}">
+                                <td th:include="@{inlinecode} :: inlinecode (${container.type})"></td>
+                            </th:block>
+                            <th:block th:if="${not container.hasType}">
+                                <td>(type?)</td>
+                            </th:block>
+                        </tr>
+                        <!-- Condition -->
+                        <tr th:if="${specimen.resource.hasCondition}">
+                            <td>Condition</td>
+                            <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.condition})"></td>
+                        </tr>
+                        <!-- Notes -->
+                        <tr th:if="${specimen.resource.hasNote}" th:each="note : ${specimen.resource.note}">
+                            <td>Note</td>
+                            <td th:include="@{inlineannotation} :: inlineannotation (${note})"></td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </th:block>
         </th:block>
 
     </table>
