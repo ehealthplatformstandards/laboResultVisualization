@@ -1,0 +1,83 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="serviceRequest (basedOn)">
+    <thead><tr>
+        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentNode.parentNode.nextSibling.classList.toggle('hidden')">
+            <div>
+                <div>Service request details</div><div>
+                <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+            </div>
+            </div>
+        </td>
+    </tr></thead>
+    <tbody class="hidden">
+    <tr th:if="${basedOn.resource.hasIdentifier}">
+        <td>Identifier</td>
+        <td th:narrative="${basedOn.resource.identifier[0]}"></td>
+    </tr>
+    <!-- Subject -->
+    <tr th:if="${basedOn.resource.hasSubject}">
+        <td>Subject</td>
+        <td>
+            <th:block th:text="${basedOn.resource.subject.resource.name[0].nameAsSingleString}">--</th:block>
+            <th:block th:text="' (' + ${basedOn.resource.subject.resource.identifier[0].value} + ')'"> (--)</th:block>
+        </td>
+    </tr>
+    <!-- Status -->
+    <tr th:if="${basedOn.resource.hasStatusElement}">
+        <td>Status</td>
+        <td th:narrative="${basedOn.resource.statusElement}"></td>
+    </tr>
+    <!-- Intent -->
+    <tr th:if="${basedOn.resource.hasIntentElement}">
+        <td>Intent</td>
+        <td th:narrative="${basedOn.resource.intentElement}"></td>
+    </tr>
+    <!-- Category -->
+    <th:block th:if="${basedOn.resource.hasCategory}"  th:each="category : ${basedOn.resource.category}">
+        <tr>
+            <td>Category</td>
+            <td th:include="@{inlinecode} :: inlinecode (${category})"></td>
+        </tr>
+    </th:block>
+    <!-- Priority -->
+    <tr th:if="${basedOn.resource.hasPriorityElement}">
+        <td>Priority</td>
+        <td th:narrative="${basedOn.resource.priorityElement}"></td>
+    </tr>
+    <!-- Authored on -->
+    <tr th:if="${basedOn.resource.hasAuthoredOnElement}">
+        <td>Authored on</td>
+        <td th:text="${#dates.format(basedOn.resource.authoredOnElement.value,'dd MMMM yyyy hh:mm:ss')}"></td>
+    </tr>
+    <!-- Requester -->
+    <tr th:if="${basedOn.resource.hasRequester}">
+        <td>Requester</td>
+        <td>
+            <th:block th:if="${basedOn.resource.requester.resource.hasName}"
+                      th:text="${basedOn.resource.requester.resource.name[0].nameAsSingleString}">(name?)
+            </th:block>
+            <th:block th:if="${basedOn.resource.requester.resource.hasIdentifier and basedOn.resource.requester.resource.identifier[0].hasSystemElement}"
+                      th:text="' (' + ${#strings.replace(basedOn.resource.requester.resource.identifier[0].system,'https://www.ehealth.fgov.be/standards/fhir/NamingSystem/','')} + ')'"> (system?)
+            </th:block>
+            <th:block th:if="${basedOn.resource.requester.resource.hasIdentifier and basedOn.resource.requester.resource.identifier[0].hasValueElement}"
+                      th:text="' (' + ${basedOn.resource.requester.resource.identifier[0].value} + ')'"> (value?)
+            </th:block>
+        </td>
+    </tr>
+    <!-- Notes -->
+    <tr th:if="${basedOn.resource.hasNote}" th:each="note : ${basedOn.resource.note}">
+        <td>Note</td>
+        <td th:include="@{inlineannotation} :: inlineannotation (${note})"></td>
+    </tr>
+    </tbody>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->

@@ -78,6 +78,7 @@ table.hapiPropertyTable tbody tr td:first-child {
     border: 1px solid #DBDFE3;
     font-size: .8em;
     vertical-align: baseline;
+    width: 20%;
 }
 
 table.hapiPropertyTable tbody tr td {
@@ -118,4 +119,42 @@ tr.level_8 td.label {
 
 tr.level_9 td.label {
     padding-left: 6em;
+}
+
+
+td.toggable {
+    cursor: pointer;
+}
+
+td.toggable div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+td.toggable div span {
+    background-color: rgba(107, 128, 148, 0.6);
+    color: #EEF2F6;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: .8em;
+    min-width: 100px;
+    text-align: center;
+}
+
+td.toggable.displayed div span.clicktoshow {
+    display: none;
+}
+
+td.toggable div span.clicktohide {
+    display: none;
+}
+
+td.toggable.displayed div span.clicktohide {
+    display: inline !important;
+}
+
+tbody.hidden {
+    display: none;
 }
