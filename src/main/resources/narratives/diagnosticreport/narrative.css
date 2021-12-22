@@ -121,7 +121,6 @@ tr.level_9 td.label {
     padding-left: 6em;
 }
 
-
 td.toggable {
     cursor: pointer;
 }
@@ -137,10 +136,14 @@ td.toggable div span {
     background-color: rgba(107, 128, 148, 0.6);
     color: #EEF2F6;
     border-radius: 10px;
-    padding: 2px 6px;
+    padding: 4px 6px 2px;
     font-size: .8em;
     min-width: 100px;
     text-align: center;
+}
+
+td.toggable div span.inline {
+    min-width: 20px;
 }
 
 td.toggable.displayed div span.clicktoshow {
@@ -155,6 +158,6 @@ td.toggable.displayed div span.clicktohide {
     display: inline !important;
 }
 
-tbody.hidden {
+.hidden {
     display: none;
 }

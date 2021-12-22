@@ -7,7 +7,7 @@
 <!--*/-->
 <th:block th:fragment="specimen (specimen)">
     <thead><tr>
-        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentNode.parentNode.nextSibling.classList.toggle('hidden')">
+        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
             <div>
                 <div>Specimen details</div><div>
                 <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
@@ -54,20 +54,8 @@
     <!-- Specimen collection -->
     <th:block if="${specimen.resource.hasCollection}">
         <!-- Collection collector -->
-        <tr th:if="${specimen.resource.collection.hasCollector}">
-            <td>Collector</td>
-            <td>
-                <th:block th:if="${specimen.resource.collection.collector.resource.hasName}"
-                          th:text="${specimen.resource.collection.collector.resource.name[0].nameAsSingleString}">(name?)
-                </th:block>
-                <th:block th:if="${specimen.resource.collection.collector.resource.hasIdentifier and specimen.resource.collection.collector.resource.identifier[0].hasSystemElement}"
-                          th:text="' (' + ${#strings.replace(specimen.resource.collection.collector.resource.identifier[0].system,'https://www.ehealth.fgov.be/standards/fhir/NamingSystem/','')} + ')'"> (system?)
-                </th:block>
-                <th:block th:if="${specimen.resource.collection.collector.resource.hasIdentifier and specimen.resource.collection.collector.resource.identifier[0].hasValueElement}"
-                          th:text="' (' + ${specimen.resource.collection.collector.resource.identifier[0].value} + ')'"> (value?)
-                </th:block>
-            </td>
-        </tr>
+        <th:block th:if="${specimen.resource.collection.hasCollector and specimen.resource.collection.collector.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: inlineOrganization (organization=${specimen.resource.collection.collector}, title='Collector', id='Collector')" />
+        <th:block th:if="${specimen.resource.collection.hasCollector and specimen.resource.collection.collector.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: inlinePractitioner (practitioner=${specimen.resource.collection.collector}, title='Collector', id='Collector')" />
         <!-- Collection collected date -->
         <tr th:if="${specimen.resource.collection.hasCollectedDateTimeType}">
             <td>Collected date</td>

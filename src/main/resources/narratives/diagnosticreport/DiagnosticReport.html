@@ -58,6 +58,10 @@
                         th:text="${#dates.format(resource.subject.resource.birthDateElement.value,'dd MMMM yyyy')}"></span>
                 </td>
             </tr>
+            <tr th:if="${not resource.subject.resource.telecom.empty}" th:each="telco : ${resource.subject.resource.telecom}">
+                <td th:text="${telco.system.name}">Telecom</td>
+                <td th:narrative="${telco}"></td>
+            </tr>
             <tr th:if="${not resource.subject.resource.address.empty}">
                 <td>Address</td>
                 <td th:narrative="${resource.subject.resource.address[0]}"></td>
@@ -70,6 +74,16 @@
             <!-- Specimen details -->
             <th:block th:if="${resource.hasSpecimen}" th:each="specimen : ${resource.specimen}">
                 <th:block th:include="@{specimen} :: specimen (specimen=${specimen})" />
+            </th:block>
+            <!-- Performer details -->
+            <th:block th:if="${resource.hasPerformer}" th:each="performer : ${resource.performer}">
+                <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='Performer')" />
+                <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='Performer')" />
+            </th:block>
+            <!-- Results interpreter -->
+            <th:block th:if="${resource.hasSpecimen}" th:each="resultsInterpreter : ${resource.resultsInterpreter}">
+                <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
+                <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
             </th:block>
         </th:block>
 

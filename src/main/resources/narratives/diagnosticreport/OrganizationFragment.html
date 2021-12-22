@@ -1,0 +1,86 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="organization (organization, title)">
+    <thead><tr>
+        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+            <div>
+                <div th:text="${title}">Organization</div><div>
+                <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+            </div>
+            </div>
+        </td>
+    </tr></thead>
+    <tbody class="hidden">
+    <tr th:if="${not organization.resource.type.empty}">
+        <td>Type</td>
+        <td th:narrative="${organization.resource.type[0]}"></td>
+    </tr>
+    <tr th:if="${not organization.resource.identifier.empty}">
+        <td>Identifier</td>
+        <td th:narrative="${organization.resource.identifier[0]}"></td>
+    </tr>
+    <tr th:if="${not organization.resource.name.empty}">
+        <td>Name</td>
+        <td th:text="${organization.resource.name}">--</td>
+    </tr>
+    <tr th:if="${not organization.resource.telecom.empty}" th:each="telco : ${organization.resource.telecom}">
+        <td th:text="${telco.system.name}">Telecom</td>
+        <td th:narrative="${telco}"></td>
+    </tr>
+    <tr th:if="${not organization.resource.address.empty}" th:each="addr : ${organization.resource.address}">
+        <td>Address</td>
+        <td th:narrative="${addr}"></td>
+    </tr>
+    </tbody>
+</th:block>
+<th:block th:fragment="inlineOrganization (organization, title)">
+    <tr th:class="${id}">
+        <td th:text="${title}"></td>
+        <td class="toggable" onclick="this.classList.toggle('displayed'); var ns = this.parentElement; while(ns.nextElementSibling &amp;&amp; ns.nextElementSibling.classList.contains([...ns.classList].find(function(x) { return x !== 'hidden' }))) { ns.nextElementSibling.classList.toggle('hidden'); ns = ns.nextElementSibling }">
+            <div>
+                <div>
+                    <th:block th:if="${organization.resource.hasName}"
+                              th:text="${organization.resource.name}">(name?)
+                    </th:block>
+                    <th:block th:if="${organization.resource.hasIdentifier and organization.resource.identifier[0].hasSystemElement}"
+                              th:text="' (' + ${#strings.replace(organization.resource.identifier[0].system,'https://www.ehealth.fgov.be/standards/fhir/NamingSystem/','')} + ')'"> (system?)
+                    </th:block>
+                    <th:block th:if="${organization.resource.hasIdentifier and organization.resource.identifier[0].hasValueElement}"
+                              th:text="' (' + ${organization.resource.identifier[0].value} + ')'"> (value?)
+                    </th:block>
+                </div><div>
+                <span class="inline clicktoshow">+</span><span class="inline clicktohide">-</span>
+            </div>
+            </div>
+        </td>
+    </tr>
+    <tr th:class="'hidden '+${id}" th:if="${not organization.resource.type.empty}">
+        <td>Type</td>
+        <td th:narrative="${organization.resource.type[0]}"></td>
+    </tr>
+    <tr th:class="'hidden '+${id}" th:if="${not organization.resource.identifier.empty}">
+        <td>Identifier</td>
+        <td th:narrative="${organization.resource.identifier[0]}"></td>
+    </tr>
+    <tr th:class="'hidden '+${id}" th:if="${not organization.resource.name.empty}">
+        <td>Name</td>
+        <td th:text="${organization.resource.name}">--</td>
+    </tr>
+    <tr th:class="'hidden '+${id}" th:if="${not organization.resource.telecom.empty}" th:each="telco : ${organization.resource.telecom}">
+        <td th:text="${telco.system.name}">Telecom</td>
+        <td th:narrative="${telco}"></td>
+    </tr>
+    <tr th:class="'hidden '+${id}" th:if="${not organization.resource.address.empty}" th:each="addr : ${organization.resource.address}">
+        <td>Address</td>
+        <td th:narrative="${addr}"></td>
+    </tr>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->

@@ -7,7 +7,7 @@
 <!--*/-->
 <th:block th:fragment="serviceRequest (basedOn)">
     <thead><tr>
-        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentNode.parentNode.nextSibling.classList.toggle('hidden')">
+        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
             <div>
                 <div>Service request details</div><div>
                 <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
@@ -56,20 +56,11 @@
         <td th:text="${#dates.format(basedOn.resource.authoredOnElement.value,'dd MMMM yyyy hh:mm:ss')}"></td>
     </tr>
     <!-- Requester -->
-    <tr th:if="${basedOn.resource.hasRequester}">
-        <td>Requester</td>
-        <td>
-            <th:block th:if="${basedOn.resource.requester.resource.hasName}"
-                      th:text="${basedOn.resource.requester.resource.name[0].nameAsSingleString}">(name?)
-            </th:block>
-            <th:block th:if="${basedOn.resource.requester.resource.hasIdentifier and basedOn.resource.requester.resource.identifier[0].hasSystemElement}"
-                      th:text="' (' + ${#strings.replace(basedOn.resource.requester.resource.identifier[0].system,'https://www.ehealth.fgov.be/standards/fhir/NamingSystem/','')} + ')'"> (system?)
-            </th:block>
-            <th:block th:if="${basedOn.resource.requester.resource.hasIdentifier and basedOn.resource.requester.resource.identifier[0].hasValueElement}"
-                      th:text="' (' + ${basedOn.resource.requester.resource.identifier[0].value} + ')'"> (value?)
-            </th:block>
-        </td>
-    </tr>
+    <th:block th:if="${basedOn.resource.hasRequester and basedOn.resource.requester.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: inlineOrganization (organization=${basedOn.resource.requester}, title='Requester', id='Requester')" />
+    <th:block th:if="${basedOn.resource.hasRequester and basedOn.resource.requester.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: inlinePractitioner (practitioner=${basedOn.resource.requester}, title='Requester', id='Requester')" />
+    <!-- Performer -->
+    <th:block th:if="${basedOn.resource.hasPerformer and basedOn.resource.performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: inlineOrganization (organization=${basedOn.resource.performer}, title='Performer', id='Performer')" />
+    <th:block th:if="${basedOn.resource.hasPerformer and basedOn.resource.performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: inlinePractitioner (practitioner=${basedOn.resource.performer}, title='Performer', id='Performer')" />
     <!-- Notes -->
     <tr th:if="${basedOn.resource.hasNote}" th:each="note : ${basedOn.resource.note}">
         <td>Note</td>
