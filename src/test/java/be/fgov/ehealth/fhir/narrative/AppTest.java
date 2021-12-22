@@ -51,7 +51,7 @@ public class AppTest
      */
     public void testAppWithHtmlGeneration() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        App.commandLine(new String[] {"-d", "html", "src/test/resources/example.json"}, new PrintStream(bos));
+        App.commandLine(new String[] {"html", "src/test/resources/example.json"}, new PrintStream(bos));
 
         String result = new String(bos.toByteArray(), StandardCharsets.UTF_8);
 
