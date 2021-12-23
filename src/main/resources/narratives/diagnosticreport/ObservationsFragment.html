@@ -26,7 +26,7 @@
                     th:text="${result.resource.interpretation[0].text}"/>
             <th:block
                     th:if="${not result.resource.interpretation.empty} and ${result.resource.interpretation[0].textElement.empty} and ${not result.resource.interpretation[0].coding.empty} and ${not result.resource.interpretation[0].coding[0].displayElement.empty}"
-                    th:text="${result.resource.interpretation.coding[0].display}"/>
+                    th:text="${result.resource.interpretation[0].coding[0].display}"/>
             <!--/*--> N <!--*/-->
         </td>
         <td>

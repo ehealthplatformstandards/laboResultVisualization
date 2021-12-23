@@ -25,7 +25,7 @@ public final class FhirNarrativeUtils {
                 Arrays.asList(property).forEach(base -> {
                     if (base instanceof Narrative) {
                         Narrative narrative = ((Narrative) base);
-                        if (narrative.status == null || narrative.status.getValue() == Narrative.NarrativeStatus.GENERATED) {
+                        if (narrative.status == null || (narrative.status.getValue() != Narrative.NarrativeStatus.ADDITIONAL && narrative.status.getValue() != Narrative.NarrativeStatus.EXTENSIONS)) {
                             resource.setProperty(p.getName(), new Narrative());
                         }
                     } else {
