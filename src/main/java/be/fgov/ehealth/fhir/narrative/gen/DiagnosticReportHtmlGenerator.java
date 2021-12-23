@@ -7,6 +7,7 @@ import ca.uhn.fhir.parser.IParser;
 import org.apache.commons.io.IOUtils;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.FhirNarrativeUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class DiagnosticReportHtmlGenerator {
         final IParser parser = fhirContext.newJsonParser().setPrettyPrint(true).setSuppressNarratives(false);
         fhirContext.setNarrativeGenerator(this.generator);
         //There must be a better way to do this
-        final Bundle reparsed = parser.parseResource(Bundle.class, parser.encodeResourceToString(bundle));
+        final Bundle reparsed = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(bundle)));
 
         return ((DiagnosticReport) reparsed.getEntry().stream()
                     .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()

@@ -14,8 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-import static be.fgov.ehealth.fhir.narrative.utils.FhirNarrativeUtils.stripNarratives;
 import static java.nio.file.Files.readAllBytes;
+import static org.hl7.fhir.r4.model.FhirNarrativeUtils.stripNarratives;
 
 @Command(name = "fhirpreview", mixinStandardHelpOptions = true)
 public class Visualization implements Callable<Integer> {
@@ -67,7 +67,7 @@ public class Visualization implements Callable<Integer> {
 
         final FhirContext ctx = FhirContext.forR4();
         final IParser parser = ctx.newJsonParser();
-        final Bundle bundle = stripNarratives(ctx, parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8)));
+        final Bundle bundle = stripNarratives(parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8)));
 
         return action.execute(this, ctx, bundle);
     }
