@@ -45,7 +45,62 @@
                     </th:block>
                 </th:block>
             </td>
-            <td th:text="${result.resource.statusElement.value}">final</td>
+            <td>
+                <th:block th:text="${result.resource.statusElement.value}">final</th:block>
+            </td>
+            <td class="toggable" onclick="this.classList.toggle('displayed');  this.parentElement.nextElementSibling.classList.toggle('hidden');">
+                <div>
+                    <span class="inline clicktoshow">+</span><span class="inline clicktohide">-</span>
+                </div>
+            </td>
+        </tr>
+        <tr th:class="'hidden'">
+            <td colspan="6">
+               <table>
+                    <tbody>
+                        <tr th:if="${result.resource.hasCategory}">
+                            <td>Category</td>
+                            <td th:text="${result.resource.category}"/>
+                        </tr>
+                        <tr th:if="${result.resource.hasEffectiveDateTimeType}">
+                            <td>Effective date</td>
+                            <td th:text="${#dates.format(result.resource.effectiveDateTimeType.value,'dd MMMM yyyy hh:mm:ss')}"/>
+                        </tr>
+                        <tr th:if="${result.resource.hasEffectivePeriod}">
+                            <td>Effective date</td>
+                            <td>(effective period)</td>
+                        </tr>
+                        <tr th:if="${result.resource.hasEffectiveTiming}">
+                            <td>Effective date</td>
+                            <td>(effective timing)</td>
+                        </tr>
+                        <tr th:if="${result.resource.hasEffectiveInstantType}">
+                            <td>Effective date</td>
+                            <td>(effective instant)</td>
+                        </tr>
+                        <tr th:if="${result.resource.hasIssuedElement}">
+                            <td>Issued date</td>
+                            <td th:text="${#dates.format(result.resource.issuedElement.value,'dd MMMM yyyy hh:mm:ss')}"/>
+                        </tr>
+                        <tr th:if="${result.resource.hasDataAbsentReason}">
+                            <td>Data absent reason</td>
+                            <td>(data absent reason)</td>
+                        </tr>
+                        <tr th:if="${result.resource.hasBodySite}">
+                            <td>Body site</td>
+                            <td>(body site)</td>
+                        </tr>
+                        <tr th:if="${result.resource.hasDerivedFrom}">
+                            <td>Derived from</td>
+                            <td>(derived from)</td>
+                        </tr>
+                        <tr th:if="${result.resource.hasComponent}">
+                            <td>Component</td>
+                            <td>(component)</td>
+                        </tr>
+                    </tbody>
+               </table>
+            </td>
         </tr>
         <tr th:replace="@{observations} :: observations (items=${result.resource.hasMember},level=${level}+1)"></tr>
         <th:block th:if="${result.resource.hasNote}" th:each="note : ${result.resource.note}">
