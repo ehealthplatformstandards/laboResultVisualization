@@ -64,6 +64,10 @@
             <td colspan="6">
                <table>
                     <tbody>
+                        <tr th:if="${result.resource.hasLanguage}">
+                            <td>Language</td>
+                            <td th:text="${result.resource.language}"/>
+                        </tr>
                         <tr th:if="${result.resource.hasCategory}">
                             <td>Category</td>
                             <td th:text="${result.resource.category}"/>
