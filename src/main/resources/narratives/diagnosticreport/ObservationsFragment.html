@@ -139,7 +139,7 @@
         <th:block th:if="${result.resource.hasNote}" th:each="note : ${result.resource.note}">
             <tr th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
                 class="hapiTableOfValuesRowOdd">
-                <td th:text="${note.text}" colspan="5">This is a comment</td>
+                <td th:text="${note.text}" colspan="6">This is a comment</td>
             </tr>
         </th:block>
     </th:block>
