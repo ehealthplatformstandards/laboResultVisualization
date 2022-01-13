@@ -36,6 +36,8 @@ table.hapiTableOfValues thead tr td {
 
 table.hapiTableOfValues tbody tr td {
     padding: .5em 1em;
+    border-top: 1px solid #DBDFE3;
+    border-bottom: 1px solid #DBDFE3;
 }
 
 table.hapiTableOfValues tbody tr.title td {
@@ -44,9 +46,6 @@ table.hapiTableOfValues tbody tr.title td {
 
 table.hapiTableOfValues tbody tr.title.level_0 td {
     background: #deeeff;
-}
-table.hapiTableOfValues tbody tr:nth-child(even) td {
-    background: #f7f9fb;
 }
 
 /********************************************************
