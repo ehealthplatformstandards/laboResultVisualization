@@ -1,8 +1,6 @@
 package org.hl7.fhir.r4.model;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
-import org.hl7.fhir.r4.model.Bundle;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -12,11 +10,17 @@ public final class FhirNarrativeUtils {
     private FhirNarrativeUtils() { }
 
     public static Bundle stripNarratives(Bundle bundle) {
-        visit(bundle);
+        visitAndStrip(bundle);
         return bundle;
     }
 
-    private static void visit(Base resource) {
+    public static List<Pair<String, String>> collectNarratives(Bundle bundle) {
+        LinkedList<Pair<String, String>> acc = new LinkedList<>();
+        visitAndCollect(bundle, "", acc);
+        return acc;
+    }
+
+    private static void visitAndStrip(Base resource) {
         List<Property> children = new LinkedList<>();
         resource.listChildren(children);
         children.forEach(p -> {
@@ -29,10 +33,31 @@ public final class FhirNarrativeUtils {
                             resource.setProperty(p.getName(), new Narrative());
                         }
                     } else {
-                        visit(base);
+                        visitAndStrip(base);
                     }
                 });
             }
         });
     }
+
+    private static void visitAndCollect(Base resource, String path, List<Pair<String, String>> acc) {
+        List<Property> children = new LinkedList<>();
+        resource.listChildren(children);
+        children.forEach(p -> {
+            Base[] property = resource.getProperty(p.getName().hashCode(), p.getName(), false);
+            if (property != null) {
+                List<Base> bases = Arrays.asList(property);
+                bases.forEach(base -> {
+                    if (base instanceof Narrative) {
+                        Narrative narrative = ((Narrative) base);
+                        acc.add(Pair.of(path, narrative.getDiv().toString()));
+                    } else {
+                        visitAndCollect(base, path + "/" + p.getName() + "[" + bases.indexOf(base) + "]:" + base.getClass().getSimpleName(), acc);
+                    }
+                });
+            }
+        });
+    }
+
+
 }

@@ -78,7 +78,8 @@ public class Visualization implements Callable<Integer> {
 
     public enum Action {
         html((viz, ctx, bundle) -> new HtmlPreview(viz, ctx).process(bundle)),
-        embed((viz, ctx, bundle) -> new HtmlNarrativeEmbed(viz, ctx).process(bundle));
+        embed((viz, ctx, bundle) -> new HtmlNarrativeEmbed(viz, ctx).process(bundle)),
+        extract((viz, ctx, bundle) -> new HtmlNarrativeExtract(viz).process(bundle));
 
         private final ActionLambda executor;
 
