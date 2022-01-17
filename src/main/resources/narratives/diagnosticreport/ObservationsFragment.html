@@ -46,7 +46,7 @@
                 </th:block>
             </td>
             <td>
-                <th:block th:text="${result.resource.statusElement.value}">final</th:block>
+                <th:block th:unless="${result.resource.hasHasMember}" th:text="${result.resource.statusElement.value}">final</th:block>
             </td>
             <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
                 <td class="toggable" onclick="this.classList.toggle('displayed');  this.parentElement.nextElementSibling.classList.toggle('hidden');">
