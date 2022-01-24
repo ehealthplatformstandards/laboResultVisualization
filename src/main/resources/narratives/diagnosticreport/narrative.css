@@ -18,7 +18,7 @@ div.hapiHeaderText {
 ********************************************************/
 table.hapiTableOfValues {
     width: 100%;
-    max-width: 880px;
+    max-width: 1200px;
     margin-top: 24px;
     border-spacing: 0;
     border-collapse: collapse;
@@ -36,8 +36,7 @@ table.hapiTableOfValues thead tr td {
 
 table.hapiTableOfValues tbody tr td {
     padding: .5em 1em;
-    border-top: 1px solid #DBDFE3;
-    border-bottom: 1px solid #DBDFE3;
+    border: 1px solid #DBDFE3;
 }
 
 table.hapiTableOfValues tbody tr.title td {
@@ -55,7 +54,7 @@ table.hapiTableOfValues tbody tr.title.level_0 td {
 ********************************************************/
 table.hapiPropertyTable {
     width: 100%;
-    max-width: 880px;
+    max-width: 1200px;
     margin-top: 24px;
     border-spacing: 0;
     border-collapse: collapse;
