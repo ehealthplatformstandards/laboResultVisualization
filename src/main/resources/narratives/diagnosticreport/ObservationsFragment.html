@@ -23,8 +23,7 @@
                 <!-- quantity -->
                 <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasComparatorElement}" th:text="${result.resource.valueQuantity.comparatorElement.code}"/>
                 <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasValueElement}" th:text="${result.resource.valueQuantity.valueElement.valueAsString}"/>
-                <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasUnit}" th:text="${result.resource.valueQuantity.unit}"/>
-                <th:block th:if="${result.resource.hasValueQuantity} and ${not result.resource.valueQuantity.hasUnit} and ${result.resource.valueQuantity.hasCode}" th:text="${result.resource.valueQuantity.code}"/>
+                <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasCode}" th:text="${result.resource.valueQuantity.code}"/>
                 <!-- string -->
                 <th:block th:if="${result.resource.hasValueStringType}" th:text="${result.resource.valueStringType} + ' '"/>
                 <!-- codeable concept -->
