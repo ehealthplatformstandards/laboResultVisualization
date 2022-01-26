@@ -19,7 +19,70 @@
                         th:text="'?'"/>
                 <!--/*--> Hb <!--*/-->
             </td>
-            <td th:narrative="${result.resource.value}">--</td>
+            <td>
+                <!-- quantity -->
+                <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasComparatorElement}" th:text="${result.resource.valueQuantity.comparatorElement.code}"/>
+                <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasValueElement}" th:text="${result.resource.valueQuantity.valueElement.valueAsString}"/>
+                <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasUnit}" th:text="${result.resource.valueQuantity.unit}"/>
+                <th:block th:if="${result.resource.hasValueQuantity} and ${not result.resource.valueQuantity.hasUnit} and ${result.resource.valueQuantity.hasCode}" th:text="${result.resource.valueQuantity.code}"/>
+                <!-- string -->
+                <th:block th:if="${result.resource.hasValueStringType}" th:text="${result.resource.valueStringType} + ' '"/>
+                <!-- codeable concept -->
+                <th:block th:if="${result.resource.hasValueCodeableConcept} and ${${result.resource.valueCodeableConcept.hasCoding}}">
+                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display} + ' '"/>
+                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasSystem}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.system} + ') '"/>
+                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasCode}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.code} + ') '"/>
+                </th:block>
+                <!-- boolean -->
+                <th:block th:if="${result.resource.hasValueBooleanType}" th:text="${result.resource.valueBooleanType.valueAsString}"/>
+                <!-- date time -->
+                <th:block th:if="${result.resource.hasValueDateTimeType}" th:text="${#dates.format(result.resource.valueDateTimeType.value,'dd MMMM yyyy hh:mm:ss')}"/>
+                <!-- integer -->
+                <th:block th:if="${result.resource.hasValueIntegerType}" th:text="${result.resource.valueIntegerType.valueAsString}"/>
+                <!-- period -->
+                <th:block th:if="${result.resource.hasValuePeriod}">
+                    <span th:if="${result.resource.effectivePeriod.hasStartElement}"
+                          th:text="${#dates.format(result.resource.valuePeriod.startElement.value,'dd MMMM yyyy')}">...</span>
+                    -
+                    <span
+                            th:if="${result.resource.effectivePeriod.hasEndElement}"
+                            th:text="${#dates.format(result.resource.valuePeriod.endElement.value,'dd MMMM yyyy')}">...</span>
+                </th:block>
+                <!-- range -->
+                <th:block th:if="${result.resource.hasValueRange}">
+                    <th:block th:if="${not result.resource.valueRange.low.empty} and ${not result.resource.valueRange.high.empty}">
+                        <th:block th:narrative="${result.resource.valueRange.low}">--</th:block>&nbsp;-&nbsp;<th:block th:narrative="${result.resource.valueRange.high}">--</th:block>
+                    </th:block>
+                    <th:block th:if="${result.resource.valueRange.low.empty} and ${not result.resource.valueRange.high.empty}">
+                        &lt;&nbsp;<th:block th:narrative="${result.resource.valueRange.high}"></th:block>
+                    </th:block>
+                    <th:block th:if="${not result.resource.valueRange.low.empty} and ${result.resource.valueRange.high.empty}">
+                        &gt;&nbsp;<th:block th:narrative="${result.resource.valueRange.low}"></th:block>
+                    </th:block>
+                    <th:block th:if="${result.resource.valueRange.hasTextElement}">
+                        <th:block th:narrative="${result.resource.valueRange.textElement}"></th:block>
+                    </th:block>
+                </th:block>
+                <!-- ratio -->
+                <th:block th:if="${result.resource.hasValueRatio}">
+                    <th:block th:if="${result.resource.valueRatio.hasNumerator}">
+                        <th:block th:if="${result.resource.numerator.hasComparatorElement}" th:text="${result.resource.numerator.comparatorElement.code}"/>
+                        <th:block th:if="${result.resource.numerator.hasValueElement}" th:text="${result.resource.numerator.valueElement.valueAsString}"/>
+                        <th:block th:if="${result.resource.numerator.hasUnit}" th:text="${result.resource.numerator.unit}"/>
+                        <th:block th:if="${not result.resource.numerator.hasUnit} and ${result.resource.numerator.hasCode}" th:text="${result.resource.numerator.code}"/>
+                    </th:block>
+                    /
+                    <th:block th:if="${result.resource.valueRatio.hasDenominator}">
+                        <th:block th:if="${result.resource.denominator.hasComparatorElement}" th:text="${result.resource.denominator.comparatorElement.code}"/>
+                        <th:block th:if="${result.resource.denominator.hasValueElement}" th:text="${result.resource.denominator.valueElement.valueAsString}"/>
+                        <th:block th:if="${result.resource.denominator.hasUnit}" th:text="${result.resource.denominator.unit}"/>
+                        <th:block th:if="${not result.resource.denominator.hasUnit} and ${result.resource.denominator.hasCode}" th:text="${result.resource.denominator.code}"/>
+                    </th:block>
+                </th:block>
+                <!-- sample data, what is this in a lab context? -->
+                <!-- time -->
+                <th:block th:if="${result.resource.hasValueTimeType}" th:text="${result.resource.valueTimeType.valueAsString}"/>
+            </td>
             <td>
                 <th:block
                         th:if="${not result.resource.interpretation.empty} and ${not result.resource.interpretation[0].textElement.empty}"
@@ -46,7 +109,7 @@
                 </th:block>
             </td>
             <td>
-                <th:block th:text="${result.resource.statusElement.value}">final</th:block>
+                <th:block th:unless="${result.resource.hasHasMember}" th:text="${result.resource.statusElement.value}">final</th:block>
             </td>
             <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
                 <td class="toggable" onclick="this.classList.toggle('displayed');  this.parentElement.nextElementSibling.classList.toggle('hidden');">
@@ -120,10 +183,10 @@
                             <td>
                                 <th:block th:if="${not component.hasValueQuanity} and ${not component.hasValueCodeableConcept} and ${not component.hasValueStringType}" th:text="'(component without quantity, code or string?)'"/>
 
-                                <th:block th:if="${component.hasValueQuanity} and ${not ${component.valueQuanity.comparatorElement.empty}" th:text="${component.valueQuanity.comparatorElement.value}"/>
-                                <th:block th:if="${component.hasValueQuanity} and ${not ${component.valueQuanity.valueElement.empty}" th:text="${component.valueQuanity.valueElement.valueAsString}"/>
-                                <th:block th:if="${component.hasValueQuanity} and ${not ${component.valueQuanity.unitElement.empty}" th:text="${component.valueQuanity.unitElement.value}"/>
-                                <th:block th:if="${component.hasValueStringType}" th:text="${component.valueStringType.string} + ' '"/>
+                                <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.comparatorElement.empty}" th:text="${component.valueQuantity.comparatorElement.value}"/>
+                                <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.valueElement.empty}" th:text="${component.valueQuantity.valueElement.valueAsString}"/>
+                                <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.unitElement.empty}" th:text="${component.valueQuantity.unitElement.value}"/>
+                                <th:block th:if="${component.hasValueStringType}" th:text="${component.valueStringType} + ' '"/>
                                 <th:block th:if="${component.hasValueCodeableConcept} and ${${component.valueCodeableConcept.hasCoding}}">
                                     <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${component.valueCodeableConcept.codingFirstRep.display} + ' '"/>
                                     <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasSystem}" th:text="'(' + ${component.valueCodeableConcept.codingFirstRep.system} + ') '"/>
