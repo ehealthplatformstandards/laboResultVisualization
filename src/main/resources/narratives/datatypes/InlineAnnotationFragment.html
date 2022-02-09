@@ -6,18 +6,25 @@
 <body>
 <!--*/-->
 <th:block th:fragment="inlineannotation (annotation)">
-    <th:block th:if="${annotation.hasAuthorStringType} and not ${annotation.hasTimeElement}"
-              th:text="${annotation.authorStringType}+':'"/>
-    <th:block th:if="${annotation.hasAuthorStringType} and ${annotation.hasTimeElement}"
-              th:text="${annotation.authorStringType}"/>
-    <th:block th:if="${not annotation.hasAuthorStringType and annotation.hasAuthor} and not ${annotation.hasTimeElement}"
-              th:text="${annotation.author.resource.name[0].nameAsSingleString}+': '"/>
-    <th:block th:if="${not annotation.hasAuthorStringType and annotation.hasAuthor} and ${annotation.hasTimeElement}"
-              th:text="${annotation.author.resource.name[0].nameAsSingleString}"/>
-    <th:block th:if="${annotation.hasTimeElement}"
-              th:text="${#dates.format(annotation.timeElement.value,'dd MMMM yyyy hh:mm:ss')}+': '"></th:block>
-    <th:block th:if="${annotation.hasTextElement}" th:text="${annotation.textElement.value}">
-
+    <th:block th:if="${annotation.hasAuthorStringType}">
+        <b>Author:</b> <th:block th:text="${annotation.authorStringType}"/><br/>
+    </th:block>
+    <th:block th:if="${annotation.hasTimeElement}">
+        <b>Time:</b> <th:block th:text="${#dates.format(annotation.timeElement.value,'dd MMMM yyyy hh:mm:ss')}"/><br/>
+    </th:block>
+    <th:block th:if="${annotation.hasExtension('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/annotation-code')}" th:each="ext : ${annotation.getExtensionByUrl('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/annotation-code')}">
+        <th:block th:if="${ext.value.hasCoding('https://www.ehealth.fgov.be/standards/fhir/CodeSystem/be-cs-coded-annotation-types', 'lab-test-accreditation')}">
+            <b>Accreditation</b><br/>
+        </th:block>
+        <th:block th:if="${ext.value.hasCoding('https://www.ehealth.fgov.be/standards/fhir/CodeSystem/be-cs-coded-annotation-types', 'lab-test-subcontractor')}">
+            <b>Subcontractor</b><br/>
+        </th:block>
+        <th:block th:if="${ext.value.hasCoding('https://www.ehealth.fgov.be/standards/fhir/CodeSystem/be-cs-coded-annotation-types', 'lab-referencerange-comment	')}">
+            <b>Lab reference range comment</b><br/>
+        </th:block>
+    </th:block>
+    <th:block th:if="${annotation.hasTextElement}">
+        <th:block th:utext="${#strings.replace(#strings.escapeXml(annotation.textElement.value),'\n','<br/>')}"/>
     </th:block>
 </th:block>
 <!--/*-->

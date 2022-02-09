@@ -83,6 +83,9 @@
                 <th:block th:if="${result.resource.hasValueTimeType}" th:text="${result.resource.valueTimeType.valueAsString}"/>
             </td>
             <td>
+                <th:block th:if="${result.resource.hasInterpretation}" th:each="interp : ${result.resource.interpretation}">
+
+                </th:block>
                 <th:block
                         th:if="${not result.resource.interpretation.empty} and ${not result.resource.interpretation[0].textElement.empty}"
                         th:text="${result.resource.interpretation[0].text}"/>
@@ -201,7 +204,7 @@
         <th:block th:if="${result.resource.hasNote}" th:each="note : ${result.resource.note}">
             <tr th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
                 class="hapiTableOfValuesRowOdd">
-                <td th:text="${note.text}" colspan="6">This is a comment</td>
+                <td colspan="6" th:include="@{inlineannotation} :: inlineannotation (${note})"></td>
             </tr>
         </th:block>
     </th:block>
