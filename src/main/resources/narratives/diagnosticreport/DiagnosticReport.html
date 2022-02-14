@@ -81,7 +81,7 @@
                 <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='Performer')" />
             </th:block>
             <!-- Results interpreter -->
-            <th:block th:if="${resource.hasSpecimen}" th:each="resultsInterpreter : ${resource.resultsInterpreter}">
+            <th:block th:if="${resource.hasResultsInterpreter}" th:each="resultsInterpreter : ${resource.resultsInterpreter}">
                 <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
                 <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
             </th:block>
