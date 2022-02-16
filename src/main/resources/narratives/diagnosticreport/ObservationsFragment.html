@@ -84,15 +84,8 @@
             </td>
             <td>
                 <th:block th:if="${result.resource.hasInterpretation}" th:each="interp : ${result.resource.interpretation}">
-
+                    <th:block th:if="${interp.hasCoding} and ${interp.codingFirstRep.hasCode}" th:text="${interp.codingFirstRep.code}"/><th:block th:if="${interp.hasText}" th:text="'('+${interp.text}+')'"/>
                 </th:block>
-                <th:block
-                        th:if="${not result.resource.interpretation.empty} and ${not result.resource.interpretation[0].textElement.empty}"
-                        th:text="${result.resource.interpretation[0].text}"/>
-                <th:block
-                        th:if="${not result.resource.interpretation.empty} and ${result.resource.interpretation[0].textElement.empty} and ${not result.resource.interpretation[0].coding.empty} and ${not result.resource.interpretation[0].coding[0].displayElement.empty}"
-                        th:text="${result.resource.interpretation[0].coding[0].display}"/>
-                <!--/*--> N <!--*/-->
             </td>
             <td>
                 <th:block th:each="ref,rowStat : ${result.resource.referenceRange}">
