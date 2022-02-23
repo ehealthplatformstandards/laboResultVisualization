@@ -84,15 +84,8 @@
             </td>
             <td>
                 <th:block th:if="${result.resource.hasInterpretation}" th:each="interp : ${result.resource.interpretation}">
-
+                    <th:block th:if="${interp.hasCoding} and ${interp.codingFirstRep.hasCode}" th:text="${interp.codingFirstRep.code}"/><th:block th:if="${interp.hasText}" th:text="'('+${interp.text}+')'"/>
                 </th:block>
-                <th:block
-                        th:if="${not result.resource.interpretation.empty} and ${not result.resource.interpretation[0].textElement.empty}"
-                        th:text="${result.resource.interpretation[0].text}"/>
-                <th:block
-                        th:if="${not result.resource.interpretation.empty} and ${result.resource.interpretation[0].textElement.empty} and ${not result.resource.interpretation[0].coding.empty} and ${not result.resource.interpretation[0].coding[0].displayElement.empty}"
-                        th:text="${result.resource.interpretation[0].coding[0].display}"/>
-                <!--/*--> N <!--*/-->
             </td>
             <td>
                 <th:block th:each="ref,rowStat : ${result.resource.referenceRange}">
@@ -113,91 +106,27 @@
             <td>
                 <th:block th:unless="${result.resource.hasHasMember}" th:text="${result.resource.statusElement.value}">final</th:block>
             </td>
-            <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
+            <th:block th:if="${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
                 <td class="toggable" onclick="this.classList.toggle('displayed');  this.parentElement.nextElementSibling.classList.toggle('hidden');">
                     <div>
                         <span class="inline clicktoshow">+</span><span class="inline clicktohide">-</span>
                     </div>
                 </td>
             </th:block>
-            <th:block th:unless="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
+            <th:block th:unless="${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
                 <td>
                 </td>
             </th:block>
         </tr>
-        <tr th:class="'hidden'" th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
+        <tr th:class="'hidden'" th:if="${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
             <td colspan="6">
-               <table>
-                    <tbody>
-                        <tr th:if="${result.resource.hasLanguage}">
-                            <td>Language</td>
-                            <td th:text="${result.resource.language}"/>
-                        </tr>
-                        <tr th:if="${result.resource.hasCategory}">
-                            <td>Category</td>
-                            <td th:text="${result.resource.category}"/>
-                        </tr>
-                        <tr th:if="${result.resource.hasEffectiveDateTimeType}">
-                            <td>Effective date (datetime)</td>
-                            <td th:text="${#dates.format(result.resource.effectiveDateTimeType.value,'dd MMMM yyyy hh:mm:ss')}"/>
-                        </tr>
-                        <tr th:if="${result.resource.hasEffectivePeriod}">
-                            <td>Effective date (period)</td>
-                            <td><span th:if="${result.resource.effectivePeriod.hasStartElement}"
-                                    th:text="${#dates.format(result.resource.effectivePeriod.startElement.value,'dd MMMM yyyy')}">...</span>
-                                -
-                                <span
-                                    th:if="${result.resource.effectivePeriod.hasEndElement}"
-                                    th:text="${#dates.format(result.resource.effectivePeriod.endElement.value,'dd MMMM yyyy')}">...</span></td>
-                        </tr>
-                        <!-- will effective timing ever occur in context of lab results? -->
-                        <!--tr th:if="${result.resource.hasEffectiveTiming}">
-                            <td>Effective date</td>
-                            <td>(effective timing)</td>
-                        </tr-->
-                        <tr th:if="${result.resource.hasEffectiveInstantType}">
-                            <td>Effective date (instant)</td>
-                            <td th:text="${#dates.format(result.resource.effectiveInstantType.value,'dd MMMM yyyy hh:mm:ss')}"/>
-                        </tr>
-                        <tr th:if="${result.resource.hasIssuedElement}">
-                            <td>Issued date</td>
-                            <td th:text="${#dates.format(result.resource.issuedElement.value,'dd MMMM yyyy hh:mm:ss')}"/>
-                        </tr>
-                        <tr th:if="${result.resource.hasDataAbsentReason}">
-                            <td>Data absent reason</td>
-                            <td th:include="@{inlinecode} :: inlinecode (${result.resource.dataAbsentReason})"></td>
-                        </tr>
-                        <tr th:if="${result.resource.hasBodySite}">
-                            <td>Body site</td>
-                            <td th:include="@{inlinecode} :: inlinecode (${result.resource.bodySite})"></td>
-                        </tr>
-                        <!-- derivedFrom shows which other observation(s) this observation was derived from,
-                             is this usefull clinical information to show in the visualizer? How do we show the other observations this has been derived from?
-                             Include all information of that observation -again- in a collapsible sub-table? The screen will get very busy imo. -->
-                        <!--th:block th:if="${result.resource.hasDerivedFrom}" th:each="derivedFrom : ${result.resource.hasDerivedFrom}">
-                            <tr>
-                                <td>Derived from</td>
-                                <td>(derived from)</td>
-                            </tr>
-                        </th:block-->
-                        <tr th:if="${result.resource.hasComponent}" th:each="component : ${result.resource.component}">
-                            <td>Component</td>
-                            <td>
-                                <th:block th:if="${not component.hasValueQuanity} and ${not component.hasValueCodeableConcept} and ${not component.hasValueStringType}" th:text="'(component without quantity, code or string?)'"/>
-
-                                <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.comparatorElement.empty}" th:text="${component.valueQuantity.comparatorElement.value}"/>
-                                <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.valueElement.empty}" th:text="${component.valueQuantity.valueElement.valueAsString}"/>
-                                <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.unitElement.empty}" th:text="${component.valueQuantity.unitElement.value}"/>
-                                <th:block th:if="${component.hasValueStringType}" th:text="${component.valueStringType} + ' '"/>
-                                <th:block th:if="${component.hasValueCodeableConcept} and ${${component.valueCodeableConcept.hasCoding}}">
-                                    <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${component.valueCodeableConcept.codingFirstRep.display} + ' '"/>
-                                    <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasSystem}" th:text="'(' + ${component.valueCodeableConcept.codingFirstRep.system} + ') '"/>
-                                    <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasCode}" th:text="'(' + ${component.valueCodeableConcept.codingFirstRep.code} + ') '"/>
-                                </th:block>
-                            </td>
-                        </tr>
-                    </tbody>
-               </table>
+                <table class="hapiPropertyTable">
+                        <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}" th:include="@{details} :: details (${result})" />
+                        <th:block th:if="${resource.hasPerformer}" th:each="performer : ${resource.performer}">
+                            <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='ObservationPerformer')" />
+                            <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='ObservationPerformer')" />
+                        </th:block>
+                </table>
             </td>
         </tr>
         <tr th:replace="@{observations} :: observations (items=${result.resource.hasMember},level=${level}+1)"></tr>

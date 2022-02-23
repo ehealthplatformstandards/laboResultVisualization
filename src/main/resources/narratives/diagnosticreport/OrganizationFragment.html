@@ -16,13 +16,17 @@
         </td>
     </tr></thead>
     <tbody class="hidden">
-    <tr th:if="${not organization.resource.type.empty}">
+    <tr th:if="${organization.resource.hasType}" th:each="type : ${organization.resource.type}">
         <td>Type</td>
-        <td th:narrative="${organization.resource.type[0]}"></td>
+        <td th:include="@{inlinecode} :: inlinecode (${type})"></td>
     </tr>
-    <tr th:if="${not organization.resource.identifier.empty}">
+    <tr th:if="${organization.resource.hasIdentifier}" th:each="identifier : ${organization.resource.identifier}">
         <td>Identifier</td>
-        <td th:narrative="${organization.resource.identifier[0]}"></td>
+        <td>
+            <th:block th:if="${identifier.hasUse}" th:text="${identifier.use.display}"/>
+            <th:block th:if="${identifier.hasValue}" th:text="${identifier.value}"/>
+            <th:block th:if="${identifier.hasSystem}" th:text="'(' + ${identifier.system} + ')'"/>
+        </td>
     </tr>
     <tr th:if="${not organization.resource.name.empty}">
         <td>Name</td>

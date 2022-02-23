@@ -11,14 +11,11 @@
     <th:block
             th:if="${not code.hasTextElement} and ${code.hasCoding} and ${code.coding[0].hasDisplay}"
             th:text="${code.coding[0].display}"/>
-    <th:block
-            th:if="${not code.hasTextElement} and ${code.hasCoding} and ${not code.coding[0].hasDisplayElement}"
-            th:text="'?'"/>
     <th:block th:if="${code.hasCoding} and ${code.coding[0].hasSystemElement}"
-              th:text="' (' + ${code.coding[0].system} + ')'"> (no system?)
+              th:text="'(' + ${code.coding[0].system} + ')'">(no system?)
     </th:block>
     <th:block th:if="${code.hasCoding} and ${code.coding[0].hasCodeElement}"
-              th:text=" '(' + ${code.coding[0].code} + ')'"> (no code?)
+              th:text="'(' + ${code.coding[0].code} + ')'">(no code?)
     </th:block>
 </th:block>
 <!--/*-->

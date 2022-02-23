@@ -41,28 +41,28 @@
         </tr>
         </tbody>
 
-        <th:block th:if="${not resource.subject.resource.empty}">
+        <th:block th:if="${resource.hasSubject}">
             <thead><tr><td colspan="2">Patient details</td></tr></thead>
             <tbody>
-            <tr th:if="${not resource.subject.resource.identifier.empty}">
+            <tr th:if="${resource.subject.resource.hasIdentifier}">
                 <td>Identifier</td>
                 <td th:narrative="${resource.subject.resource.identifier[0]}"></td>
             </tr>
-            <tr th:if="${not resource.subject.resource.name.empty}">
+            <tr th:if="${resource.subject.resource.hasName}">
                 <td>Patient name</td>
                 <td th:text="${resource.subject.resource.name[0].nameAsSingleString}">--</td>
             </tr>
-            <tr th:if="${not resource.subject.resource.birthDateElement.empty}">
+            <tr th:if="${resource.subject.resource.hasBirthDateElement}">
                 <td>Date of birth</td>
                 <td><span
                         th:text="${#dates.format(resource.subject.resource.birthDateElement.value,'dd MMMM yyyy')}"></span>
                 </td>
             </tr>
-            <tr th:if="${not resource.subject.resource.telecom.empty}" th:each="telco : ${resource.subject.resource.telecom}">
+            <tr th:if="${resource.subject.resource.hasTelecom}" th:each="telco : ${resource.subject.resource.telecom}">
                 <td th:text="${telco.system.name}">Telecom</td>
                 <td th:narrative="${telco}"></td>
             </tr>
-            <tr th:if="${not resource.subject.resource.address.empty}">
+            <tr th:if="${resource.subject.resource.hasAddress}">
                 <td>Address</td>
                 <td th:narrative="${resource.subject.resource.address[0]}"></td>
             </tr>
@@ -81,7 +81,7 @@
                 <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='Performer')" />
             </th:block>
             <!-- Results interpreter -->
-            <th:block th:if="${resource.hasSpecimen}" th:each="resultsInterpreter : ${resource.resultsInterpreter}">
+            <th:block th:if="${resource.hasResultsInterpreter}" th:each="resultsInterpreter : ${resource.resultsInterpreter}">
                 <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
                 <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
             </th:block>
