@@ -35,7 +35,7 @@
                 <!-- boolean -->
                 <th:block th:if="${result.resource.hasValueBooleanType}" th:text="${result.resource.valueBooleanType.valueAsString}"/>
                 <!-- date time -->
-                <th:block th:if="${result.resource.hasValueDateTimeType}" th:text="${#dates.format(result.resource.valueDateTimeType.value,'dd MMMM yyyy hh:mm:ss')}"/>
+                <th:block th:if="${result.resource.hasValueDateTimeType}" th:text="${#dates.format(result.resource.valueDateTimeType.value,'dd MMMM yyyy HH:mm:ss')}"/>
                 <!-- integer -->
                 <th:block th:if="${result.resource.hasValueIntegerType}" th:text="${result.resource.valueIntegerType.valueAsString}"/>
                 <!-- period -->

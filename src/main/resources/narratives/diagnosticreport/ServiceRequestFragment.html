@@ -53,7 +53,7 @@
     <!-- Authored on -->
     <tr th:if="${basedOn.resource.hasAuthoredOnElement}">
         <td>Authored on</td>
-        <td th:text="${#dates.format(basedOn.resource.authoredOnElement.value,'dd MMMM yyyy hh:mm:ss')}"></td>
+        <td th:text="${#dates.format(basedOn.resource.authoredOnElement.value,'dd MMMM yyyy HH:mm:ss')}"></td>
     </tr>
     <!-- Requester -->
     <th:block th:if="${basedOn.resource.hasRequester and basedOn.resource.requester.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: inlineOrganization (organization=${basedOn.resource.requester}, title='Requester', id='Requester')" />

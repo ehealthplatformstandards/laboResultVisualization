@@ -42,7 +42,7 @@
     <!-- Received time -->
     <tr th:if="${specimen.resource.hasReceivedTimeElement}">
         <td>Received</td>
-        <td th:text="${#dates.format(specimen.resource.receivedTimeElement.value,'dd MMMM yyyy hh:mm:ss')}"></td>
+        <td th:text="${#dates.format(specimen.resource.receivedTimeElement.value,'dd MMMM yyyy HH:mm:ss')}"></td>
     </tr>
     <!-- Requests -->
     <th:block th:if="${not specimen.resource.hasRequest}" th:each="request : ${specimen.resource.request}">
@@ -59,17 +59,17 @@
         <!-- Collection collected date -->
         <tr th:if="${specimen.resource.collection.hasCollectedDateTimeType}">
             <td>Collected date</td>
-            <td th:text="${#dates.format(specimen.resource.collection.collectedDateTimeType.value,'dd MMMM yyyy hh:mm:ss')}"></td>
+            <td th:text="${#dates.format(specimen.resource.collection.collectedDateTimeType.value,'dd MMMM yyyy HH:mm:ss')}"></td>
         </tr>
         <!-- Collection collected period -->
         <tr th:if="${specimen.resource.collection.hasCollectedPeriod}">
             <td>Collected period</td>
             <td>
                 <th:block th:if="${specimen.resource.collection.collectedPeriod.hasStart}"
-                          th:text="${#dates.format(specimen.resource.collection.collectedPeriod.start,'dd MMMM yyyy hh:mm:ss')}">...</th:block>
+                          th:text="${#dates.format(specimen.resource.collection.collectedPeriod.start,'dd MMMM yyyy HH:mm:ss')}">...</th:block>
                 -
                 <th:block th:if="${specimen.resource.collection.collectedPeriod.hasEnd}"
-                          th:text="${#dates.format(specimen.resource.collection.collectedPeriod.end,'dd MMMM yyyy hh:mm:ss')}">...</th:block>
+                          th:text="${#dates.format(specimen.resource.collection.collectedPeriod.end,'dd MMMM yyyy HH:mm:ss')}">...</th:block>
             </td>
         </tr>
         <!-- Collection duration -->
