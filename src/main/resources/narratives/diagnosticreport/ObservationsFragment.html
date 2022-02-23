@@ -122,7 +122,7 @@
             <td colspan="6">
                 <table class="hapiPropertyTable">
                         <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}" th:include="@{details} :: details (${result})" />
-                        <th:block th:if="${resource.hasPerformer}" th:each="performer : ${resource.performer}">
+                        <th:block th:if="${result.resource.hasPerformer}" th:each="performer : ${result.resource.performer}">
                             <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='ObservationPerformer')" />
                             <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='ObservationPerformer')" />
                         </th:block>
