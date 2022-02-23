@@ -1,0 +1,14 @@
+<!--/*-->
+<html xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="inlinetext (text)">
+    <th:block th:utext="${#strings.replace(#strings.escapeXml(text),'\n','<br/>')}"/>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->
