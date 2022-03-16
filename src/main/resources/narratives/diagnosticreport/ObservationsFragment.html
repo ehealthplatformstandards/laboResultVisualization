@@ -8,9 +8,9 @@
 <th:block th:fragment="observations (items,level)">
     <th:block th:each="result,rowStat : ${items}">
         <tr th:class="'level_'+${level} + ' ' + (${not result.resource.hasMember.empty }? 'title' : (${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'))" class="hapiTableOfValuesRowOdd">
-            <td class="label">
+            <td class="label" style="vertical-align:top">
                 <th:block th:if="${not result.resource.code.textElement.empty}"
-                          th:text="${result.resource.code.textElement.value}"/>
+                          th:include="@{inlinetext} :: inlinetext (${result.resource.code.textElement.value})"/>
                 <th:block
                         th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${not result.resource.code.coding[0].displayElement.empty}"
                         th:text="${result.resource.code.coding[0].display}"/>
@@ -35,7 +35,7 @@
                 <!-- boolean -->
                 <th:block th:if="${result.resource.hasValueBooleanType}" th:text="${result.resource.valueBooleanType.valueAsString}"/>
                 <!-- date time -->
-                <th:block th:if="${result.resource.hasValueDateTimeType}" th:text="${#dates.format(result.resource.valueDateTimeType.value,'dd MMMM yyyy hh:mm:ss')}"/>
+                <th:block th:if="${result.resource.hasValueDateTimeType}" th:text="${#dates.format(result.resource.valueDateTimeType.value,'dd MMMM yyyy HH:mm:ss')}"/>
                 <!-- integer -->
                 <th:block th:if="${result.resource.hasValueIntegerType}" th:text="${result.resource.valueIntegerType.valueAsString}"/>
                 <!-- period -->
@@ -58,8 +58,8 @@
                     <th:block th:if="${not result.resource.valueRange.low.empty} and ${result.resource.valueRange.high.empty}">
                         &gt;&nbsp;<th:block th:narrative="${result.resource.valueRange.low}"></th:block>
                     </th:block>
-                    <th:block th:if="${result.resource.valueRange.hasTextElement}">
-                        <th:block th:narrative="${result.resource.valueRange.textElement}"></th:block>
+                    <th:block th:if="${result.resource.valueRange.hasText}">
+                        <th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueRange.text)"></th:block>
                     </th:block>
                 </th:block>
                 <!-- ratio -->
@@ -98,31 +98,32 @@
                     <th:block th:if="${not ref.low.empty} and ${ref.high.empty}">
                         &gt;&nbsp;<th:block th:narrative="${ref.low}"></th:block>
                     </th:block>
-                    <th:block th:if="${ref.hasTextElement}">
-                        <th:block th:narrative="${ref.textElement}"></th:block>
+                    <th:block th:if="${ref.hasText}">
+                        <th:block th:include="@{inlinetext} :: inlinetext (${ref.text})"></th:block>
                     </th:block>
                 </th:block>
             </td>
             <td>
                 <th:block th:unless="${result.resource.hasHasMember}" th:text="${result.resource.statusElement.value}">final</th:block>
             </td>
-            <th:block th:if="${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
+            <th:block th:if="${result.resource.hasSubject} or ${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
                 <td class="toggable" onclick="this.classList.toggle('displayed');  this.parentElement.nextElementSibling.classList.toggle('hidden');">
                     <div>
                         <span class="inline clicktoshow">+</span><span class="inline clicktohide">-</span>
                     </div>
                 </td>
             </th:block>
-            <th:block th:unless="${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
+            <th:block th:unless="${result.resource.hasSubject} or ${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
                 <td>
                 </td>
             </th:block>
         </tr>
-        <tr th:class="'hidden'" th:if="${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
+        <tr th:class="'hidden'" th:if="${result.resource.hasSubject} or ${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
             <td colspan="6">
                 <table class="hapiPropertyTable">
                         <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}" th:include="@{details} :: details (${result})" />
-                        <th:block th:if="${resource.hasPerformer}" th:each="performer : ${resource.performer}">
+                        <th:block th:if="${result.resource.hasSubject}" th:include="@{patient} :: hiddenPatient (patient=${result.resource.subject}, title='Subject', id='Subject')"/>
+                        <th:block th:if="${result.resource.hasPerformer}" th:each="performer : ${result.resource.performer}">
                             <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='ObservationPerformer')" />
                             <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='ObservationPerformer')" />
                         </th:block>

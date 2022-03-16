@@ -9,7 +9,7 @@
     <thead><tr>
         <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
             <div>
-                <div>Service request details</div><div>
+                <div>Service request</div><div>
                 <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
             </div>
             </div>
@@ -53,7 +53,7 @@
     <!-- Authored on -->
     <tr th:if="${basedOn.resource.hasAuthoredOnElement}">
         <td>Authored on</td>
-        <td th:text="${#dates.format(basedOn.resource.authoredOnElement.value,'dd MMMM yyyy hh:mm:ss')}"></td>
+        <td th:text="${#dates.format(basedOn.resource.authoredOnElement.value,'dd MMMM yyyy HH:mm:ss')}"></td>
     </tr>
     <!-- Requester -->
     <th:block th:if="${basedOn.resource.hasRequester and basedOn.resource.requester.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: inlineOrganization (organization=${basedOn.resource.requester}, title='Requester', id='Requester')" />

@@ -22,7 +22,7 @@
     </tr>
     <tr th:if="${result.resource.hasEffectiveDateTimeType}">
         <td>Effective date (datetime)</td>
-        <td th:text="${#dates.format(result.resource.effectiveDateTimeType.value,'dd MMMM yyyy hh:mm:ss')}"/>
+        <td th:text="${#dates.format(result.resource.effectiveDateTimeType.value,'dd MMMM yyyy HH:mm:ss')}"/>
     </tr>
     <tr th:if="${result.resource.hasEffectivePeriod}">
         <td>Effective date (period)</td>
@@ -41,11 +41,11 @@
     </tr-->
     <tr th:if="${result.resource.hasEffectiveInstantType}">
         <td>Effective date (instant)</td>
-        <td th:text="${#dates.format(result.resource.effectiveInstantType.value,'dd MMMM yyyy hh:mm:ss')}"/>
+        <td th:text="${#dates.format(result.resource.effectiveInstantType.value,'dd MMMM yyyy HH:mm:ss')}"/>
     </tr>
     <tr th:if="${result.resource.hasIssuedElement}">
         <td>Issued date</td>
-        <td th:text="${#dates.format(result.resource.issuedElement.value,'dd MMMM yyyy hh:mm:ss')}"/>
+        <td th:text="${#dates.format(result.resource.issuedElement.value,'dd MMMM yyyy HH:mm:ss')}"/>
     </tr>
     <tr th:if="${result.resource.hasDataAbsentReason}">
         <td>Data absent reason</td>

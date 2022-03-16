@@ -1,0 +1,81 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="patient (patient, title)">
+    <thead><tr><td colspan="2" th:text="${title}">Patient</td></tr></thead>
+    <tbody>
+    <tr th:if="${patient.resource.hasIdentifier}" th:each="identifier : ${patient.resource.identifier}">
+        <td>Identifier</td>
+        <td>
+            <th:block th:if="${identifier.hasUse}" th:text="${identifier.use.display}"/>
+            <th:block th:if="${identifier.hasValue}" th:text="${identifier.value}"/>
+            <th:block th:if="${identifier.hasSystem}" th:text="'(' + ${identifier.system} + ')'"/>
+        </td>
+    </tr>
+    <tr th:if="${patient.resource.hasName}">
+        <td>Patient name</td>
+        <td th:text="${patient.resource.name[0].nameAsSingleString}">--</td>
+    </tr>
+    <tr th:if="${patient.resource.hasBirthDateElement}">
+        <td>Date of birth</td>
+        <td><span
+                th:text="${#dates.format(patient.resource.birthDateElement.value,'dd MMMM yyyy')}"></span>
+        </td>
+    </tr>
+    <tr th:if="${patient.resource.hasTelecom}" th:each="telco : ${patient.resource.telecom}">
+        <td th:text="${telco.system.name}">Telecom</td>
+        <td th:narrative="${telco}"></td>
+    </tr>
+    <tr th:if="${patient.resource.hasAddress}">
+        <td>Address</td>
+        <td th:narrative="${patient.resource.address[0]}"></td>
+    </tr>
+    </tbody>
+</th:block>
+<th:block th:fragment="hiddenPatient (patient, title)">
+    <thead><tr>
+        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+            <div>
+                <div th:text="${title}">Patient</div><div>
+                <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+            </div>
+            </div>
+        </td>
+    </tr></thead>
+    <tbody class="hidden">
+    <tr th:if="${patient.resource.hasIdentifier}" th:each="identifier : ${patient.resource.identifier}">
+        <td>Identifier</td>
+        <td>
+            <th:block th:if="${identifier.hasUse}" th:text="${identifier.use.display}"/>
+            <th:block th:if="${identifier.hasValue}" th:text="${identifier.value}"/>
+            <th:block th:if="${identifier.hasSystem}" th:text="'(' + ${identifier.system} + ')'"/>
+        </td>
+    </tr>
+    <tr th:if="${patient.resource.hasName}">
+        <td>Patient name</td>
+        <td th:text="${patient.resource.name[0].nameAsSingleString}">--</td>
+    </tr>
+    <tr th:if="${patient.resource.hasBirthDateElement}">
+        <td>Date of birth</td>
+        <td><span
+                th:text="${#dates.format(patient.resource.birthDateElement.value,'dd MMMM yyyy')}"></span>
+        </td>
+    </tr>
+    <tr th:if="${patient.resource.hasTelecom}" th:each="telco : ${patient.resource.telecom}">
+        <td th:text="${telco.system.name}">Telecom</td>
+        <td th:narrative="${telco}"></td>
+    </tr>
+    <tr th:if="${patient.resource.hasAddress}">
+        <td>Address</td>
+        <td th:narrative="${patient.resource.address[0]}"></td>
+    </tr>
+    </tbody>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->
