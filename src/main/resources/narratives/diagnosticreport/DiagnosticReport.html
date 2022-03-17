@@ -13,13 +13,13 @@
         display value on the first coding, and if that's missing too show a default "Untitled"
         value
         */-->
-        <th:block th:if="${not resource.code.textElement.empty} or ${resource.code.coding.empty}"
+        <th:block th:if="${resource.code.hasTextElement} or ${not resource.code.hasCoding}"
                   th:text="${resource.code.textElement.value}"/>
         <th:block
-                th:if="${not resource.code.coding.empty} and ${resource.code.textElement.empty} and ${not resource.code.coding[0].displayElement.empty}"
+                th:if="${resource.code.hasCoding} and ${not resource.code.hasTextElement} and ${resource.code.coding[0].hasDisplayElement}"
                 th:include="@{inlinetext} :: inlinetext (${resource.code.coding[0].display})"/>
         <th:block
-                th:if="${not resource.code.coding.empty} and ${resource.code.textElement.empty} and ${resource.code.coding[0].displayElement.empty}"
+                th:if="${resource.code.hasCoding} and ${not resource.code.hasTextElement} and ${not resource.code.coding[0].hasDisplayElement}"
                 th:text="'Untitled Diagnostic Report'"/>
         <!--/*--> Complete Blood Count <!--*/-->
     </div>
@@ -27,15 +27,15 @@
     <table class="hapiPropertyTable">
         <thead><tr><td colspan="2">Result information</td></tr></thead>
         <tbody>
-        <tr th:if="${not resource.statusElement.empty}">
+        <tr th:if="${resource.hasStatusElement}">
             <td>Status</td>
             <td th:text="${resource.statusElement.value}">Final</td>
         </tr>
-        <tr th:if="${not resource.issuedElement.empty}">
+        <tr th:if="${resource.hasIssuedElement}">
             <td>Issued</td>
             <td th:narrative="${resource.issuedElement}">--</td>
         </tr>
-        <tr th:if="${not resource.conclusionElement.empty}">
+        <tr th:if="${resource.hasConclusionElement}">
             <td>Conclusion</td>
             <td th:narrative="${resource.conclusionElement}">No conclusion was integrated in this report</td>
         </tr>
