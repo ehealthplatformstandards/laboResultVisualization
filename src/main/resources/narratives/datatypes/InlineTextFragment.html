@@ -5,9 +5,7 @@
 </head>
 <body>
 <!--*/-->
-<th:block th:fragment="inlinetext (text)">
-    <th:block th:utext="${#strings.replace(#strings.escapeXml(text),'\n','<br/>')}"/>
-</th:block>
+<th:block th:fragment="inlinetext (text)"><th:block th:utext="${#strings.replace(#strings.escapeXml(text),'\n','<br/>')}"/></th:block>
 <!--/*-->
 </body>
 </html>
