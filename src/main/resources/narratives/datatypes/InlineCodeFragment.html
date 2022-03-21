@@ -5,18 +5,37 @@
 </head>
 <body>
 <!--*/-->
-<th:block th:fragment="inlinecode (code)">
-    <th:block th:if="${code.hasTextElement}"
-              th:text="${code.textElement.value}"/>
-    <th:block
-            th:if="${not code.hasTextElement} and ${code.hasCoding} and ${code.coding[0].hasDisplay}"
-            th:text="${code.coding[0].display}"/>
-    <th:block th:if="${code.hasCoding} and ${code.coding[0].hasSystemElement}"
-              th:text="'(' + ${code.coding[0].system} + ')'">(no system?)
-    </th:block>
-    <th:block th:if="${code.hasCoding} and ${code.coding[0].hasCodeElement}"
-              th:text="'(' + ${code.coding[0].code} + ')'">(no code?)
-    </th:block>
+<th:block th:fragment="inlinecoderows (code, title)">
+    <tr th:if="${code.hasText} and ${not code.hasCoding}">
+        <td th:text="${title}">Code</td>
+        <td th:text="${code.text}"></td>
+    </tr>
+    <tr th:if="${code.hasCoding}">
+        <td th:text="${title}">Code</td>
+        <td  th:each="coding : ${code.coding}">
+            <th:block th:include="@{inlinecode} :: inlinecoding (coding=${coding}, text=${code.text})"/>
+        </td>
+    </tr>
+</th:block>
+
+<th:block th:fragment="inlinecoderowshidden (code, id, title)">
+    <tr th:class="'hidden '+${id}"  th:if="${code.hasText} and ${not code.hasCoding}">
+        <td th:text="${title}">Code</td>
+        <td th:text="${code.text}"></td>
+    </tr>
+    <tr th:class="'hidden '+${id}"  th:if="${code.hasCoding}">
+        <td th:text="${title}">Code</td>
+        <td  th:each="coding : ${code.coding}">
+            <th:block th:include="@{inlinecode} :: inlinecoding (coding=${coding}, text=${code.text})"/>
+        </td>
+    </tr>
+</th:block>
+
+<th:block th:fragment="inlinecoding (coding, text)">
+    <th:block th:if="${not coding.hasDisplay} and ${not #strings.isEmpty(text)}" th:text="${text}"/>
+    <th:block th:if="${coding.hasDisplay}" th:text="${coding.display}"/>
+    <th:block th:if="${coding.hasCode}" th:text="'('+ ${coding.code} + ')'"/>
+    <th:block th:if="${coding.hasSystem}" th:text="'(' + ${coding.system} + ')'"/>
 </th:block>
 <!--/*-->
 </body>
