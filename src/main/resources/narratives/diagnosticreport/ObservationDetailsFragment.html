@@ -49,7 +49,10 @@
             <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasValueElement}" th:text="${result.resource.valueQuantity.valueElement.valueAsString}"/>
             <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasCode}" th:text="${result.resource.valueQuantity.code}"/>
             <!-- string -->
-            <pre><th:block th:if="${result.resource.hasValueStringType}" th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></pre>
+            <th:block th:if="${result.resource.hasValueStringType}">
+                <th:block th:if="${#strings.contains(result.resource.valueStringType, '\n')}"><pre><th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></pre></th:block>
+                <th:block th:unless="${#strings.contains(result.resource.valueStringType, '\n')}"><th:block th:text="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></th:block>
+            </th:block>
             <!-- codeable concept -->
             <th:block th:if="${result.resource.hasValueCodeableConcept} and ${${result.resource.valueCodeableConcept.hasCoding}}">
                 <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display} + ' '"/>
