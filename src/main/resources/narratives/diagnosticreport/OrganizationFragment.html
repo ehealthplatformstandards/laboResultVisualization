@@ -16,7 +16,9 @@
         </td>
     </tr></thead>
     <tbody class="hidden">
-    <th:block th:if="${organization.resource.hasType}" th:include="@{inlinecode} :: inlinecoderows (code=${organization.resource.type}, title='Type')"/>
+    <th:block th:if="${organization.resource.hasType}" th:each="type : ${organization.resource.type}">
+        <th:block th:include="@{inlinecode} :: inlinecoderows (code=${type}, title='Type')"/>
+    </th:block>
     <tr th:if="${organization.resource.hasIdentifier}" th:each="identifier : ${organization.resource.identifier}">
         <td>Identifier</td>
         <td>
@@ -60,7 +62,9 @@
             </div>
         </td>
     </tr>
-    <th:block th:if="${organization.resource.hasType}" th:include="@{inlinecode} :: inlinecoderowshidden (code=${organization.resource.type}, id=${id}, title='Type')"/>
+    <th:block th:if="${organization.resource.hasType}" th:each="type : ${organization.resource.type}">
+        <th:block th:include="@{inlinecode} :: inlinecoderowshidden (code=${type}, id=${id}, title='Type')"/>
+    </th:block>
     <tr th:class="'hidden '+${id}" th:if="${organization.resource.hasIdentifier}" th:each="identifier : ${organization.resource.identifier}">
         <td>Identifier</td>
         <td>
