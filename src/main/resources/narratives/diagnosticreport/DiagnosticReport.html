@@ -13,13 +13,14 @@
         display value on the first coding, and if that's missing too show a default "Untitled"
         value
         */-->
-        <th:block th:if="${resource.code.hasTextElement} or ${not resource.code.hasCoding}"
-                  th:text="${resource.code.textElement.value}"/>
+        <th:block th:if="${resource.hasCode} and (${resource.code.hasText} or ${not resource.code.hasCoding})"
+                  th:text="${resource.code.text}"/>
         <th:block
-                th:if="${resource.code.hasCoding} and ${not resource.code.hasTextElement} and ${resource.code.coding[0].hasDisplayElement}"
-                th:include="@{inlinetext} :: inlinetext (${resource.code.coding[0].display})"/>
+                th:if="${resource.hasCode} and (${resource.code.hasCoding} and ${not resource.code.hasText} and ${resource.code.coding[0].hasDisplay})">
+            <th:block th:include="@{inlinetext} :: inlinetext (${resource.code.coding[0].display})"/>
+        </th:block>
         <th:block
-                th:if="${resource.code.hasCoding} and ${not resource.code.hasTextElement} and ${not resource.code.coding[0].hasDisplayElement}"
+                th:if="${not resource.hasCode} or (${resource.code.hasCoding} and ${not resource.code.hasText} and ${not resource.code.coding[0].hasDisplay})"
                 th:text="'Untitled Diagnostic Report'"/>
         <!--/*--> Complete Blood Count <!--*/-->
     </div>
@@ -41,7 +42,20 @@
         </tr>
         </tbody>
 
+        <!-- patient -->
         <th:block th:if="${resource.hasSubject}" th:include="@{patient} :: patient (patient=${resource.subject}, title='Patient', id='Patient')"/>
+        <!-- notes extension -->
+        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-ext-note')}">
+            <thead><tr><td colspan="2">Report notes</td></tr></thead>
+            <tbody>
+            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-ext-note')}">
+                <tr>
+                    <td>Note</td>
+                    <td th:narrative="${ext.value}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </th:block>
         <!-- Service Request Details -->
         <th:block th:if="${resource.hasBasedOn}" th:each="basedOn : ${resource.basedOn}">
             <th:block th:include="@{serviceRequest} :: serviceRequest (basedOn=${basedOn})" />
@@ -60,7 +74,6 @@
             <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
             <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
         </th:block>
-
     </table>
 
     <table class="hapiTableOfValues" th:if="${not #lists.isEmpty(resource.result)}">

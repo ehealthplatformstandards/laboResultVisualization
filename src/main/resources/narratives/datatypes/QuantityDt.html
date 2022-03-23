@@ -1,0 +1,4 @@
+<th:block th:if="${resource.hasComparatorElement}" th:text="${resource.comparatorElement.value.toCode} + ' '"/>
+<th:block th:if="${resource.hasValueElement}" th:text="${resource.valueElement.valueAsString} + ' '"/>
+<th:block th:if="${resource.hasUnitElement}" th:text="${resource.unitElement.value}"/>
+<th:block th:if="${not resource.hasUnitElement} and ${resource.codeElement}" th:text="${resource.codeElement.value}"/>

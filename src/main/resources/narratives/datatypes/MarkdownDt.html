@@ -1,0 +1,1 @@
+<th:block th:if="${resource.hasValue}" th:utext="${#strings.replace(#strings.escapeXml(resource.value),'\n','<br/>')}"/>

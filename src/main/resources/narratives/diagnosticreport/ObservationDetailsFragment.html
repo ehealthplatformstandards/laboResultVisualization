@@ -45,9 +45,9 @@
         <td>Value</td>
         <td>
             <!-- quantity -->
-            <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasComparatorElement}" th:text="${result.resource.valueQuantity.comparatorElement.code}"/>
-            <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasValueElement}" th:text="${result.resource.valueQuantity.valueElement.valueAsString}"/>
-            <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasCode}" th:text="${result.resource.valueQuantity.code}"/>
+            <th:block th:if="${result.resource.hasValueQuantity}">
+                <th:block th:narrative="${result.resource.valueQuantity}"/>
+            </th:block>
             <!-- string -->
             <th:block th:if="${result.resource.hasValueStringType}">
                 <th:block th:if="${#strings.contains(result.resource.valueStringType, '\n')}"><pre><th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></pre></th:block>
@@ -186,15 +186,6 @@
     </tr>
     <th:block th:if="${result.resource.hasDataAbsentReason}" th:include="@{inlinecode} :: inlinecoderows (code=${result.resource.dataAbsentReason}, title='Data absent reason')"/>
     <th:block th:if="${result.resource.hasBodySite}" th:include="@{inlinecode} :: inlinecoderows (code=${result.resource.bodySite}, title='Body site')"/>
-    <!-- derivedFrom shows which other observation(s) this observation was derived from,
-         is this usefull clinical information to show in the visualizer? How do we show the other observations this has been derived from?
-         Include all information of that observation -again- in a collapsible sub-table? The screen will get very busy imo. -->
-    <!--th:block th:if="${result.resource.hasDerivedFrom}" th:each="derivedFrom : ${result.resource.hasDerivedFrom}">
-        <tr>
-            <td>Derived from</td>
-            <td>(derived from)</td>
-        </tr>
-    </th:block-->
     <tr th:if="${result.resource.hasComponent}" th:each="component : ${result.resource.component}">
         <td>Component</td>
         <td>
@@ -202,12 +193,9 @@
                     th:if="${not component.hasValueQuanity} and ${not component.hasValueCodeableConcept} and ${not component.hasValueStringType}"
                     th:text="'(component without quantity, code or string?)'"/>
 
-            <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.comparatorElement.empty}"
-                      th:text="${component.valueQuantity.comparatorElement.value}"/>
-            <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.valueElement.empty}"
-                      th:text="${component.valueQuantity.valueElement.valueAsString}"/>
-            <th:block th:if="${component.hasValueQuantity} and ${not component.valueQuantity.unitElement.empty}"
-                      th:text="${component.valueQuantity.unitElement.value}"/>
+            <th:block th:if="${component.hasValueQuantity}">
+                <th:block th:narrative="${component.valueQuantity}"/>
+            </th:block>
             <th:block th:if="${component.hasValueStringType}" th:text="${component.valueStringType} + ' '"/>
             <th:block th:if="${component.hasValueCodeableConcept} and ${${component.valueCodeableConcept.hasCoding}}">
                 <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasDisplay}"
