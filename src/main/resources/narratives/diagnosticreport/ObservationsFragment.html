@@ -17,7 +17,6 @@
                 <th:block
                         th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${result.resource.code.coding[0].displayElement.empty}"
                         th:text="'?'"/>
-                <!--/*--> Hb <!--*/-->
             </td>
             <td>
                 <!-- quantity -->
@@ -25,7 +24,10 @@
                 <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasValueElement}" th:text="${result.resource.valueQuantity.valueElement.valueAsString}"/>
                 <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasCode}" th:text="${result.resource.valueQuantity.code}"/>
                 <!-- string -->
-                <th:block th:if="${result.resource.hasValueStringType}" th:text="${result.resource.valueStringType} + ' '"/>
+                <th:block th:if="${result.resource.hasValueStringType}">
+                    <th:block th:if="${#strings.contains(result.resource.valueStringType, '\n')}"><pre><th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></pre></th:block>
+                    <th:block th:unless="${#strings.contains(result.resource.valueStringType, '\n')}"><th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></th:block>
+                </th:block>
                 <!-- codeable concept -->
                 <th:block th:if="${result.resource.hasValueCodeableConcept} and ${${result.resource.valueCodeableConcept.hasCoding}}">
                     <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display} + ' '"/>
@@ -88,7 +90,7 @@
                 </th:block>
             </td>
             <td>
-                <th:block th:each="ref,rowStat : ${result.resource.referenceRange}">
+                <th:block th:if="${result.resource.referenceRange}" th:each="ref,rowStat : ${result.resource.referenceRange}">
                     <th:block th:if="${not ref.low.empty} and ${not ref.high.empty}">
                         <th:block th:narrative="${ref.low}">--</th:block>&nbsp;-&nbsp;<th:block th:narrative="${ref.high}">--</th:block>
                     </th:block>
@@ -118,7 +120,7 @@
                 </td>
             </th:block>
         </tr>
-        <tr th:class="'hidden'" th:if="${result.resource.hasSubject} or ${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
+        <tr th:class="'hidden'" th:if="${result.resource.hasderivedFrom} or ${result.resource.hasSubject} or ${result.resource.hasPerformer} or ${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}">
             <td colspan="6">
                 <table class="hapiPropertyTable">
                         <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}" th:include="@{details} :: details (${result})" />
@@ -127,6 +129,7 @@
                             <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='ObservationPerformer')" />
                             <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='ObservationPerformer')" />
                         </th:block>
+                        <th:block th:if="${result.resource.hasderivedFrom}" th:include="@{details} :: detailsDerivedFrom (${result})" />
                 </table>
             </td>
         </tr>

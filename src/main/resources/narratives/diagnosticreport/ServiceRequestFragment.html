@@ -39,11 +39,8 @@
         <td th:narrative="${basedOn.resource.intentElement}"></td>
     </tr>
     <!-- Category -->
-    <th:block th:if="${basedOn.resource.hasCategory}"  th:each="category : ${basedOn.resource.category}">
-        <tr>
-            <td>Category</td>
-            <td th:include="@{inlinecode} :: inlinecode (${category})"></td>
-        </tr>
+    <th:block th:if="${basedOn.resource.hasCategory}" th:each="category : ${basedOn.resource.category}">
+        <th:block th:include="@{inlinecode} :: inlinecoderows (code=${category}, title='Category')"/>
     </th:block>
     <!-- Priority -->
     <tr th:if="${basedOn.resource.hasPriorityElement}">

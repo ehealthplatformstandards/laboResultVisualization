@@ -17,9 +17,13 @@
     </tr></thead>
     <tbody class="hidden">
     <!-- Identifier -->
-    <tr th:if="${specimen.resource.hasIdentifier}">
+    <tr th:if="${specimen.resource.hasIdentifier}"  th:each="identifier : ${specimen.resource.identifier}">
         <td>Identifier</td>
-        <td th:narrative="${specimen.resource.identifier[0]}"></td>
+        <td>
+            <th:block th:if="${identifier.hasUse}" th:text="${identifier.use.display}"/>
+            <th:block th:if="${identifier.hasValue}" th:text="${identifier.value}"/>
+            <th:block th:if="${identifier.hasSystem}" th:text="'(' + ${identifier.system} + ')'"/>
+        </td>
     </tr>
     <!-- Status -->
     <tr th:if="${specimen.resource.hasStatusElement}">
@@ -27,10 +31,7 @@
         <td th:narrative="${specimen.resource.statusElement}"></td>
     </tr>
     <!-- Type -->
-    <tr th:if="${specimen.resource.hasType}">
-        <td>Type</td>
-        <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.type})"></td>
-    </tr>
+    <th:block th:if="${specimen.resource.hasType}" th:include="@{inlinecode} :: inlinecoderows (code=${specimen.resource.type}, title='Type')"/>
     <!-- Subject -->
     <tr th:if="${specimen.resource.hasSubject}">
         <td>Patient</td>
@@ -83,20 +84,11 @@
             <td th:narrative="${specimen.resource.collection.quantity}"></td>
         </tr>
         <!-- Collection method -->
-        <tr th:if="${specimen.resource.collection.hasMethod}">
-            <td>Method</td>
-            <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.collection.method})"></td>
-        </tr>
+        <th:block th:if="${specimen.resource.collection.hasMethod}" th:include="@{inlinecode} :: inlinecoderows (code=${specimen.resource.collection.method}, title='Method')"/>
         <!-- Collection body site -->
-        <tr th:if="${specimen.resource.collection.hasBodySite}">
-            <td>Body site</td>
-            <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.collection.bodySite})"></td>
-        </tr>
+        <th:block th:if="${specimen.resource.collection.hasBodySite}" th:include="@{inlinecode} :: inlinecoderows (code=${specimen.resource.collection.bodySite}, title='Body site')"/>
         <!-- Collection fasted status (CodeableConcept)-->
-        <tr th:if="${specimen.resource.collection.hasFastingStatusCodeableConcept}">
-            <td>Fasting status</td>
-            <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.collection.fastingStatusCodeableConcept})"></td>
-        </tr>
+        <th:block th:if="${specimen.resource.collection.hasFastingStatusCodeableConcept}" th:include="@{inlinecode} :: inlinecoderows (code=${specimen.resource.collection.fastingStatusCodeableConcept}, title='Fasted status')"/>
         <!-- Fasted status (Duration) -->
         <tr th:if="${specimen.resource.collection.hasFastingStatusDuration}">
             <td>Fasting status</td>
@@ -104,30 +96,15 @@
         </tr>
         <!-- Processings -->
         <th:block th:if="${specimen.resource.hasProcessing}" th:each="processing : ${specimen.resource.processing}">
-            <tr>
-                <td>Processing</td>
-                <th:block th:if="${processing.hasProcedure}">
-                    <td th:include="@{inlinecode} :: inlinecode (${processing.procedure})"></td>
-                </th:block>
-                <th:block th:if="${not processing.hasProcedure}">
-                    <td>(processing without procedure?)</td>
-                </th:block>
-            </tr>
+            <th:block th:if="${processing.hasProcedure}" th:include="@{inlinecode} :: inlinecoderows (code=${processing.procedure}, title='Processing')"/>
         </th:block>
         <!-- Containers -->
         <tr th:if="${specimen.resource.hasContainer}"  th:each="container : ${specimen.resource.container}">
-            <td>Container</td>
-            <th:block th:if="${container.hasType}">
-                <td th:include="@{inlinecode} :: inlinecode (${container.type})"></td>
-            </th:block>
-            <th:block th:if="${not container.hasType}">
-                <td>(type?)</td>
-            </th:block>
+            <th:block th:if="${container.hasType}" th:include="@{inlinecode} :: inlinecoderows (code=${container.type}, title='Container type')"/>
         </tr>
         <!-- Condition -->
         <tr th:if="${specimen.resource.hasCondition}">
-            <td>Condition</td>
-            <td th:include="@{inlinecode} :: inlinecode (${specimen.resource.condition})"></td>
+            <th:block th:if="${specimen.resource.hasCondition}" th:include="@{inlinecode} :: inlinecoderows (code=${specimen.resource.condition}, title='Condition')"/>
         </tr>
         <!-- Notes -->
         <tr th:if="${specimen.resource.hasNote}" th:each="note : ${specimen.resource.note}">
