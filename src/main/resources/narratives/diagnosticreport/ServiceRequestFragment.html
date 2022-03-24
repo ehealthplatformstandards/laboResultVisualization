@@ -61,7 +61,7 @@
     <!-- Notes -->
     <tr th:if="${basedOn.resource.hasNote}" th:each="note : ${basedOn.resource.note}">
         <td>Note</td>
-        <td th:include="@{inlineannotation} :: inlineannotation (${note})"></td>
+        <td th:narrative="${note}"></td>
     </tr>
     </tbody>
 </th:block>

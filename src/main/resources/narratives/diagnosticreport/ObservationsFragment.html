@@ -20,9 +20,9 @@
             </td>
             <td>
                 <!-- quantity -->
-                <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasComparatorElement}" th:text="${result.resource.valueQuantity.comparatorElement.code}"/>
-                <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasValueElement}" th:text="${result.resource.valueQuantity.valueElement.valueAsString}"/>
-                <th:block th:if="${result.resource.hasValueQuantity} and ${result.resource.valueQuantity.hasCode}" th:text="${result.resource.valueQuantity.code}"/>
+                <th:block th:if="${result.resource.hasValueQuantity}">
+                    <th:block th:narrative="${result.resource.valueQuantity}"/>
+                </th:block>
                 <!-- string -->
                 <th:block th:if="${result.resource.hasValueStringType}">
                     <th:block th:if="${#strings.contains(result.resource.valueStringType, '\n')}"><pre><th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></pre></th:block>
@@ -90,14 +90,14 @@
                 </th:block>
             </td>
             <td>
-                <th:block th:if="${result.resource.referenceRange}" th:each="ref,rowStat : ${result.resource.referenceRange}">
-                    <th:block th:if="${not ref.low.empty} and ${not ref.high.empty}">
+                <th:block th:if="${result.resource.hasReferenceRange}" th:each="ref,rowStat : ${result.resource.referenceRange}">
+                    <th:block th:if="${ref.hasLow} and ${ref.hasHigh}">
                         <th:block th:narrative="${ref.low}">--</th:block>&nbsp;-&nbsp;<th:block th:narrative="${ref.high}">--</th:block>
                     </th:block>
-                    <th:block th:if="${ref.low.empty} and ${not ref.high.empty}">
+                    <th:block th:if="${not ref.hasLow} and ${ref.hasHigh}">
                         &lt;&nbsp;<th:block th:narrative="${ref.high}"></th:block>
                     </th:block>
-                    <th:block th:if="${not ref.low.empty} and ${ref.high.empty}">
+                    <th:block th:if="${ref.hasLow} and ${not ref.hasHigh}">
                         &gt;&nbsp;<th:block th:narrative="${ref.low}"></th:block>
                     </th:block>
                     <th:block th:if="${ref.hasText}">
@@ -134,10 +134,16 @@
             </td>
         </tr>
         <tr th:replace="@{observations} :: observations (items=${result.resource.hasMember},level=${level}+1)"></tr>
+        <th:block th:if="${result.resource.hasReferenceRange}" th:each="ref : ${result.resource.referenceRange}">
+            <th:block th:if="${ref.hasExtension('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-ext-referencerange-comment')}" th:each="ext : ${ref.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-ext-referencerange-comment')}">
+                <tr>
+                    <td colspan="6" th:narrative="${ext.value}"></td>
+                </tr>
+            </th:block>
+        </th:block>
         <th:block th:if="${result.resource.hasNote}" th:each="note : ${result.resource.note}">
-            <tr th:class="${rowStat.odd}? 'hapiTableOfValuesRowOdd' : 'hapiTableOfValuesRowEven'"
-                class="hapiTableOfValuesRowOdd">
-                <td colspan="6" th:include="@{inlineannotation} :: inlineannotation (${note})"></td>
+            <tr>
+                <td colspan="6" th:narrative="${note}"></td>
             </tr>
         </th:block>
     </th:block>

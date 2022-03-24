@@ -1,0 +1,20 @@
+<th:block th:if="${resource.hasAuthorStringType}">
+    <b>Author:</b> <th:block th:text="${resource.authorStringType}"/><br/>
+</th:block>
+<th:block th:if="${resource.hasTimeElement}">
+    <b>Time:</b> <th:block th:text="${#dates.format(resource.timeElement.value,'dd MMMM yyyy hh:mm:ss')}"/><br/>
+</th:block>
+<th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/annotation-code')}" th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/annotation-code')}">
+    <th:block th:if="${ext.value.hasCoding('https://www.ehealth.fgov.be/standards/fhir/CodeSystem/be-cs-coded-annotation-types', 'lab-test-accreditation')}">
+        <b>Accreditation</b><br/>
+    </th:block>
+    <th:block th:if="${ext.value.hasCoding('https://www.ehealth.fgov.be/standards/fhir/CodeSystem/be-cs-coded-annotation-types', 'lab-test-subcontractor')}">
+        <b>Subcontractor</b><br/>
+    </th:block>
+    <th:block th:if="${ext.value.hasCoding('https://www.ehealth.fgov.be/standards/fhir/CodeSystem/be-cs-coded-annotation-types', 'lab-referencerange-comment')}">
+        <b>Lab reference range comment</b><br/>
+    </th:block>
+</th:block>
+<th:block th:if="${resource.hasTextElement}">
+    <th:block th:narrative="${resource.textElement}"/>
+</th:block>
