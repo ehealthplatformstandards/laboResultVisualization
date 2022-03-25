@@ -30,8 +30,9 @@
     <tr>
         <td>Name</td>
         <td>
-            <th:block th:if="${not result.resource.code.textElement.empty}"
-                      th:include="@{inlinetext} :: inlinetext (${result.resource.code.textElement.value})"/>
+            <th:block th:if="${not result.resource.code.textElement.empty}">
+                <th:block th:include="@{inlinetext} :: inlinetext (${result.resource.code.textElement.value})"/>
+            </th:block>
             <th:block
                     th:if="${result.resource.code.textElement.empty} and ${not #lists.isEmpty(result.resource.code.coding)} and ${not result.resource.code.coding[0].empty} and ${not result.resource.code.coding[0].displayElement.empty}"
                     th:text="${result.resource.code.coding[0].display}"/>
@@ -51,7 +52,7 @@
             <!-- string -->
             <th:block th:if="${result.resource.hasValueStringType}">
                 <th:block th:if="${#strings.contains(result.resource.valueStringType, '\n')}"><pre><th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></pre></th:block>
-                <th:block th:unless="${#strings.contains(result.resource.valueStringType, '\n')}"><th:block th:text="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></th:block>
+                <th:block th:unless="${#strings.contains(result.resource.valueStringType, '\n')}"><th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></th:block>
             </th:block>
             <!-- codeable concept -->
             <th:block th:if="${result.resource.hasValueCodeableConcept} and ${${result.resource.valueCodeableConcept.hasCoding}}">
