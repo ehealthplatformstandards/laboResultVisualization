@@ -29,7 +29,7 @@
                     <th:block th:unless="${#strings.contains(result.resource.valueStringType, '\n')}"><th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueStringType})"/></th:block>
                 </th:block>
                 <!-- codeable concept -->
-                <th:block th:if="${result.resource.hasValueCodeableConcept} and ${${result.resource.valueCodeableConcept.hasCoding}}">
+                <th:block th:if="${result.resource.hasValueCodeableConcept} and ${result.resource.valueCodeableConcept.hasCoding}">
                     <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display} + ' '"/>
                     <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasSystem}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.system} + ') '"/>
                     <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasCode}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.code} + ') '"/>
