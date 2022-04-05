@@ -24,8 +24,8 @@
     <tr th:if="${basedOn.resource.hasSubject}">
         <td>Subject</td>
         <td>
-            <th:block th:text="${basedOn.resource.subject.resource.name[0].nameAsSingleString}">--</th:block>
-            <th:block th:text="' (' + ${basedOn.resource.subject.resource.identifier[0].value} + ')'"> (--)</th:block>
+            <th:block th:if="${basedOn.resource.subject.resource.hasName}" th:text="${basedOn.resource.subject.resource.name[0].nameAsSingleString}">--</th:block>
+            <th:block th:if="${basedOn.resource.subject.resource.hasIdentifier}" th:text="' (' + ${basedOn.resource.subject.resource.identifier[0].value} + ')'"> (--)</th:block>
         </td>
     </tr>
     <!-- Status -->
