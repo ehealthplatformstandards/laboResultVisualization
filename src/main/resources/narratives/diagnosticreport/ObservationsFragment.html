@@ -129,7 +129,11 @@
                             <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='ObservationPerformer')" />
                             <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='ObservationPerformer')" />
                         </th:block>
-                        <th:block th:if="${result.resource.hasderivedFrom}" th:include="@{details} :: detailsDerivedFrom (${result})" />
+                        <th:block th:if="${result.resource.hasderivedFrom}">
+                            <th:block th:each="derivedFrom : ${result.resource.derivedFrom}">
+                                <th:block th:include="@{details} :: detailsDerivedFrom (${derivedFrom})"/>
+                            </th:block>
+                        </th:block>
                 </table>
             </td>
         </tr>
