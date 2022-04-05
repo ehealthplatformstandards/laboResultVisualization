@@ -36,8 +36,8 @@
     <tr th:if="${specimen.resource.hasSubject}">
         <td>Patient</td>
         <td>
-            <th:block th:text="${specimen.resource.subject.resource.name[0].nameAsSingleString}">--</th:block>
-            <th:block th:text="' (' + ${specimen.resource.subject.resource.identifier[0].value} + ')'"> (--)</th:block>
+            <th:block th:if="${specimen.resource.subject.resource.hasName}" th:text="${specimen.resource.subject.resource.name[0].nameAsSingleString}">--</th:block>
+            <th:block th:if="${specimen.resource.subject.resource.hasIdentifier}" th:text="' (' + ${specimen.resource.subject.resource.identifier[0].value} + ')'"> (--)</th:block>
         </td>
     </tr>
     <!-- Received time -->
