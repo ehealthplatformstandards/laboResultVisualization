@@ -4,7 +4,7 @@
   <groupId>be.fgov.ehealth</groupId>
   <artifactId>fhir-visualization-tool</artifactId>
   <packaging>jar</packaging>
-  <version>1.9</version>
+  <version>1.10</version>
 <distributionManagement>
     <repository>
         <id>maven.taktik.be</id>
