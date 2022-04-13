@@ -26,6 +26,10 @@
                 th:text="${#dates.format(patient.resource.birthDateElement.value,'dd MMMM yyyy')}"></span>
         </td>
     </tr>
+    <tr th:if="${patient.resource.hasGender}">
+        <td>Gender</td>
+        <td th:text="${patient.resource.gender.toCode}"></td>
+    </tr>
     <tr th:if="${patient.resource.hasTelecom}" th:each="telco : ${patient.resource.telecom}">
         <td th:text="${telco.system.name}">Telecom</td>
         <td th:narrative="${telco}"></td>
@@ -64,6 +68,10 @@
         <td><span
                 th:text="${#dates.format(patient.resource.birthDateElement.value,'dd MMMM yyyy')}"></span>
         </td>
+    </tr>
+    <tr th:if="${patient.resource.hasGender}">
+        <td>Gender</td>
+        <td th:text="${patient.resource.gender.toCode}"></td>
     </tr>
     <tr th:if="${patient.resource.hasTelecom}" th:each="telco : ${patient.resource.telecom}">
         <td th:text="${telco.system.name}">Telecom</td>

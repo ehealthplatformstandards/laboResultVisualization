@@ -40,6 +40,10 @@
             <td>Conclusion</td>
             <td th:narrative="${resource.conclusionElement}">No conclusion was integrated in this report</td>
         </tr>
+        <tr th:if="${resource.hasMeta} and ${resource.meta.hasVersionId}">
+            <td>Version Id</td>
+            <td th:text="${resource.meta.versionId}"></td>
+        </tr>
         </tbody>
 
         <!-- patient -->
