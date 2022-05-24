@@ -70,7 +70,7 @@ public class AppTest
      */
     public void testValidation() throws Exception {
         PrintStream output = new PrintStream(new ByteArrayOutputStream());
-        FhirValidator fhirValidator = new FhirValidator(output, Collections.singletonList("https://build.fhir.org/ig/hl7-be/hl7-be-fhir-laboratory-report"));
+        FhirValidator fhirValidator = new FhirValidator(output, Collections.singletonList("https://build.fhir.org/ig/hl7-be/lab"));
         Pair<Integer, String> validated = fhirValidator.validate(IOUtils.toByteArray(new FileInputStream("src/test/resources/example.json")));
 
         assertTrue( validated.getLeft() == 8 );
@@ -92,7 +92,7 @@ public class AppTest
      */
     public void testParallelValidation() throws Exception {
         PrintStream output = new PrintStream(new ByteArrayOutputStream());
-        FhirValidator fhirValidator = new FhirValidator(output, Collections.singletonList("https://build.fhir.org/ig/hl7-be/hl7-be-fhir-laboratory-report"));
+        FhirValidator fhirValidator = new FhirValidator(output, Collections.singletonList("https://build.fhir.org/ig/hl7-be/lab"));
 
         List<Thread> threads = new ArrayList<>();
         for (int i=0;i<10;i++) {
@@ -118,7 +118,7 @@ public class AppTest
      */
     public void testAppWithHtmlGenerationAndValidation() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        App.commandLine(new String[] {"--validate=https://build.fhir.org/ig/hl7-be/hl7-be-fhir-laboratory-report", "html", "src/test/resources/example.json"}, new PrintStream(bos));
+        App.commandLine(new String[] {"--validate=https://build.fhir.org/ig/hl7-be/lab", "html", "src/test/resources/example.json"}, new PrintStream(bos));
 
         String result = new String(bos.toByteArray(), StandardCharsets.UTF_8);
 
