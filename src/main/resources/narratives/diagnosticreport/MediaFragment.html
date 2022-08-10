@@ -1,0 +1,31 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+
+<th:block th:fragment="media (media)">
+    <thead><tr>
+        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+            <div>
+                <div>Media</div><div>
+                <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+            </div>
+            </div>
+        </td>
+    </tr></thead>
+    <tbody class="hidden">
+    <tr th:if="${media.resource.hasContent}">
+        <td colspan="2">
+            <img align="left" th:src="@{'data:image/jpeg;base64,' + ${media.resource.content.dataElement.valueAsString}}"/>
+        </td>
+    </tr>
+    </tbody>
+</th:block>
+
+<!--/*-->
+</body>
+</html>
+<!--*/-->
