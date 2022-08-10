@@ -183,15 +183,19 @@
     </tr>
     <tr th:if="${result.resource.hasIssuedElement}">
         <td>Issued date</td>
-        <td th:text="${#dates.format(result.resource.issuedElement.value,'dd MMMM yyyy HH:mm:ss')}"/>
+        <td th:text="${#dates.format(result.resource.issuedElement.value,'YYYY-MM-dd')} + 'T' + ${#dates.format(result.resource.issuedElement.value,'hh:mm:ss.sssZZ')}"/
     </tr>
     <th:block th:if="${result.resource.hasDataAbsentReason}" th:include="@{inlinecode} :: inlinecoderows (code=${result.resource.dataAbsentReason}, title='Data absent reason')"/>
+    <tr th:if="${result.resource.hasNote}" th:each="note : ${result.resource.note}">
+        <td>Note</td>
+        <td th:narrative="${note}"/>
+    </tr>
     <th:block th:if="${result.resource.hasBodySite}" th:include="@{inlinecode} :: inlinecoderows (code=${result.resource.bodySite}, title='Body site')"/>
     <tr th:if="${result.resource.hasComponent}" th:each="component : ${result.resource.component}">
         <td>Component</td>
         <td>
             <th:block
-                    th:if="${not component.hasValueQuanity} and ${not component.hasValueCodeableConcept} and ${not component.hasValueStringType}"
+                    th:if="${not component.hasValueQuantity} and ${not component.hasValueCodeableConcept} and ${not component.hasValueStringType}"
                     th:text="'(component without quantity, code or string?)'"/>
 
             <th:block th:if="${component.hasValueQuantity}">
