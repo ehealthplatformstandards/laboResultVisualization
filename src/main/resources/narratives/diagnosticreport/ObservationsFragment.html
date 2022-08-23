@@ -32,7 +32,7 @@
                 <th:block th:if="${result.resource.hasValueCodeableConcept} and ${result.resource.valueCodeableConcept.hasCoding}">
                     <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display} + ' '"/>
                     <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasSystem}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.system} + ') '"/>
-                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasCode}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.code} + ') '"/>
+                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasCode}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.code}"/>
                 </th:block>
                 <!-- boolean -->
                 <th:block th:if="${result.resource.hasValueBooleanType}" th:text="${result.resource.valueBooleanType.valueAsString}"/>
@@ -86,7 +86,11 @@
             </td>
             <td>
                 <th:block th:if="${result.resource.hasInterpretation}" th:each="interp : ${result.resource.interpretation}">
-                    <th:block th:if="${interp.hasCoding} and ${interp.codingFirstRep.hasCode}" th:text="${interp.codingFirstRep.code}"/><th:block th:if="${interp.hasText}" th:text="'('+${interp.text}+')'"/>
+                    <th:block th:if="${interp.hasCoding} and ${interp.codingFirstRep.hasCode}">
+                        <th:block th:if="${not result.resource.hasValueCodeableConcept} and ${not result.resource.hasValueStringType}" th:text="${interp.codingFirstRep.code}"/>
+                        <th:block th:if="${result.resource.hasValueCodeableConcept} and ${result.resource.ValueCodeableConcept.hasCoding} and ${result.resource.valueCodeableConcept.codingFirstRep.hasCode} and ${result.resource.valueCodeableConcept.codingFirstRep.code} != ${interp.codingFirstRep.code}" th:text="${interp.codingFirstRep.code}"/>
+                        <th:block th:if="${result.resource.hasValueStringType} and ${result.resource.valueStringType.valueAsString} != ${interp.codingFirstRep.code}" th:text="${interp.codingFirstRep.code}"/>
+                    </th:block>
                 </th:block>
             </td>
             <td>
@@ -125,13 +129,19 @@
                 <table class="hapiPropertyTable">
                         <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}" th:include="@{details} :: details (${result})" />
                         <th:block th:if="${result.resource.hasSubject}" th:include="@{patient} :: hiddenPatient (patient=${result.resource.subject}, title='Subject', id='Subject')"/>
+                        <th:block th:if="${result.resource.hasSpecimen}" th:include="@{specimen} :: specimen (specimen=${result.resource.specimen}, title='Specimen', id='Specimen')"/
                         <th:block th:if="${result.resource.hasPerformer}" th:each="performer : ${result.resource.performer}">
                             <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='ObservationPerformer')" />
                             <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='ObservationPerformer')" />
                         </th:block>
                         <th:block th:if="${result.resource.hasderivedFrom}">
                             <th:block th:each="derivedFrom : ${result.resource.derivedFrom}">
-                                <th:block th:include="@{details} :: detailsDerivedFrom (${derivedFrom})"/>
+                                <th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Media'">
+                                    <th:block th:include="@{media} :: media (media=${derivedFrom}, title='Media', id='Media')" />
+                                </th:block>
+                                <th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Observation'">
+                                    <th:block th:include="@{details} :: detailsDerivedFrom (${derivedFrom})"/>
+                                </th:block>
                             </th:block>
                         </th:block>
                 </table>
@@ -144,11 +154,6 @@
                     <td colspan="6" th:narrative="${ext.value}"></td>
                 </tr>
             </th:block>
-        </th:block>
-        <th:block th:if="${result.resource.hasNote}" th:each="note : ${result.resource.note}">
-            <tr>
-                <td colspan="6" th:narrative="${note}"></td>
-            </tr>
         </th:block>
     </th:block>
 </th:block>

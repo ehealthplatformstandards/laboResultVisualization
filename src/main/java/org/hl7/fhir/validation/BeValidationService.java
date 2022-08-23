@@ -1,23 +1,17 @@
 package org.hl7.fhir.validation;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
+import java.io.PrintStream;
+
 import org.hl7.fhir.r5.context.TerminologyCache;
 import org.hl7.fhir.r5.model.FhirPublication;
 import org.hl7.fhir.r5.model.OperationOutcome;
-import org.hl7.fhir.r5.model.StringType;
 import org.hl7.fhir.r5.utils.ToolingExtensions;
 import org.hl7.fhir.utilities.TimeTracker;
 import org.hl7.fhir.utilities.Utilities;
-import org.hl7.fhir.utilities.npm.FilesystemPackageCacheManager;
-import org.hl7.fhir.utilities.npm.ToolsVersion;
 import org.hl7.fhir.utilities.validation.ValidationMessage;
 import org.hl7.fhir.validation.cli.model.CliContext;
 import org.hl7.fhir.validation.cli.services.StandAloneValidatorFetcher;
 import org.hl7.fhir.validation.cli.services.ValidationService;
-
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Iterator;
 
 public class BeValidationService extends ValidationService {
     private final PrintStream ps;
@@ -73,73 +67,61 @@ public class BeValidationService extends ValidationService {
         return validator;
     }
 
+    /**
+     * Processes the content of an OperationOutcome and prints a summary.
+     *
+     * @param operationOutcome Outcome of a call to the validator service
+     * @param hasMultiples     set to true if multiple resources were validated (as a Bundle)
+     * @param crumbs           Include slice info text
+     * @return amount of issues that have severity FATAL or ERROR
+     */
     @Override
-    public int displayOperationOutcome(OperationOutcome oo, boolean hasMultiples, boolean crumbs) {
+    public int displayOperationOutcome(OperationOutcome operationOutcome, boolean hasMultiples,
+        boolean crumbs) {
         int error = 0;
         int warn = 0;
         int info = 0;
-        String file = ToolingExtensions.readStringExtension(oo, "http://hl7.org/fhir/StructureDefinition/operationoutcome-file");
-        Iterator var8 = oo.getIssue().iterator();
+        String file = ToolingExtensions.readStringExtension(operationOutcome,
+            ToolingExtensions.EXT_OO_FILE);
 
-        while(true) {
-            OperationOutcome.OperationOutcomeIssueComponent issue;
-            while(var8.hasNext()) {
-                issue = (OperationOutcome.OperationOutcomeIssueComponent)var8.next();
-                if (issue.getSeverity() != OperationOutcome.IssueSeverity.FATAL && issue.getSeverity() != OperationOutcome.IssueSeverity.ERROR) {
-                    if (issue.getSeverity() == OperationOutcome.IssueSeverity.WARNING) {
-                        ++warn;
-                    } else {
-                        ++info;
+        for (OperationOutcome.OperationOutcomeIssueComponent issue : operationOutcome.getIssue()) {
+            if (issue.getSeverity() == OperationOutcome.IssueSeverity.FATAL ||
+                issue.getSeverity() == OperationOutcome.IssueSeverity.ERROR) {
+                error++;
+            } else if (issue.getSeverity() == OperationOutcome.IssueSeverity.WARNING) {
+                warn++;
+            } else {
+                info++;
+            }
+        }
+
+        if (hasMultiples) {
+            ps.print("-- ");
+            ps.print(file);
+            ps.print(" --");
+            ps.println(Utilities.padLeft("", '-', Integer.max(38, file.length() + 6)));
+        }
+        ps.println((error == 0 ? "Success" : "*FAILURE*") + ": " + error + " " +
+                   "errors, " + warn + " warnings, " + info + " notes");
+        for (OperationOutcome.OperationOutcomeIssueComponent issue : operationOutcome.getIssue()) {
+            ps.println(getIssueSummary(issue));
+            if (crumbs) {
+                ValidationMessage vm = (ValidationMessage) issue.getUserData("source.msg");
+                if (vm != null && vm.sliceText != null) {
+                    for (String s : vm.sliceText) {
+                        ps.println("    slice info: " + s);
                     }
-                } else {
-                    ++error;
-                }
-            }
-
-            if (hasMultiples) {
-                ps.print("-- ");
-                ps.print(file);
-                ps.print(" --");
-                ps.println(Utilities.padLeft("", '-', Integer.max(38, file.length() + 6)));
-            }
-
-            ps.println((error == 0 ? "Success" : "*FAILURE*") + ": " + Integer.toString(error) + " errors, " + Integer.toString(warn) + " warnings, " + Integer.toString(info) + " notes");
-            var8 = oo.getIssue().iterator();
-
-            while(true) {
-                ValidationMessage vm;
-                do {
-                    do {
-                        do {
-                            if (!var8.hasNext()) {
-                                if (hasMultiples) {
-                                    ps.print("---");
-                                    ps.print(Utilities.padLeft("", '-', file.length()));
-                                    ps.print("---");
-                                    ps.println(Utilities.padLeft("", '-', Integer.max(38, file.length() + 6)));
-                                    ps.println();
-                                }
-
-                                return error;
-                            }
-
-                            issue = (OperationOutcome.OperationOutcomeIssueComponent)var8.next();
-                            ps.println(this.getIssueSummary(issue));
-                        } while(!crumbs);
-
-                        vm = (ValidationMessage)issue.getUserData("source.msg");
-                    } while(vm == null);
-                } while(vm.sliceText == null);
-
-                String[] var11 = vm.sliceText;
-                int var12 = var11.length;
-
-                for(int var13 = 0; var13 < var12; ++var13) {
-                    String s = var11[var13];
-                    ps.println("    slice info: " + s);
                 }
             }
         }
+        if (hasMultiples) {
+            ps.print("---");
+            ps.print(Utilities.padLeft("", '-', file.length()));
+            ps.print("---");
+            ps.println(Utilities.padLeft("", '-', Integer.max(38, file.length() + 6)));
+            ps.println();
+        }
+        return error;
     }
 
     private String getIssueSummary(OperationOutcome.OperationOutcomeIssueComponent issue) {
@@ -147,17 +129,26 @@ public class BeValidationService extends ValidationService {
         int line;
         int col;
         if (issue.hasExpression()) {
-            line = ToolingExtensions.readIntegerExtension(issue, "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-line", -1);
-            col = ToolingExtensions.readIntegerExtension(issue, "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-col", -1);
-            loc = ((StringType)issue.getExpression().get(0)).asStringValue() + (line >= 0 && col >= 0 ? " (line " + Integer.toString(line) + ", col" + Integer.toString(col) + ")" : "");
+            line = ToolingExtensions.readIntegerExtension(issue,
+                "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-line", -1);
+            col = ToolingExtensions.readIntegerExtension(issue,
+                "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-col", -1);
+            loc = (issue.getExpression().get(0)).asStringValue() +
+                  (line >= 0 && col >= 0 ? " (line " +
+                                           line + ", col" +
+                                           col + ")" : "");
         } else if (issue.hasLocation()) {
-            loc = ((StringType)issue.getLocation().get(0)).asStringValue();
+            loc = (issue.getLocation().get(0)).asStringValue();
         } else {
-            line = ToolingExtensions.readIntegerExtension(issue, "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-line", -1);
-            col = ToolingExtensions.readIntegerExtension(issue, "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-col", -1);
-            loc = line >= 0 && col >= 0 ? "line " + Integer.toString(line) + ", col" + Integer.toString(col) : "??";
+            line = ToolingExtensions.readIntegerExtension(issue,
+                "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-line", -1);
+            col = ToolingExtensions.readIntegerExtension(issue,
+                "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-col", -1);
+            loc = line >= 0 && col >= 0 ? "line " + line + ", col" + col : "??";
         }
 
-        return "  " + issue.getSeverity().getDisplay() + " @ " + loc + " : " + issue.getDetails().getText();
+        return "  " + issue.getSeverity().getDisplay() + " @ " + loc + " : " +
+               issue.getDetails().getText();
     }
+
 }
