@@ -25,7 +25,7 @@ public class Visualization implements Callable<Integer> {
     @Option(names = { "-d", "--display" }, description = "Display generated document in visualizer")
     protected Boolean display = false;
 
-    @Option(names = { "-v", "--validate" }, arity = "0..1", fallbackValue = "https://build.fhir.org/ig/hl7-be/hl7-be-fhir-laboratory-report",
+    @Option(names = { "-v", "--validate" }, arity = "0..1", fallbackValue = "https://build.fhir.org/ig/hl7-be/lab",
             description = {
             "Validate the resource.",
             "If absent, validation is not performed.",
