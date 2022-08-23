@@ -79,9 +79,9 @@
             <th:block th:if="${resultsInterpreter.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${resultsInterpreter}, title='Results Interpreter', id='ResultsInterpreter')" />
         </th:block>
         <!-- Media -->
-        <th:block th:if="${resource.hasMedia}" th:each="media : ${resource.media}">
+        <!-- th:block th:if="${resource.hasMedia}" th:each="media : ${resource.media}"> TODO Media fragment is missing from repository
             <th:block th:include="@{media} :: media (media=${media.link}, title='Media', id='Media')" />
-        </th:block>
+        </th:block-->
     </table>
 
     <table class="hapiTableOfValues" th:if="${not #lists.isEmpty(resource.result)}">

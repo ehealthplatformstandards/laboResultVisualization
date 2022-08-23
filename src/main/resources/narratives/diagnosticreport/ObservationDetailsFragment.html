@@ -183,7 +183,7 @@
     </tr>
     <tr th:if="${result.resource.hasIssuedElement}">
         <td>Issued date</td>
-        <td th:text="${#dates.format(result.resource.issuedElement.value,'YYYY-MM-dd')} + 'T' + ${#dates.format(result.resource.issuedElement.value,'hh:mm:ss.sssZZ')}"/
+        <td th:text="${#dates.format(result.resource.issuedElement.value,'YYYY-MM-dd')} + 'T' + ${#dates.format(result.resource.issuedElement.value,'hh:mm:ss.sssZZ')}"/>
     </tr>
     <th:block th:if="${result.resource.hasDataAbsentReason}" th:include="@{inlinecode} :: inlinecoderows (code=${result.resource.dataAbsentReason}, title='Data absent reason')"/>
     <tr th:if="${result.resource.hasNote}" th:each="note : ${result.resource.note}">

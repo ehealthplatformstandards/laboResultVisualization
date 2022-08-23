@@ -129,16 +129,16 @@
                 <table class="hapiPropertyTable">
                         <th:block th:if="${result.resource.hasCategory} or ${result.resource.hasEffectiveDateTimeType} or ${result.resource.hasEffectivePeriod} or ${result.resource.hasEffectiveInstantType} or ${result.resource.hasIssuedElement} or ${result.resource.hasDataAbsentReason} or ${result.resource.hasBodySite} or ${result.resource.hasComponent}" th:include="@{details} :: details (${result})" />
                         <th:block th:if="${result.resource.hasSubject}" th:include="@{patient} :: hiddenPatient (patient=${result.resource.subject}, title='Subject', id='Subject')"/>
-                        <th:block th:if="${result.resource.hasSpecimen}" th:include="@{specimen} :: specimen (specimen=${result.resource.specimen}, title='Specimen', id='Specimen')"/
+                        <th:block th:if="${result.resource.hasSpecimen}" th:include="@{specimen} :: specimen (specimen=${result.resource.specimen}, title='Specimen', id='Specimen')"/>
                         <th:block th:if="${result.resource.hasPerformer}" th:each="performer : ${result.resource.performer}">
                             <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='ObservationPerformer')" />
                             <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='ObservationPerformer')" />
                         </th:block>
                         <th:block th:if="${result.resource.hasderivedFrom}">
                             <th:block th:each="derivedFrom : ${result.resource.derivedFrom}">
-                                <th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Media'">
+                                <!-- th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Media'"> TODO Media fragment is missing from repository
                                     <th:block th:include="@{media} :: media (media=${derivedFrom}, title='Media', id='Media')" />
-                                </th:block>
+                                </th:block -->
                                 <th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Observation'">
                                     <th:block th:include="@{details} :: detailsDerivedFrom (${derivedFrom})"/>
                                 </th:block>
