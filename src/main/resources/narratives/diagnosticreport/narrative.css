@@ -91,31 +91,31 @@ tr.level_2 td.label {
 }
 
 tr.level_3 td.label {
-    padding-left: 2em;
+    padding-left: 3em;
 }
 
 tr.level_4 td.label {
-    padding-left: 3em;
+    padding-left: 4em;
 }
 
 tr.level_5 td.label {
-    padding-left: 3em;
-}
-
-tr.level_6 td.label {
-    padding-left: 4em;
-}
-
-tr.level_7 td.label {
-    padding-left: 4em;
-}
-
-tr.level_8 td.label {
     padding-left: 5em;
 }
 
-tr.level_9 td.label {
+tr.level_6 td.label {
     padding-left: 6em;
+}
+
+tr.level_7 td.label {
+    padding-left: 7em;
+}
+
+tr.level_8 td.label {
+    padding-left: 8em;
+}
+
+tr.level_9 td.label {
+    padding-left: 9em;
 }
 
 td.toggable {
