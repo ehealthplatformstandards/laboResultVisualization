@@ -136,9 +136,9 @@
                         </th:block>
                         <th:block th:if="${result.resource.hasderivedFrom}">
                             <th:block th:each="derivedFrom : ${result.resource.derivedFrom}">
-                                <!-- th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Media'"> TODO Media fragment is missing from repository
+                                <th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Media'">
                                     <th:block th:include="@{media} :: media (media=${derivedFrom}, title='Media', id='Media')" />
-                                </th:block -->
+                                </th:block>
                                 <th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Observation'">
                                     <th:block th:include="@{details} :: detailsDerivedFrom (${derivedFrom})"/>
                                 </th:block>
