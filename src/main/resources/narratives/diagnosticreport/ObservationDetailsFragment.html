@@ -56,9 +56,9 @@
             </th:block>
             <!-- codeable concept -->
             <th:block th:if="${result.resource.hasValueCodeableConcept} and ${result.resource.valueCodeableConcept.hasCoding}">
-                <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display} + ' '"/>
-                <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasSystem}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.system} + ') '"/>
-                <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasCode}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.code} + ') '"/>
+                <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display}"/>
+                <th:block th:if="${not result.resource.valueCodeableConcept.codingFirstRep.hasDisplay} and ${result.resource.valueCodeableConcept.hasText}" th:text="${result.resource.valueCodeableConcept.text}"/>
+                <th:block th:if="${not result.resource.valueCodeableConcept.codingFirstRep.hasDisplay} and ${not result.resource.valueCodeableConcept.hasText} and ${result.resource.valueCodeableConcept.codingFirstRep.hasCode}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.code}"/>
             </th:block>
             <!-- boolean -->
             <th:block th:if="${result.resource.hasValueBooleanType}" th:text="${result.resource.valueBooleanType.valueAsString}"/>
@@ -203,12 +203,9 @@
             </th:block>
             <th:block th:if="${component.hasValueStringType}" th:text="${component.valueStringType} + ' '"/>
             <th:block th:if="${component.hasValueCodeableConcept} and ${${component.valueCodeableConcept.hasCoding}}">
-                <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasDisplay}"
-                          th:text="${component.valueCodeableConcept.codingFirstRep.display} + ' '"/>
-                <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasSystem}"
-                          th:text="'(' + ${component.valueCodeableConcept.codingFirstRep.system} + ') '"/>
-                <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasCode}"
-                          th:text="'(' + ${component.valueCodeableConcept.codingFirstRep.code} + ') '"/>
+                <th:block th:if="${component.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${component.valueCodeableConcept.codingFirstRep.display}"/>
+                <th:block th:if="${not component.valueCodeableConcept.codingFirstRep.hasDisplay} and ${component.valueCodeableConcept.hasText}" th:text="${component.valueCodeableConcept.text}"/>
+                <th:block th:if="${not component.valueCodeableConcept.codingFirstRep.hasDisplay} and ${not component.valueCodeableConcept.hasText} and ${component.valueCodeableConcept.codingFirstRep.hasCode}" th:text="${component.valueCodeableConcept.codingFirstRep.code}"/>
             </th:block>
         </td>
     </tr>
