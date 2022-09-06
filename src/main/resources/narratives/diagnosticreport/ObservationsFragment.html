@@ -30,9 +30,9 @@
                 </th:block>
                 <!-- codeable concept -->
                 <th:block th:if="${result.resource.hasValueCodeableConcept} and ${result.resource.valueCodeableConcept.hasCoding}">
-                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display} + ' '"/>
-                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasSystem}" th:text="'(' + ${result.resource.valueCodeableConcept.codingFirstRep.system} + ') '"/>
-                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasCode}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.code}"/>
+                    <th:block th:if="${result.resource.valueCodeableConcept.codingFirstRep.hasDisplay}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.display}"/>
+                    <th:block th:if="${not result.resource.valueCodeableConcept.codingFirstRep.hasDisplay} and ${result.resource.valueCodeableConcept.hasText}" th:text="${result.resource.valueCodeableConcept.text}"/>
+                    <th:block th:if="${not result.resource.valueCodeableConcept.codingFirstRep.hasDisplay} and ${not result.resource.valueCodeableConcept.hasText} and ${result.resource.valueCodeableConcept.codingFirstRep.hasCode}" th:text="${result.resource.valueCodeableConcept.codingFirstRep.code}"/>
                 </th:block>
                 <!-- boolean -->
                 <th:block th:if="${result.resource.hasValueBooleanType}" th:text="${result.resource.valueBooleanType.valueAsString}"/>
@@ -86,7 +86,17 @@
             </td>
             <td>
                 <th:block th:if="${result.resource.hasInterpretation}" th:each="interp : ${result.resource.interpretation}">
-                    <th:block th:if="${interp.hasCoding} and ${interp.codingFirstRep.hasCode}">
+                    <th:block th:if="${interp.hasCoding} and ${interp.codingFirstRep.hasDisplay}" >
+                        <th:block th:if="${not result.resource.hasValueCodeableConcept} and ${not result.resource.hasValueStringType}" th:text="${interp.codingFirstRep.display}"/>
+                        <th:block th:if="${result.resource.hasValueCodeableConcept} and ${result.resource.ValueCodeableConcept.hasCoding} and ${result.resource.valueCodeableConcept.codingFirstRep.hasCode} and ${result.resource.valueCodeableConcept.codingFirstRep.code} != ${interp.codingFirstRep.display}" th:text="${interp.codingFirstRep.display}"/>
+                        <th:block th:if="${result.resource.hasValueStringType} and ${result.resource.valueStringType.valueAsString} != ${interp.codingFirstRep.display}" th:text="${interp.codingFirstRep.display}"/>
+                    </th:block>
+                    <th:block th:if="${not interp.codingFirstRep.hasDisplay} and ${interp.hasText}" >
+                        <th:block th:if="${not result.resource.hasValueCodeableConcept} and ${not result.resource.hasValueStringType}" th:text="${interp.text}"/>
+                        <th:block th:if="${result.resource.hasValueCodeableConcept} and ${result.resource.ValueCodeableConcept.hasCoding} and ${result.resource.valueCodeableConcept.codingFirstRep.hasCode} and ${result.resource.valueCodeableConcept.codingFirstRep.code} != ${interp.text}" th:text="${interp.text}"/>
+                        <th:block th:if="${result.resource.hasValueStringType} and ${result.resource.valueStringType.valueAsString} != ${interp.text}" th:text="${interp.text}"/>
+                    </th:block>
+                    <th:block th:if="${interp.hasCoding} and ${not interp.codingFirstRep.hasDisplay} and ${not interp.hasText} and ${interp.codingFirstRep.hasCode}">
                         <th:block th:if="${not result.resource.hasValueCodeableConcept} and ${not result.resource.hasValueStringType}" th:text="${interp.codingFirstRep.code}"/>
                         <th:block th:if="${result.resource.hasValueCodeableConcept} and ${result.resource.ValueCodeableConcept.hasCoding} and ${result.resource.valueCodeableConcept.codingFirstRep.hasCode} and ${result.resource.valueCodeableConcept.codingFirstRep.code} != ${interp.codingFirstRep.code}" th:text="${interp.codingFirstRep.code}"/>
                         <th:block th:if="${result.resource.hasValueStringType} and ${result.resource.valueStringType.valueAsString} != ${interp.codingFirstRep.code}" th:text="${interp.codingFirstRep.code}"/>
