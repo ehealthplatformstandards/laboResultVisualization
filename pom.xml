@@ -5,19 +5,16 @@
   <artifactId>fhir-visualization-tool</artifactId>
   <packaging>jar</packaging>
   <version>1.13</version>
-<distributionManagement>
+  <properties>
+    <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+    <github.global.server>github</github.global.server>
+</properties>
+  <distributionManagement>
     <repository>
-        <id>maven.taktik.be</id>
-        <url>
-            https://maven.taktik.be/content/repositories/releases/
-        </url>
+        <id>internal.repo</id>
+        <name>Temporary Staging Repository</name>
+        <url>file://${project.build.directory}/mvn-repo</url>
     </repository>
-    <snapshotRepository>
-        <id>maven.taktik.be</id>
-        <url>
-            https://maven.taktik.be/content/repositories/snapshots/
-        </url>
-    </snapshotRepository>
 </distributionManagement>
 <build>
     <plugins>
@@ -26,6 +23,10 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
+          <configuration>
+            <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+        </configuration>
+
           <source>8</source>
           <target>8</target>
           <annotationProcessorPaths>
@@ -62,6 +63,29 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.12</version>
+        <configuration>
+            <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+            <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+            <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+            <branch>refs/heads/mvn-rep</branch>                       <!-- remote branch name -->
+            <includes><include>**/*</include></includes>
+            <repositoryName>laboResultVisualization</repositoryName>      <!-- github repo name -->
+            <repositoryOwner>ehealthplatformstandards</repositoryOwner>    <!-- github username  -->
+        </configuration>
+        <executions>
+          <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>deploy</phase>
+          </execution>
+        </executions>
+    </plugin>
     </plugins>
   </build>
   <name>trial</name>
