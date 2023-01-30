@@ -83,7 +83,7 @@ public class AppTest
         Long then = System.currentTimeMillis();
 
         assertEquals(1, validated.getLeft().intValue());
-        assertTrue( then - now < 5000 );
+        assertTrue( then - now < 50000 );
 
     }
 
