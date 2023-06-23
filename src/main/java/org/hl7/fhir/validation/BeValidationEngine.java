@@ -22,8 +22,8 @@ import java.util.List;
 public class BeValidationEngine extends ValidationEngine {
     private final PrintStream ps;
 
-    public BeValidationEngine(PrintStream ps, String src, String vString, TimeTracker tt) throws FHIRException, IOException, URISyntaxException {
-        super(src, vString, tt);
+    public BeValidationEngine(PrintStream ps, ValidationEngine ve) throws FHIRException, IOException, URISyntaxException {
+        super(ve);
         this.ps = ps;
     }
 
@@ -35,7 +35,7 @@ public class BeValidationEngine extends ValidationEngine {
 
         for (byte[] data: sources) {
             List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
-            InstanceValidator validator = getValidator();
+            InstanceValidator validator = getValidator(Manager.FhirFormat.JSON);
             validator.validate(null, messages, new ByteArrayInputStream(data), Manager.FhirFormat.JSON, asSdList(profiles));
             if (record != null) {
                 record.add(new ValidationRecord("--", messages));
@@ -54,25 +54,26 @@ public class BeValidationEngine extends ValidationEngine {
     }
 
     @Override
-    public Resource validate(List<String> sources, List<String> profiles, List<ValidationRecord> record) throws FHIRException, IOException {
+    public Resource validate(List<String> sources, List<String> profiles, List<ValidatorUtils.SourceFile> refs, List<ValidationRecord> record, IValidationEngineLoader loader, boolean all) throws FHIRException, IOException {
+
         if (profiles.size() > 0) {
             ps.println("  Profiles: " + profiles);
         }
 
-        List<String> refs = new ArrayList<>();
+        refs = new ArrayList<>();
         boolean asBundle = ValidatorUtils.parseSources(sources, refs, this.getContext());
         Bundle results = new Bundle();
         results.setType(Bundle.BundleType.COLLECTION);
 
-        for(String ref : refs) {
+        for(ValidatorUtils.SourceFile ref : refs) {
             TimeTracker.Session tts = this.getContext().clock().start("validation");
             this.getContext().clock().milestone();
             ps.print("  Validate " + ref);
-            Content cnt = this.getIgLoader().loadContent(ref, "validate", false);
+            Content cnt = this.getIgLoader().loadContent(ref.getRef(), "validate", false);
 
             try {
-                OperationOutcome outcome = this.validate(ref, cnt.focus, cnt.cntType, profiles, record);
-                ToolingExtensions.addStringExtension(outcome, "http://hl7.org/fhir/StructureDefinition/operationoutcome-file", ref);
+                OperationOutcome outcome = this.validate(ref.getRef(), cnt.getFocus(), cnt.getCntType(), profiles, record);
+                ToolingExtensions.addStringExtension(outcome, "http://hl7.org/fhir/StructureDefinition/operationoutcome-file", ref.getRef());
                 ps.println(" " + this.getContext().clock().milestone());
                 results.addEntry().setResource(outcome);
                 tts.end();

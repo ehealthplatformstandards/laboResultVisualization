@@ -29,6 +29,8 @@ public class FhirValidator {
         cliContext = new CliContext();
         cliContext.setSv(VersionUtilities.getCurrentPackageVersion("4.0"));
         cliContext.setIgs(implementationGuideUrls);
+        cliContext.setDisplayWarnings(true);
+        cliContext.setAllowExampleUrls(true);
 
         final String definitions = VersionUtilities.packageForVersion(cliContext.getSv()) + "#" + VersionUtilities.getCurrentVersion(cliContext.getSv());
         validator = validationService.initializeValidator(cliContext, definitions, tt);
@@ -40,7 +42,7 @@ public class FhirValidator {
 
         // validate
         final List<ValidationRecord> records = new ArrayList<>();
-        final Resource resource = validator.validate(cliContext.getSources(), cliContext.getProfiles(), records);
+        final Resource resource = validator.validate(cliContext.getSources(), cliContext.getProfiles(), null, records,null,false);
         final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
 
         // return hasErrors and html

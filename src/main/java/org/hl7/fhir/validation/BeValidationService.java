@@ -1,9 +1,10 @@
 package org.hl7.fhir.validation;
 
+import java.io.IOException;
 import java.io.PrintStream;
-
+import java.net.URISyntaxException;
+import org.hl7.fhir.r5.terminologies.CodeSystemUtilities;
 import org.hl7.fhir.r5.context.TerminologyCache;
-import org.hl7.fhir.r5.model.FhirPublication;
 import org.hl7.fhir.r5.model.OperationOutcome;
 import org.hl7.fhir.r5.utils.ToolingExtensions;
 import org.hl7.fhir.utilities.TimeTracker;
@@ -23,6 +24,9 @@ public class BeValidationService extends ValidationService {
 
     @Override
     public BeValidationEngine initializeValidator(CliContext cliContext, String definitions, TimeTracker tt) throws Exception {
+        return buildValidationEngine(cliContext, definitions, tt);
+
+        /*
         tt.milestone();
 
         ps.print("  Load FHIR v" + cliContext.getSv() + " from " + definitions);
@@ -44,7 +48,7 @@ public class BeValidationService extends ValidationService {
         validator.setQuestionnaireMode(cliContext.getQuestionnaireMode());
         validator.setDoNative(cliContext.isDoNative());
         validator.setHintAboutNonMustSupport(cliContext.isHintAboutNonMustSupport());
-        validator.setAnyExtensionsAllowed(cliContext.isAnyExtensionsAllowed());
+        //validator.setAnyExtensionsAllowed(cliContext.isAnyExtensionsAllowed());
         validator.setLanguage(cliContext.getLang());
         validator.setLocale(cliContext.getLocale());
         validator.setSnomedExtension(cliContext.getSnomedCTCode());
@@ -65,6 +69,55 @@ public class BeValidationService extends ValidationService {
         ps.println(" go (" + tt.milestone() + ")");
 
         return validator;
+        */
+    }
+
+    protected BeValidationEngine buildValidationEngine( CliContext cliContext, String definitions, TimeTracker timeTracker) throws IOException, URISyntaxException {
+        System.out.print("  Load FHIR v" + cliContext.getSv() + " from " + definitions);
+    ValidationEngine tmpValidationEngine = getValidationEngineBuilder().withTHO(false).withVersion(cliContext.getSv()).withTimeTracker(timeTracker).withUserAgent("fhir/validator").fromSource(definitions);
+    BeValidationEngine validationEngine = new  BeValidationEngine(ps, tmpValidationEngine);
+
+    System.out.println(" - " + validationEngine.getContext().countAllCaches() + " resources (" + timeTracker.milestone() + ")");
+
+    loadIgsAndExtensions(validationEngine, cliContext, timeTracker);
+    System.out.print("  Get set... ");
+    validationEngine.setDisplayWarnings(cliContext.isDisplayWarnings());
+    validationEngine.setQuestionnaireMode(cliContext.getQuestionnaireMode());
+    validationEngine.setLevel(cliContext.getLevel());
+    validationEngine.setDoNative(cliContext.isDoNative());
+    validationEngine.setHintAboutNonMustSupport(cliContext.isHintAboutNonMustSupport());
+    for (String s : cliContext.getExtensions()) {
+      if ("any".equals(s)) {
+        validationEngine.setAnyExtensionsAllowed(true);
+      } else {
+        validationEngine.getExtensionDomains().add(s);
+      }
+    }
+    validationEngine.setLanguage(cliContext.getLang());
+    validationEngine.setLocale(cliContext.getLocale());
+    validationEngine.setSnomedExtension(cliContext.getSnomedCTCode());
+    validationEngine.setAssumeValidRestReferences(cliContext.isAssumeValidRestReferences());
+    validationEngine.setShowMessagesFromReferences(cliContext.isShowMessagesFromReferences());
+    validationEngine.setDoImplicitFHIRPathStringConversion(cliContext.isDoImplicitFHIRPathStringConversion());
+    validationEngine.setHtmlInMarkdownCheck(cliContext.getHtmlInMarkdownCheck());
+    validationEngine.setNoExtensibleBindingMessages(cliContext.isNoExtensibleBindingMessages());
+    validationEngine.setNoUnicodeBiDiControlChars(cliContext.isNoUnicodeBiDiControlChars());
+    validationEngine.setNoInvariantChecks(cliContext.isNoInvariants());
+    validationEngine.setWantInvariantInMessage(cliContext.isWantInvariantsInMessages());
+    validationEngine.setSecurityChecks(cliContext.isSecurityChecks());
+    validationEngine.setCrumbTrails(cliContext.isCrumbTrails());
+    validationEngine.setForPublication(cliContext.isForPublication());
+    validationEngine.setShowTimes(cliContext.isShowTimes());
+    validationEngine.setAllowExampleUrls(cliContext.isAllowExampleUrls());
+    StandAloneValidatorFetcher fetcher = new StandAloneValidatorFetcher(validationEngine.getPcm(), validationEngine.getContext(), validationEngine);
+    validationEngine.setFetcher(fetcher);
+    validationEngine.getContext().setLocator(fetcher);
+    validationEngine.getBundleValidationRules().addAll(cliContext.getBundleValidationRules());
+    validationEngine.setJurisdiction(CodeSystemUtilities.readCoding(cliContext.getJurisdiction()));
+    TerminologyCache.setNoCaching(cliContext.isNoInternalCaching());
+    validationEngine.prepare(); // generate any missing snapshots
+    System.out.println(" go (" + timeTracker.milestone() + ")");
+    return validationEngine;
     }
 
     /**
@@ -75,7 +128,7 @@ public class BeValidationService extends ValidationService {
      * @param crumbs           Include slice info text
      * @return amount of issues that have severity FATAL or ERROR
      */
-    @Override
+    //@Override
     public int displayOperationOutcome(OperationOutcome operationOutcome, boolean hasMultiples,
         boolean crumbs) {
         int error = 0;
