@@ -73,7 +73,7 @@ public class AppTest
         FhirValidator fhirValidator = new FhirValidator(output, Collections.singletonList("https://build.fhir.org/ig/hl7-be/lab"));
         Pair<Integer, String> validated = fhirValidator.validate(IOUtils.toByteArray(new FileInputStream("src/test/resources/example.json")));
 
-        assertEquals(1, validated.getLeft().intValue());
+        assertEquals(0, validated.getLeft().intValue());
 
         Long now = System.currentTimeMillis();
         fhirValidator.validate(IOUtils.toByteArray(new FileInputStream("src/test/resources/example.json")));
@@ -82,7 +82,7 @@ public class AppTest
         validated = fhirValidator.validate(IOUtils.toByteArray(new FileInputStream("src/test/resources/example.json")));
         Long then = System.currentTimeMillis();
 
-        assertEquals(1, validated.getLeft().intValue());
+        assertEquals(0, validated.getLeft().intValue());
         assertTrue( then - now < 50000 );
 
     }
@@ -122,7 +122,7 @@ public class AppTest
 
         String result = new String(bos.toByteArray(), StandardCharsets.UTF_8);
 
-        assertTrue( result.contains("  Load FHIR v4.0 from hl7.fhir.r4.core#4.0.1") );
+        assertTrue( result.contains("Success: 0 errors") );
     }
 
     /**

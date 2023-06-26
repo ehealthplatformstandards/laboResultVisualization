@@ -20,6 +20,11 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.6.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
@@ -27,8 +32,8 @@
             <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
         </configuration>
 
-          <source>8</source>
-          <target>8</target>
+          <source>11</source>
+          <target>11</target>
           <annotationProcessorPaths>
             <path>
               <groupId>info.picocli</groupId>
@@ -97,6 +102,54 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ca.uhn.hapi.fhir</groupId>
+      <artifactId>org.hl7.fhir.validation</artifactId>
+      <version>6.0.16</version>
+      <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>info.cqframework</groupId>
+          <artifactId>elm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>info.cqframework</groupId>
+          <artifactId>cql-to-elm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>info.cqframework</groupId>
+          <artifactId>quick</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>info.cqframework</groupId>
+          <artifactId>qdm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>info.cqframework</groupId>
+          <artifactId>cql</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>info.cqframework</groupId>
+          <artifactId>model</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.javalin</groupId>
+          <artifactId>javalin</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-collections4</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xpp3</groupId>
+          <artifactId>xpp3</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.fhir/ucum -->
     <dependency>
       <groupId>org.fhir</groupId>
@@ -107,19 +160,25 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-base</artifactId>
-      <version>5.5.3</version>
+      <version>6.6.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-structures-r4 -->
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-r4</artifactId>
-      <version>5.5.3</version>
+      <version>6.6.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-validation -->
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-validation</artifactId>
-      <version>5.5.3</version>
+      <version>6.6.1</version>
+      <exclusions>
+      <exclusion>
+        <groupId>ca.uhn.hapi.fhir</groupId>
+        <artifactId>org.hl7.fhir.validation</artifactId>
+      </exclusion>
+      </exclusions>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
     <dependency>
@@ -151,5 +210,8 @@
       <artifactId>okhttp</artifactId>
       <version>4.9.2</version>
     </dependency>
+
+  
+    
   </dependencies>
 </project>
