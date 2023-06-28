@@ -1,14 +1,9 @@
 package be.fgov.ehealth.fhir.narrative.cmd;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.narrative.CustomThymeleafNarrativeGenerator;
-import ca.uhn.fhir.narrative.INarrativeGenerator;
-import ca.uhn.fhir.parser.IParser;
-import org.apache.commons.lang3.tuple.Pair;
-import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.FhirNarrativeUtils;
+import org.hl7.fhir.r4.model.Resource;
 
-public class HtmlNarrativeExtract implements BundleProcessor {
+public class HtmlNarrativeExtract implements ResourceProcessor {
     private final Visualization visualization;
 
     public HtmlNarrativeExtract(Visualization visualization) {
@@ -16,10 +11,12 @@ public class HtmlNarrativeExtract implements BundleProcessor {
     }
 
     @Override
-    public Integer process(Bundle bundle) {
-        FhirNarrativeUtils.collectNarratives(bundle).forEach(x -> {
+    public Integer process(Resource resource) {
+        FhirNarrativeUtils.collectNarratives(resource).forEach(x -> {
             visualization.getOutput().println(x.getLeft());
             visualization.getOutput().println(x.getRight());
+            System.out.println("left:" + x.getLeft());
+            System.out.println("left:" + x.getRight());
         });
         return 0;
     }

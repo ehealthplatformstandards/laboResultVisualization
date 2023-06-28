@@ -1,0 +1,56 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="organization (organization)">
+    <thead><tr>
+    <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+        <div>
+            <div>Organization</div>
+            <div>
+                    <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+            </div>
+        </div>
+    </td>
+    </tr></thead>
+
+    <tbody class="hidden">
+
+        <tr th:if="${organization.hasID}">
+            <td>Id</td>
+            <td>
+                <th:block th:text="${organization.id}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${organization.hasIdentifier}">
+            <th:block th:each="identifier : ${organization.identifier}">
+                <td>Identifier</td>
+                <td th:if="${identifier.hasValue}" th:text="${identifier.value}" />
+            </th:block>
+        </tr>
+
+        <tr th:if="${organization.hasActive}">
+            <td>Active</td>
+            <td>
+                <th:block th:text="${organization.active}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${organization.hasName}">
+            <td>Name</td>
+            <td>
+                <th:block th:text="${organization.name}"/>
+            </td>
+        </tr>
+
+
+    </tbody>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->

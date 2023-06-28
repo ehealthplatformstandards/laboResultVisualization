@@ -1,0 +1,256 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+
+<div>
+    <div class="hapiHeaderText">
+        <th:block th:text="Vaccination"/>
+    </div>
+
+    <table class="hapiPropertyTable">
+
+        <th:block th:if="${resource.hasPatient}">
+            <thead><tr><td colspan="2">Patient</td></tr></thead>
+            <tr th:if="${resource.patient.hasIdentifier}">
+                <td>Identifier</td>
+                <td>
+                    <th:block th:if="${resource.patient.hasIdentifier}" th:text="${resource.patient.identifier.value} + ' (' +  ${resource.patient.identifier.system} + ')'"/>
+                </td>
+            </tr>
+            <tr th:if="${resource.patient.hasReference}">
+                <td>Reference</td>
+                <td>
+                    <th:block th:if="${resource.patient.hasReference}" th:text="${resource.patient.reference}"/>
+                </td>
+            </tr>
+        </th:block>
+
+        <thead><tr><td colspan="2">Information</td></tr></thead>
+        <tbody>
+
+        <tr th:if="${resource.hasIdentifier}"  th:each="identifier : ${resource.identifier}">
+            <td>Identifier</td>
+            <td>
+                <th:block th:if="${identifier.hasValue}" th:text="${identifier.value}" />
+                <!--<th:block th:if="${identifier.hasSystem}" th:text="'(' + ${identifier.system} + ')'" />-->
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasVaccineCode}" >
+            <td>Vaccine code</td>
+            <td>
+                <th:block th:if="${resource.vaccineCode.hasCoding}">
+                    <th:block th:if="${resource.vaccineCode.codingFirstRep.hasDisplay}" th:text="${resource.vaccineCode.codingFirstRep.display}"/>
+                    <th:block th:if="${not resource.vaccineCode.codingFirstRep.hasDisplay} and ${resource.vaccineCode.hasText}" th:text="${resource.vaccineCode.text}"/>
+                    <th:block th:if="${not resource.vaccineCode.codingFirstRep.hasDisplay} and ${not resource.vaccineCode.hasText} and ${resource.vaccineCode.codingFirstRep.hasCode}" th:text="${resource.vaccineCode.codingFirstRep.code}"/>
+                </th:block>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasStatus}">
+            <td>Status</td>
+            <td>
+                <th:block th:text="${resource.status}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasStatusReason}">
+            <td>Status reason</td>
+            <td>
+                <th:block th:if="${resource.statusReason.hasCoding}">
+                    <th:block th:if="${resource.statusReason.codingFirstRep.hasDisplay}" th:text="${resource.statusReason.codingFirstRep.display}"/>
+                    <th:block th:if="${not resource.statusReason.codingFirstRep.hasDisplay} and ${resource.statusReason.hasText}" th:text="${resource.statusReason.text}"/>
+                    <th:block th:if="${not resource.statusReason.codingFirstRep.hasDisplay} and ${not resource.statusReason.hasText} and ${resource.statusReason.codingFirstRep.hasCode}" th:text="${resource.statusReason.codingFirstRep.code}"/>
+                </th:block>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasEncounter}">
+            <td>Encounter</td>
+            <td>
+                <th:block th:if="${resource.encounter.hasReference}" th:text="${resource.encounter.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasOccurrenceDateTimeType} or ${resource.hasOccurrenceStringType}">
+            <td>Occurence</td>
+            <td>
+                <th:block th:if="${resource.hasOccurrenceDateTimeType}" th:text="${#dates.format(resource.occurrenceDateTimeType.value,'dd MMMM yyyy HH:mm:ss')}"/>
+                <th:block th:if="${resource.hasOccurrenceStringType}">
+                    <th:block th:if="${#strings.contains(resource.occurrenceStringType, '\n')}"><pre><th:block th:include="@{inlinetext} :: inlinetext (${resource.occurrenceStringType})"/></pre></th:block>
+                    <th:block th:unless="${#strings.contains(resource.occurrenceStringType, '\n')}"><th:block th:include="@{inlinetext} :: inlinetext (${resource.occurrenceStringType})"/></th:block>
+                </th:block>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasRecorded}">
+            <td>Recorded</td>
+            <td>
+                <th:block th:text="${#dates.format(resource.recorded,'dd MMMM yyyy HH:mm:ss')}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasManufacturer}">
+            <td>Manufacturer</td>
+            <td>
+                <th:block th:if="${resource.manufacturer.hasReference}" th:text="${resource.manufacturer.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasSite}">
+            <td>Site</td>
+            <td>
+                <th:block th:if="${resource.site.hasId}" th:text="${resource.site.id}" />
+                <th:block th:if="${resource.site.hasCoding}">
+                    <th:block th:if="${resource.site.codingFirstRep.hasDisplay}" th:text="${resource.site.codingFirstRep.display}" />
+                    <th:block th:if="${resource.site.codingFirstRep.hasCode}" th:text="${resource.site.codingFirstRep.code}" />
+                    <th:block th:if="${resource.site.codingFirstRep.hasSystem}" th:text="${resource.site.codingFirstRep.system}" />
+                </th:block>
+                <th:block th:if="${resource.site.hasText}" th:text="${resource.site.text}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasRoute}">
+            <!-- TODO check display conditional code/display -->
+            <td>Route</td>
+            <td>
+                <th:block th:if="${resource.route.hasCoding}">
+                    <th:block th:if="${resource.route.codingFirstRep.hasDisplay}" th:text="${resource.route.codingFirstRep.display}" />
+                    <th:block th:if="${resource.route.codingFirstRep.hasCode}" th:text="${resource.route.codingFirstRep.code}" />
+                    <th:block th:if="${resource.route.codingFirstRep.hasSystem}" th:text="${resource.route.codingFirstRep.system}" />
+                </th:block>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasDoseQuantity}">
+            <td>Dose quantity</td>
+            <td>
+                <th:block th:text="${resource.doseQuantity.value}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasPerformer}" th:each="performer : ${resource.performer}">
+            <td>Performer</td>
+            <td>
+                <th:block th:if="${performer.actor.hasDisplay}" th:text="${performer.actor.display}"/>
+                <th:block th:if="(not ${performer.actor.hasDisplay}) and ${performer.actor.hasIdentifier}" >
+                    <th:block th:if="(${performer.actor.identifier.hasValue})" th:text="${performer.actor.identifier.value}" />
+                    <th:block th:if="(${performer.actor.identifier.hasSystem})" th:text="' (' + ${performer.actor.identifier.system} + ')'" />
+                </th:block>
+                <th:block th:if="${performer.actor.hasReference}" th:text="${performer.actor.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasReasonReference}" th:each="reasonReference : ${resource.reasonReference}">
+            <td>Reason reference</td>
+            <td>
+                <th:block th:if="${reasonReference.hasReference}" th:text="${reasonReference.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasReaction}" th:each="reaction : ${resource.reaction}">
+            <td>Reaction</td>
+            <td>
+                <th:block th:if="${reaction.hasDate}" th:text="${#dates.format(reaction.date,'dd MMMM yyyy HH:mm:ss')}"/>
+                <th:block th:if="${reaction.hasDetail}" th:text="${reaction.detail.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasNote}" th:each="note : ${resource.note}">
+            <td>Note</td>
+            <td th:narrative="${note}"></td>
+        </tr>
+
+        <!-- extensions -->
+        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/core/StructureDefinition/be-ext-recorder')}">
+            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/core/StructureDefinition/be-ext-recorder')}">
+                <tr>
+                    <td>Recorder</td>
+                    <td th:narrative="${ext.value}"/>
+                </tr>
+            </th:block>
+        </th:block>
+
+        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-ext-vaccination-originalorder')}">
+            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-ext-vaccination-originalorder')}">
+                <tr>
+                    <td>Original order</td>
+                    <td th:narrative="${ext.value}"/>
+                </tr>
+            </th:block>
+        </th:block>
+
+        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-ext-simple-note')}">
+            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-ext-simple-note')}">
+                <tr>
+                    <td>Note</td>
+                    <td th:narrative="${ext.value}"/>
+                </tr>
+            </th:block>
+        </th:block>
+
+        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-ext-vaccination-confirmationStatus')}">
+            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-ext-vaccination-confirmationStatus')}">
+                <tr>
+                    <td>Confirmation status</td>
+                    <td th:narrative="${ext.value}"/>
+                </tr>
+            </th:block>
+        </th:block>
+
+        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-ext-administeredProduct')}">
+            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-ext-administeredProduct')}">
+                <th:block th:if="${ext.hasExtension('lotNumber')}">
+                    <th:block th:each="ext2 : ${ext.getExtensionsByUrl('lotNumber')}">
+                        <tr>
+                            <td>Administrated product lot number</td>
+                            <td th:narrative="${ext2.value}"/>
+                        </tr>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${ext.hasExtension('reference')}">
+                    <th:block th:each="ext2 : ${ext.getExtensionsByUrl('reference')}">
+                        <tr>
+                            <td>Administrated product reference</td>
+                            <td th:narrative="${ext2.value}"/>
+                        </tr>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${ext.hasExtension('expirationDate')}">
+                    <th:block th:each="ext2 : ${ext.getExtensionsByUrl('expirationDate')}">
+                        <tr>
+                            <td>Administrated product expiration date</td>
+                            <td>
+                                <th:block th:narrative="${ext2.value}"/>
+                            </td>
+                        </tr>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${ext.hasExtension('coded')}">
+                    <th:block th:each="ext2 : ${ext.getExtensionsByUrl('coded')}">
+                        <th:block th:include="@{inlinecode} :: inlinecoderows (code=${ext2.value}, title='Administrated product code')"/>
+                    </th:block>
+                </th:block>
+            </th:block>
+        </th:block>
+
+        </tbody>
+
+        <th:block th:if="${resource.hasContained}" th:each="contained : ${resource.contained}">
+            <th:block th:if="${#strings.trim(contained.resourceType)} == 'Medication'" th:include="@{medication} :: medication (medication=${contained}, title='Medication', id='Medication')"/>
+            <th:block th:if="${#strings.trim(contained.resourceType)} == 'Encounter'" th:include="@{encounter} :: encounter (encounter=${contained}, title='Encounter', id='Encounter')"/>
+            <th:block th:if="${#strings.trim(contained.resourceType)} == 'Location'" th:include="@{location} :: location (location=${contained}, title='Location', id='Location')"/>
+            <th:block th:if="${#strings.trim(contained.resourceType)} == 'Organization'" th:include="@{organization} :: organization (organization=${contained}, title='Organization', id='Organization')"/>
+        </th:block>
+
+    </table>
+</div>
+
+<!--/*-->
+</body>
+</html>
+<!--*/-->
