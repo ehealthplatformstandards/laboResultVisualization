@@ -1,9 +1,9 @@
 package be.fgov.ehealth.fhir.narrative.cmd;
 
-import be.fgov.ehealth.fhir.narrative.gen.DiagnosticReportHtmlGenerator;
+import be.fgov.ehealth.fhir.narrative.gen.ResourceHtmlGenerator;
 import ca.uhn.fhir.context.FhirContext;
 import org.apache.commons.io.IOUtils;
-import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Resource;
 
 import java.awt.Desktop;
 import java.io.BufferedOutputStream;
@@ -14,21 +14,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public class HtmlPreview implements BundleProcessor {
+public class HtmlPreview implements ResourceProcessor {
     private final Visualization visualization;
     private final FhirContext ctx;
-    private final DiagnosticReportHtmlGenerator htmlGenerator = new DiagnosticReportHtmlGenerator();
+    private final ResourceHtmlGenerator htmlGenerator = new ResourceHtmlGenerator();
 
     public HtmlPreview(Visualization visualization, FhirContext ctx) {
         this.visualization = visualization;
         this.ctx = ctx;
     }
 
-    @Override
-    public Integer process(Bundle bundle) {
+    public Integer process(Resource resource) {
         byte[] html;
         try {
-            html = htmlGenerator.generateHtmlRepresentation(ctx, bundle, visualization.css != null ?
+            html = htmlGenerator.generateHtmlRepresentation(ctx, resource, visualization.css != null ?
                     new String(IOUtils.toByteArray(new FileInputStream(visualization.css)), StandardCharsets.UTF_8)
                     : null);
         } catch (IOException e) {
@@ -50,4 +49,5 @@ public class HtmlPreview implements BundleProcessor {
         }
         return 0;
     }
+
 }

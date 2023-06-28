@@ -3,8 +3,12 @@ package be.fgov.ehealth.fhir.narrative.cmd;
 import be.fgov.ehealth.fhir.narrative.option.FhirValidator;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hl7.fhir.r4.model.AllergyIntolerance;
 import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Immunization;
+import org.hl7.fhir.r4.model.Resource;
 import picocli.CommandLine.*;
 import picocli.CommandLine.Model.CommandSpec;
 
@@ -25,7 +29,8 @@ public class Visualization implements Callable<Integer> {
     @Option(names = { "-d", "--display" }, description = "Display generated document in visualizer")
     protected Boolean display = false;
 
-    @Option(names = { "-v", "--validate" }, arity = "0..1", fallbackValue = "https://build.fhir.org/ig/hl7-be/lab",
+    //TODO rendre mandatory l'IG
+    @Option(names = { "-v", "--validate" }, arity = "1..1",
             description = {
             "Validate the resource.",
             "If absent, validation is not performed.",
@@ -34,7 +39,9 @@ public class Visualization implements Callable<Integer> {
     protected String[] implementationGuideUrls;
 
     @Parameters(description = "Action to perform on file. May be one of ${COMPLETION-CANDIDATES}", index = "0") private Action action;
-    @Parameters(index = "1") private File bundleFile;
+    @Parameters(index = "1") private File file;
+
+    @Parameters(index = "2") private String profile;
 
     @Spec private CommandSpec spec;
 
@@ -50,12 +57,13 @@ public class Visualization implements Callable<Integer> {
         final boolean shouldValidate = pr.hasMatchedOption('v');
 
         if (shouldValidate) {
-            final Pair<Integer, String> validated = new FhirValidator(output, Arrays.asList(implementationGuideUrls)).validate(bundleFile.getAbsolutePath());
+            final Pair<Integer, String> validated = new FhirValidator(output, Arrays.asList(implementationGuideUrls)).validate(file.getAbsolutePath());
+
             final boolean errors = validated.getLeft() != null && validated.getLeft() > 0;
             if (errors) {
                 if (display) {
                     final String html = validated.getRight();
-                    final File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.laboratoryreport.validation", ".html");
+                    final File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.validation", ".html");
                     try (OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
                         os.write(html.getBytes());
                     }
@@ -66,10 +74,28 @@ public class Visualization implements Callable<Integer> {
         }
 
         final FhirContext ctx = FhirContext.forR4();
-        final IParser parser = ctx.newJsonParser();
-        final Bundle bundle = stripNarratives(parser.parseResource(Bundle.class, new String(readAllBytes(bundleFile.toPath()), StandardCharsets.UTF_8)));
+        IParser parser = null;
 
-        return action.execute(this, ctx, bundle);
+        if (FilenameUtils.getExtension(file.getAbsolutePath()).equals("json")) {
+            parser  = ctx.newJsonParser();
+        } else if (FilenameUtils.getExtension(file.getAbsolutePath()).equals("xml") ) {
+            parser = ctx.newXmlParser();
+        }
+
+
+        switch (profile){
+            case "immunization":
+                final Immunization immunization = (Immunization) stripNarratives(parser.parseResource(Immunization.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
+                return action.execute(this, ctx, immunization);
+            case "lab":
+                final Bundle lab = (Bundle) stripNarratives(parser.parseResource(Bundle.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
+                return action.execute(this, ctx, lab);
+            case "allergy":
+                final AllergyIntolerance allergy = (AllergyIntolerance) stripNarratives(parser.parseResource(AllergyIntolerance.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
+                return action.execute(this, ctx, allergy);
+            default:
+                return 0;
+        }
     }
 
     public PrintStream getOutput() {
@@ -87,12 +113,12 @@ public class Visualization implements Callable<Integer> {
             this.executor = executor;
         }
 
-        public Integer execute(Visualization visualization, FhirContext ctx, Bundle bundle) throws Exception {
-            return executor.execute(visualization, ctx, bundle);
+        public Integer execute(Visualization visualization, FhirContext ctx, Resource resource) throws Exception {
+            return executor.execute(visualization, ctx, resource);
         }
 
         public interface ActionLambda {
-            Integer execute(Visualization visualization, FhirContext ctx,  Bundle bundle) throws Exception;
+            Integer execute(Visualization visualization, FhirContext ctx,  Resource resource) throws Exception;
         }
     }
 }

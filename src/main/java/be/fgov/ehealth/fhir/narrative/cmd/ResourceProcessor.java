@@ -1,7 +1,7 @@
 package be.fgov.ehealth.fhir.narrative.cmd;
 
-import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Resource;
 
-public interface BundleProcessor {
-    Integer process(Bundle bundle) throws Exception;
+public interface ResourceProcessor {
+    Integer process(Resource resource) throws Exception;
 }
