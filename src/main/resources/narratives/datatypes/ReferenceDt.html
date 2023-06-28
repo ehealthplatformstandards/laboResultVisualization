@@ -1,0 +1,7 @@
+<th:block th:if="${resource.hasReference}">
+    <th:block th:text="${resource.reference}"/>
+</th:block>
+<th:block th:if="${resource.hasIdentifier}">
+    <th:block th:if="(${resource.identifier.hasValue})" th:text="${resource.identifier.value}" />
+    <th:block th:if="(${resource.identifier.hasSystem})" th:text="' (' + ${resource.identifier.system} + ')'" />
+</th:block>
