@@ -9,14 +9,14 @@ import java.util.List;
 public final class FhirNarrativeUtils {
     private FhirNarrativeUtils() { }
 
-    public static Bundle stripNarratives(Bundle bundle) {
-        visitAndStrip(bundle);
-        return bundle;
+    public static Resource stripNarratives(Resource resource) {
+        visitAndStrip(resource);
+        return resource;
     }
 
-    public static List<Pair<String, String>> collectNarratives(Bundle bundle) {
+    public static List<Pair<String, String>> collectNarratives(Resource resource) {
         LinkedList<Pair<String, String>> acc = new LinkedList<>();
-        visitAndCollect(bundle, "", acc);
+        visitAndCollect(resource, "", acc);
         return acc;
     }
 
