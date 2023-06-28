@@ -1,0 +1,44 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="location (location)">
+    <thead><tr>
+    <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+        <div>
+            <div>Location</div>
+            <div>
+                    <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+            </div>
+        </div>
+    </td>
+    </tr></thead>
+
+    <tbody class="hidden">
+
+        <tr th:if="${location.hasId}">
+            <td>Id</td>
+            <td>
+                <th:block th:text="${location.id}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${location.hasType}" th:each="type : ${location.type}">
+            <td>Type</td>
+            <td>
+                <th:block th:if="${type.hasCoding}">
+                    <th:block th:if="${type.codingFirstRep.hasDisplay}" th:text="${type.codingFirstRep.display}"/>
+                    <th:block th:if="${not type.codingFirstRep.hasDisplay} and ${type.hasText}" th:text="${type.text}"/>
+                    <th:block th:if="${not type.codingFirstRep.hasDisplay} and ${not type.hasText} and ${type.codingFirstRep.hasCode}" th:text="${type.codingFirstRep.code}"/>
+                </th:block>
+            </td>
+        </tr>
+    </tbody>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->

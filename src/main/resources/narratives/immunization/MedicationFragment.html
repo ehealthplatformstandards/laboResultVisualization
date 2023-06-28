@@ -1,0 +1,72 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="medication (medication)">
+    <div></div>
+    <thead><tr>
+    <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+        <div>
+            <div>Vaccine</div>
+            <div>
+                    <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+            </div>
+        </div>
+    </td>
+    </tr></thead>
+
+    <tbody class="hidden">
+
+    <tr th:if="${resource.hasID}">
+        <td>Id</td>
+        <td>
+            <th:block th:text="${resource.Id}"/>
+        </td>
+    </tr>
+
+    <!-- Identifier -->
+    <tr th:if="${resource.hasIdentifier}"  th:each="identifier : ${resource.identifier}">
+        <td>Identifier</td>
+        <td>
+            <th:block th:if="${identifier.hasUse}" th:text="${identifier.use.display}"/>
+            <th:block th:if="${identifier.hasValue}" th:text="${identifier.value}"/>
+            <th:block th:if="${identifier.hasSystem}" th:text="${identifier.system}"/>
+        </td>
+    </tr>
+
+    <tr th:if="${resource.hasCode}">
+        <td>Code</td>
+        <td>
+            <th:block th:if="${resource.code.hasCoding}">
+                <th:block th:if="${resource.code.codingFirstRep.hasDisplay}" th:text="${resource.code.codingFirstRep.display}"/>
+                <th:block th:if="${not resource.code.codingFirstRep.hasDisplay} and ${resource.code.hasText}" th:text="${resource.code.text}"/>
+                <th:block th:if="${not resource.code.codingFirstRep.hasDisplay} and ${not resource.code.hasText} and ${resource.code.codingFirstRep.hasCode}" th:text="${resource.code.codingFirstRep.code}"/>
+            </th:block>
+        </td>
+    </tr>
+
+    <th:block th:if="${resource.hasBatch}">
+        <tr th:if="${resource.batch.hasLotNumber}">
+            <td>Lot Number</td>
+            <td>
+                <th:block th:text="${resource.batch.lotNumber}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.batch.hasExpirationDate}">
+            <td>Expiration date</td>
+            <td>
+                <th:block th:text="${resource.batch.expirationDate}"/>
+            </td>
+        </tr>
+    </th:block>
+
+    </tbody>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->

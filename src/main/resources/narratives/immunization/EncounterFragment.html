@@ -1,0 +1,75 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+<th:block th:fragment="encounter (encounter)">
+    <thead><tr>
+    <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+        <div>
+            <div>Encounter</div>
+            <div>
+                    <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+            </div>
+        </div>
+    </td>
+    </tr></thead>
+
+    <tbody class="hidden">
+
+        <tr th:if="${encounter.hasID}">
+            <td>Id</td>
+            <td>
+                <th:block th:text="${encounter.id}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${encounter.hasStatus}">
+            <td>Status</td>
+            <td>
+                <th:block th:text="${encounter.status}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${encounter.hasClass_}">
+            <td>Class</td>
+            <td>
+                <th:block th:if="${encounter.class_.hasDisplay}" th:text="${encounter.class_.display}" />
+                <th:block th:if="${encounter.class_.hasCode}" th:text="${encounter.class_.code}" />
+                <th:block th:if="${encounter.class_.hasSystem}" th:text="${encounter.class_.system}" />
+            </td>
+        </tr>
+
+        <tr th:if="${encounter.hasSubject}">
+            <td>Subject</td>
+            <td>
+                <th:block th:if="${encounter.subject.hasIdentifier}" th:text="${encounter.subject.identifier.value} + ' (' +  ${encounter.subject.identifier.system} + ')'"/>
+                <th:block th:if="${encounter.subject.hasReference}" th:text="${encounter.subject.reference}"/>
+            </td>
+        </tr>
+
+        <th:block th:if="${encounter.hasLocation}" th:each="location : ${encounter.Location}">
+            <tr th:if="${location.hasLocation}">
+                <td>Location</td>
+                <td>
+                    <th:block th:if="${location.location.hasReference}" th:text="${location.location.reference}"/>
+                </td>
+            </tr>
+        </th:block>
+
+        <tr th:if="${encounter.hasServiceProvider}">
+            <td>Service provider</td>
+            <td>
+                <th:block th:if="${encounter.serviceProvider.hasIdentifier}" th:text="${encounter.serviceProvider.identifier.value} + ' (' +  ${encounter.serviceProvider.identifier.system} + ')'"/>
+                <th:block th:if="${encounter.serviceProvider.hasReference}" th:text="${encounter.serviceProvider.reference}"/>
+            </td>
+        </tr>
+
+    </tbody>
+</th:block>
+<!--/*-->
+</body>
+</html>
+<!--*/-->

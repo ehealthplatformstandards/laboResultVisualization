@@ -12,11 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hl7.fhir.r4.model.Bundle;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hl7.fhir.r4.model.FhirNarrativeUtils.stripNarratives;
 
@@ -32,7 +29,7 @@ import static org.hl7.fhir.r4.model.FhirNarrativeUtils.stripNarratives;
  * Unit test for simple App.
  */
 public class AppTest
-    extends TestCase
+        extends TestCase
 {
     /**
      * Create the test case
@@ -55,11 +52,21 @@ public class AppTest
     /**
      * Rigorous Test :-)
      */
-    public void testAppWithHtmlGeneration() {
+    public void testAppWithHtmlGeneration() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        App.commandLine(new String[] {"html", "src/test/resources/example.json"}, new PrintStream(bos));
+        //App.commandLine(new String[] {"html", "src/test/resources/Bundle-hematologyStudiesAsBundleCollection.xml", "lab", "-d"}, new PrintStream(bos));
+        //App.commandLine(new String[] {"html", "src/test/resources/example5.json", "immunization", "-d"}, new PrintStream(bos));
+        App.commandLine(new String[] {"html", "src/test/resources/81365677998_815333041_13.json", "lab", "-d"}, new PrintStream(bos));
+        //App.commandLine(new String[] {"html", "src/test/resources/Bundle-hematologyStudiesAsBundleCollection.xml", "lab", "-d"}, new PrintStream(bos));
+        //App.commandLine(new String[] {"html", "C:\\Users\\eh068\\Documents\\Bundle-hematologyStudiesAsBundleCollection.xml", "lab", "-d"}, new PrintStream(bos));
+        //App.commandLine(new String[] {"html", "C:\\Users\\eh068\\Documents\\Immunization5.json", "immunization", "-d"}, new PrintStream(bos));
+
 
         String result = new String(bos.toByteArray(), StandardCharsets.UTF_8);
+
+        System.out.println("result: " + result);
+
+        createFile("C:\\Users\\eh068\\Documents\\LaboResultVisualizer\\laboResultVisualization\\TestVisu2.html", result);
 
         assertTrue( result.contains("<html") );
     }
@@ -172,5 +179,26 @@ public class AppTest
 
         String result = new ResourceHtmlGenerator().generateDivRepresentation(ctx, stripped, null);
         assertTrue( result.startsWith("<div") );
+    }
+
+    private void createFile(String fileName, String input) throws IOException {
+
+        File file = new File(fileName);
+        Writer output = new BufferedWriter(new FileWriter(file));
+        output.write(input);
+        output.close();
+
+        file.createNewFile();
+    }
+
+    static String getResourceFileAsString(String fileName) throws IOException {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        try (InputStream is = classLoader.getResourceAsStream(fileName)) {
+            if (is == null) return null;
+            try (InputStreamReader isr = new InputStreamReader(is);
+                 BufferedReader reader = new BufferedReader(isr)) {
+                return reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            }
+        }
     }
 }
