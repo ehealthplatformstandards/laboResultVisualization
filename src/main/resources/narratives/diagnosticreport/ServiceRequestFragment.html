@@ -7,15 +7,13 @@
 <!--*/-->
 <th:block th:fragment="serviceRequest (basedOn)">
     <thead><tr>
-        <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+        <td colspan="2">
             <div>
-                <div>Service request</div><div>
-                <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
-            </div>
+                <div>Service request</div>
             </div>
         </td>
     </tr></thead>
-    <tbody class="hidden">
+    <tbody>
     <tr th:if="${basedOn.resource.hasIdentifier}">
         <td>Identifier</td>
         <td th:narrative="${basedOn.resource.identifier[0]}"></td>
