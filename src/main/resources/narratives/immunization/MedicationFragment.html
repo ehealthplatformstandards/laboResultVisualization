@@ -20,15 +20,14 @@
 
     <tbody class="hidden">
 
-    <tr th:if="${resource.hasID}">
+   <tr th:if="${medication.hasID}">
         <td>Id</td>
         <td>
-            <th:block th:text="${resource.Id}"/>
+            <th:block th:text="${medication.Id}"/>
         </td>
     </tr>
 
-    <!-- Identifier -->
-    <tr th:if="${resource.hasIdentifier}"  th:each="identifier : ${resource.identifier}">
+    <tr th:if="${medication.hasIdentifier}"  th:each="identifier : ${medication.identifier}">
         <td>Identifier</td>
         <td>
             <th:block th:if="${identifier.hasUse}" th:text="${identifier.use.display}"/>
@@ -37,29 +36,29 @@
         </td>
     </tr>
 
-    <tr th:if="${resource.hasCode}">
+    <tr th:if="${medication.hasCode}">
         <td>Code</td>
         <td>
-            <th:block th:if="${resource.code.hasCoding}">
-                <th:block th:if="${resource.code.codingFirstRep.hasDisplay}" th:text="${resource.code.codingFirstRep.display}"/>
-                <th:block th:if="${not resource.code.codingFirstRep.hasDisplay} and ${resource.code.hasText}" th:text="${resource.code.text}"/>
-                <th:block th:if="${not resource.code.codingFirstRep.hasDisplay} and ${not resource.code.hasText} and ${resource.code.codingFirstRep.hasCode}" th:text="${resource.code.codingFirstRep.code}"/>
+            <th:block th:if="${medication.code.hasCoding}">
+                <th:block th:if="${medication.code.codingFirstRep.hasDisplay}" th:text="${medication.code.codingFirstRep.display}"/>
+                <th:block th:if="${not medication.code.codingFirstRep.hasDisplay} and ${medication.code.hasText}" th:text="${medication.code.text}"/>
+                <th:block th:if="${not medication.code.codingFirstRep.hasDisplay} and ${not medication.code.hasText} and ${medication.code.codingFirstRep.hasCode}" th:text="${medication.code.codingFirstRep.code}"/>
             </th:block>
         </td>
     </tr>
 
-    <th:block th:if="${resource.hasBatch}">
-        <tr th:if="${resource.batch.hasLotNumber}">
+    <th:block th:if="${medication.hasBatch}">
+        <tr th:if="${medication.batch.hasLotNumber}">
             <td>Lot Number</td>
             <td>
-                <th:block th:text="${resource.batch.lotNumber}"/>
+                <th:block th:text="${medication.batch.lotNumber}"/>
             </td>
         </tr>
 
-        <tr th:if="${resource.batch.hasExpirationDate}">
+        <tr th:if="${medication.batch.hasExpirationDate}">
             <td>Expiration date</td>
             <td>
-                <th:block th:text="${resource.batch.expirationDate}"/>
+                <th:block th:text="${#dates.format(medication.batch.expirationDate,'dd MMMM yyyy HH:mm:ss')}"/>
             </td>
         </tr>
     </th:block>
