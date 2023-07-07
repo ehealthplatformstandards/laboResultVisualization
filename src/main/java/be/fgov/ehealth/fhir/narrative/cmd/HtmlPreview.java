@@ -38,7 +38,7 @@ public class HtmlPreview implements ResourceProcessor {
 
         if (visualization.display) {
             try {
-                File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.laboratoryreport", ".html");
+                File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.report", ".html");
                 try (OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
                     os.write(html);
                 }
