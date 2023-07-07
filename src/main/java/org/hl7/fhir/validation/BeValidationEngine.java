@@ -35,8 +35,15 @@ public class BeValidationEngine extends ValidationEngine {
 
         for (byte[] data: sources) {
             List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
-            InstanceValidator validator = getValidator(Manager.FhirFormat.JSON);
-            validator.validate(null, messages, new ByteArrayInputStream(data), Manager.FhirFormat.JSON, asSdList(profiles));
+
+            String mimeType = new String(data, 0, 1);
+
+            Manager.FhirFormat fhirFormat = Manager.FhirFormat.JSON;
+            if (mimeType.equals("<")) {
+                fhirFormat = Manager.FhirFormat.XML;
+            }
+            InstanceValidator validator = getValidator(fhirFormat);
+            validator.validate(null, messages, new ByteArrayInputStream(data), fhirFormat, asSdList(profiles));
             if (record != null) {
                 record.add(new ValidationRecord("--", messages));
             }
