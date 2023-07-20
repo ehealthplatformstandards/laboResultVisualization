@@ -16,5 +16,5 @@
     </th:block>
 </th:block>
 <th:block th:if="${resource.hasTextElement}">
-    <th:block th:text="${resource.textElement}"/>
+    <th:block th:utext="${#strings.replace(#strings.escapeXml(resource.textElement), '&#10;', '&lt;br /&gt;')}"/>
 </th:block>
