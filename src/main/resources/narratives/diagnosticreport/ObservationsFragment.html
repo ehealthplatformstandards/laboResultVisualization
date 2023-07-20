@@ -117,6 +117,7 @@
                     <th:block th:if="${ref.hasText}">
                         <th:block th:include="@{inlinetext} :: inlinetext (${ref.text})"></th:block>
                     </th:block>
+
                 </th:block>
             </td>
             <td>
@@ -159,7 +160,7 @@
         </tr>
         <tr th:replace="@{observations} :: observations (items=${result.resource.hasMember},level=${level}+1)"></tr>
         <th:block th:if="${result.resource.hasReferenceRange}" th:each="ref : ${result.resource.referenceRange}">
-            <th:block th:if="${ref.hasExtension('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-ext-referencerange-comment')}" th:each="ext : ${ref.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-ext-referencerange-comment')}">
+            <th:block th:if="${ref.hasExtension('https://www.ehealth.fgov.be/standards/fhir/lab/StructureDefinition/be-ext-referencerange-comment')}" th:each="ext : ${ref.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/lab/StructureDefinition/be-ext-referencerange-comment')}">
                 <tr>
                     <td colspan="6" th:narrative="${ext.value}"></td>
                 </tr>

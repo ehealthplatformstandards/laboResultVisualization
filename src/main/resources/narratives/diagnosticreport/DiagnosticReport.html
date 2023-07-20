@@ -49,10 +49,10 @@
         <!-- patient -->
         <th:block th:if="${resource.hasSubject}" th:include="@{patient} :: patient (patient=${resource.subject}, title='Patient', id='Patient')"/>
         <!-- notes extension -->
-        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-ext-note')}">
+        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/lab/StructureDefinition/be-ext-note')}">
             <thead><tr><td colspan="2">Report notes</td></tr></thead>
             <tbody>
-            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-ext-note')}">
+            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/lab/StructureDefinition/be-ext-note')}">
                 <tr>
                     <td>Note</td>
                     <td th:narrative="${ext.value}"></td>
