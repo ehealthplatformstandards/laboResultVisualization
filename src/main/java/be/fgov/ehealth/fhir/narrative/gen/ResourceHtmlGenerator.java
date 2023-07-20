@@ -46,16 +46,30 @@ public class ResourceHtmlGenerator {
 
         switch (resource.getResourceType().toString()) {
             case "Bundle":
+                Bundle bundle = (Bundle) resource;
+
+                StringBuilder narrative = new StringBuilder();
                 generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/diagnosticreport/narrative.properties");
                 fhirContext.setNarrativeGenerator(this.generator);
                 parser = fhirContext.newJsonParser().setPrettyPrint(true).setSuppressNarratives(false);
-                final Bundle bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
+                if ("Bundle".equals(bundle.getEntryFirstRep().getResource().getResourceType().toString())) {
+                    for (Bundle.BundleEntryComponent bundleEntryComponent : bundle.getEntry()) {
+                        final Bundle bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(bundleEntryComponent.getResource())));
 
-                return ((DiagnosticReport) bundleParse.getEntry().stream()
-                        .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
-                        .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
-                        .getResource()).getText().getDiv().toString();
+                        narrative.append(((DiagnosticReport) bundleParse.getEntry().stream()
+                                .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
+                                .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
+                                .getResource()).getText().getDiv().toString()).append("<br/>");
+                    }
+                    return narrative.toString();
+                } else {
+                    final Bundle bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
 
+                    return ((DiagnosticReport) bundleParse.getEntry().stream()
+                            .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
+                            .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
+                            .getResource()).getText().getDiv().toString();
+                }
 
             case "Immunization":
                 generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/immunization/narrative.properties");
