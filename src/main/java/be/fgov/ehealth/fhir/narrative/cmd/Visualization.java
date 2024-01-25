@@ -5,12 +5,10 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.hl7.fhir.r4.model.AllergyIntolerance;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Immunization;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.*;
 import picocli.CommandLine.*;
 import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Parameters;
 
 import java.awt.*;
 import java.io.*;
@@ -93,6 +91,9 @@ public class Visualization implements Callable<Integer> {
             case "allergy":
                 final AllergyIntolerance allergy = (AllergyIntolerance) stripNarratives(parser.parseResource(AllergyIntolerance.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
                 return action.execute(this, ctx, allergy);
+            case "referral":
+                final ServiceRequest serviceRequest = (ServiceRequest) stripNarratives(parser.parseResource(ServiceRequest.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
+                return action.execute(this, ctx, serviceRequest);
             default:
                 return 0;
         }
