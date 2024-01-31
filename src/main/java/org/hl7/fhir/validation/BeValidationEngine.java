@@ -14,15 +14,13 @@ import org.hl7.fhir.validation.instance.InstanceValidator;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class BeValidationEngine extends ValidationEngine {
     private final PrintStream ps;
 
-    public BeValidationEngine(PrintStream ps, ValidationEngine ve) throws FHIRException, IOException, URISyntaxException {
+    public BeValidationEngine(PrintStream ps, ValidationEngine ve) throws FHIRException, IOException {
         super(ve);
         this.ps = ps;
     }
@@ -61,7 +59,7 @@ public class BeValidationEngine extends ValidationEngine {
     }
 
     @Override
-    public Resource validate(List<String> sources, List<String> profiles, List<ValidatorUtils.SourceFile> refs, List<ValidationRecord> record, IValidationEngineLoader loader, boolean all) throws FHIRException, IOException {
+    public Resource validate(List<String> sources, List<String> profiles, List<ValidatorUtils.SourceFile> refs, List<ValidationRecord> record, IValidationEngineLoader loader, boolean all, int delay, boolean first) throws FHIRException, IOException {
 
         if (profiles.size() > 0) {
             ps.println("  Profiles: " + profiles);
@@ -76,7 +74,7 @@ public class BeValidationEngine extends ValidationEngine {
             TimeTracker.Session tts = this.getContext().clock().start("validation");
             this.getContext().clock().milestone();
             ps.print("  Validate " + ref);
-            Content cnt = this.getIgLoader().loadContent(ref.getRef(), "validate", false);
+            Content cnt = this.getIgLoader().loadContent(ref.getRef(), "validate", false, false);
 
             try {
                 OperationOutcome outcome = this.validate(ref.getRef(), cnt.getFocus(), cnt.getCntType(), profiles, record);
