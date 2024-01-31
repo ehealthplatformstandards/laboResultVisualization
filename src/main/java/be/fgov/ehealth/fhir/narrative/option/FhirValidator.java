@@ -42,7 +42,7 @@ public class FhirValidator {
 
         // validate
         final List<ValidationRecord> records = new ArrayList<>();
-        final Resource resource = validator.validate(cliContext.getSources(), cliContext.getProfiles(), null, records,null,false);
+        final Resource resource = validator.validate(cliContext.getSources(), cliContext.getProfiles(), null, records,null,false,0,false);
         final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
 
         // return hasErrors and html
