@@ -1,0 +1,211 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+
+<div>
+    <div class="hapiHeaderText">
+        <th:block th:text="AllergyIntolerance"/>
+    </div>
+
+    <table class="hapiPropertyTable">
+
+        <th:block th:if="${resource.hasPatient}">
+            <thead><tr><td colspan="2">Patient</td></tr></thead>
+            <tr th:if="${resource.patient.hasIdentifier}">
+                <td>Identifier</td>
+                <td>
+                    <th:block th:if="${resource.patient.hasIdentifier}" th:text="${resource.patient.identifier.value} + ' (' +  ${resource.patient.identifier.system} + ')'"/>
+                </td>
+            </tr>
+            <tr th:if="${resource.patient.hasReference}">
+                <td>Reference</td>
+                <td>
+                    <th:block th:if="${resource.patient.hasReference}" th:text="${resource.patient.reference}"/>
+                </td>
+            </tr>
+        </th:block>
+
+        <thead><tr><td colspan="2">Information</td></tr></thead>
+        <tbody>
+
+        <tr th:if="${resource.hasIdentifier}"  th:each="identifier : ${resource.identifier}">
+            <td>Identifier</td>
+            <td>
+                <th:block th:if="${identifier.hasValue}" th:text="${identifier.value}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasClinicalStatus}" >
+            <td>Clinical status</td>
+            <td>
+                <th:block th:if="${resource.clinicalStatus.hasCoding}">
+                    <th:block th:if="${resource.clinicalStatus.codingFirstRep.hasDisplay}" th:text="${resource.clinicalStatus.codingFirstRep.display}"/>
+                    <th:block th:if="${not resource.clinicalStatus.codingFirstRep.hasDisplay} and ${resource.clinicalStatus.hasText}" th:text="${resource.clinicalStatus.text}"/>
+                    <th:block th:if="${not resource.clinicalStatus.codingFirstRep.hasDisplay} and ${not resource.clinicalStatus.hasText} and ${resource.clinicalStatus.codingFirstRep.hasCode}" th:text="${resource.clinicalStatus.codingFirstRep.code}"/>
+                </th:block>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasVerificationStatus}" >
+            <td>Verification status</td>
+            <td>
+                <th:block th:if="${resource.verificationStatus.hasCoding}">
+                    <th:block th:if="${resource.verificationStatus.codingFirstRep.hasDisplay}" th:text="${resource.verificationStatus.codingFirstRep.display}"/>
+                    <th:block th:if="${not resource.verificationStatus.codingFirstRep.hasDisplay} and ${resource.verificationStatus.hasText}" th:text="${resource.verificationStatus.text}"/>
+                    <th:block th:if="${not resource.verificationStatus.codingFirstRep.hasDisplay} and ${not resource.verificationStatus.hasText} and ${resource.verificationStatus.codingFirstRep.hasCode}" th:text="${resource.verificationStatus.codingFirstRep.code}"/>
+                </th:block>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasType}">
+            <td>Type</td>
+            <td>
+                <th:block th:text="${resource.type}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasCategory}" th:each="category : ${resource.category}">
+            <td>Category</td>
+            <td>
+                <th:block th:text="${category.valueAsString}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasCriticality}">
+            <td>Criticality</td>
+            <td>
+                <th:block th:text="${resource.criticality}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasCode}" >
+            <td>Allergy code</td>
+            <td>
+                <th:block th:if="${resource.code.hasCoding}">
+                    <th:block th:if="${resource.code.codingFirstRep.hasDisplay}" th:text="${resource.code.codingFirstRep.display}"/>
+                    <th:block th:if="${not resource.code.codingFirstRep.hasDisplay} and ${resource.code.hasText}" th:text="${resource.code.text}"/>
+                    <th:block th:if="${not resource.code.codingFirstRep.hasDisplay} and ${not resource.code.hasText} and ${resource.code.codingFirstRep.hasCode}" th:text="${resource.code.codingFirstRep.code}"/>
+                </th:block>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasEncounter}">
+            <td>Encounter</td>
+            <td>
+                <th:block th:if="${resource.encounter.hasReference}" th:text="${resource.encounter.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasOnsetDateTimeType}">
+            <td>Onset datetime</td>
+            <td>
+                <th:block th:text="${#dates.format(resource.onsetDateTimeType.value,'dd MMMM yyyy HH:mm:ss')}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasOnsetStringType}">
+            <td>Onset string</td>
+            <td>
+                <th:block th:if="${#strings.contains(resource.onSetStringType, '\n')}"><pre><th:block th:include="@{inlinetext} :: inlinetext (${resource.onSetStringType})"/></pre></th:block>
+                <th:block th:unless="${#strings.contains(resource.onSetStringType, '\n')}"><th:block th:include="@{inlinetext} :: inlinetext (${resource.onSetStringType})"/></th:block>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasRecordedDate}">
+            <td>Recorded date</td>
+            <td>
+                <th:block th:text="${#dates.format(resource.recordedDate,'dd MMMM yyyy HH:mm:ss')}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasRecorder}">
+            <td>Recorder</td>
+            <td>
+                <th:block th:if="${resource.recorder.hasReference}" th:text="${resource.recorder.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasAsserter}">
+            <td>Asserter</td>
+            <td>
+                <th:block th:if="${resource.asserter.hasReference}" th:text="${resource.asserter.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasLastOccurrence}">
+            <td>Last occurrence</td>
+            <td>
+                <th:block th:text="${#dates.format(resource.lastOccurrence,'dd MMMM yyyy HH:mm:ss')}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasNote}" th:each="note : ${resource.note}">
+            <td>Note</td>
+            <td th:narrative="${note}"></td>
+        </tr>
+
+        <!-- extensions -->
+        <th:block th:if="${resource.hasExtension('https://www.ehealth.fgov.be/standards/fhir/allergy/StructureDefinition/be-ext-allergy-type')}">
+            <th:block th:each="ext : ${resource.getExtensionsByUrl('https://www.ehealth.fgov.be/standards/fhir/allergy/StructureDefinition/be-ext-allergy-type')}">
+                <tr>
+                    <th:block th:include="@{inlinecode} :: inlinecoderows (code=${ext.value}, title='Allergy type')"/>
+                </tr>
+            </th:block>
+        </th:block>
+
+        </tbody>
+
+        <th:block th:if="${resource.hasReaction}" th:each="reaction : ${resource.reaction}">
+            <thead><tr>
+                <td class="toggable" colspan="2" onclick="this.classList.toggle('displayed'); this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden')">
+                    <div>
+                        <div>Reaction</div>
+                        <div>
+                            <span class="clicktoshow">click to show</span><span class="clicktohide">click to hide</span>
+                        </div>
+                    </div>
+                </td>
+            </tr></thead>
+            <tbody class="hidden">
+                <tr th:if="${reaction.hasSubstance}" th:each="substance : ${reaction.substance}">
+                    <td>Substance</td>
+                    <td th:if="${substance.hasCoding}">
+                        <th:block th:if="${substance.codingFirstRep.hasDisplay}" th:text="${substance.codingFirstRep.display}"/>
+                        <th:block th:if="${not substance.codingFirstRep.hasDisplay} and ${substance.hasText}" th:text="${manifestation.text}"/>
+                        <th:block th:if="${not substance.codingFirstRep.hasDisplay} and ${not substance.hasText} and ${substance.codingFirstRep.hasCode}" th:text="${substance.codingFirstRep.code}"/>
+                    </td>
+                </tr>
+                <tr th:if="${reaction.hasManifestation}" th:each="manifestation : ${reaction.manifestation}">
+                    <td>Manifestation</td>
+                    <td th:if="${manifestation.hasCoding}">
+                        <th:block th:if="${manifestation.codingFirstRep.hasDisplay}" th:text="${manifestation.codingFirstRep.display}"/>
+                        <th:block th:if="${not manifestation.codingFirstRep.hasDisplay} and ${manifestation.hasText}" th:text="${manifestation.text}"/>
+                        <th:block th:if="${not manifestation.codingFirstRep.hasDisplay} and ${not manifestation.hasText} and ${manifestation.codingFirstRep.hasCode}" th:text="${manifestation.codingFirstRep.code}"/>
+                    </td>
+                </tr>
+                <tr th:if="${reaction.hasOnset}">
+                    <td>Onset</td>
+                    <td>
+                        <th:block th:text="${#dates.format(reaction.onset,'dd MMMM yyyy HH:mm:ss')}"/>
+                    </td>
+                </tr>
+                <tr th:if="${reaction.hasSeverity}">
+                    <td>Severity</td>
+                    <td>
+                        <th:block th:text="${reaction.severity}"/>
+                    </td>
+                </tr>
+            </tbody>
+        </th:block>
+
+    </table>
+</div>
+
+<!--/*-->
+</body>
+</html>
+<!--*/-->
