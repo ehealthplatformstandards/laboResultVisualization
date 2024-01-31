@@ -1,0 +1,157 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+
+<div>
+    <div class="hapiHeaderText">
+        <th:block th:text="ServiceRequest"/>
+    </div>
+
+    <table class="hapiPropertyTable">
+
+        <th:block th:if="${resource.hasSubject}">
+            <thead><tr><td colspan="2">Patient</td></tr></thead>
+            <tr th:if="${resource.subject.hasIdentifier}">
+                <td>Identifier</td>
+                <td>
+                    <th:block th:if="${resource.subject.hasIdentifier}" th:text="${resource.subject.identifier.value} + ' (' +  ${resource.subject.identifier.system} + ')'"/>
+                </td>
+            </tr>
+            <tr th:if="${resource.subject.hasReference}">
+                <td>Reference</td>
+                <td>
+                    <th:block th:if="${resource.subject.hasReference}" th:text="${resource.subject.reference}"/>
+                </td>
+            </tr>
+        </th:block>
+
+        <thead><tr><td colspan="2">Information</td></tr></thead>
+        <tbody>
+
+            <tr th:if="${resource.hasStatus}">
+                <td>Status</td>
+                <td>
+                    <th:block th:text="${resource.status}" />
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasIntent}">
+                <td>Intent</td>
+                <td>
+                    <th:block th:text="${resource.intent}" />
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasCategory}"  th:each="category : ${resource.category}">
+                <td>Category</td>
+                <td>
+                    <th:block th:if="${category.hasCoding}">
+                        <th:block th:if="${category.codingFirstRep.hasDisplay}" th:text="${category.codingFirstRep.display}"/>
+                        <th:block th:if="${not category.codingFirstRep.hasDisplay} and ${category.hasText}" th:text="${category.text}"/>
+                        <th:block th:if="${not category.codingFirstRep.hasDisplay} and ${not category.hasText} and ${category.codingFirstRep.hasCode}" th:text="${category.codingFirstRep.code}"/>
+                    </th:block>
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasCode}" >
+                <td>Procedure code</td>
+                <td>
+                    <th:block th:if="${resource.code.hasCoding}">
+                        <th:block th:if="${resource.code.codingFirstRep.hasDisplay}" th:text="${resource.code.codingFirstRep.display}"/>
+                        <th:block th:if="${not resource.code.codingFirstRep.hasDisplay} and ${resource.code.hasText}" th:text="${resource.code.text}"/>
+                        <th:block th:if="${not resource.code.codingFirstRep.hasDisplay} and ${not resource.code.hasText} and ${resource.code.codingFirstRep.hasCode}" th:text="${resource.code.codingFirstRep.code}"/>
+                    </th:block>
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasAuthoredOn}">
+                <td>Date request</td>
+                <td>
+                    <th:block th:text="${#dates.format(resource.authoredOn,'dd MMMM yyyy HH:mm:ss')}" />
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasRequester}">
+                <td>Requester</td>
+                <td>
+                    <th:block th:if="${resource.requester.hasReference}" th:text="${resource.requester.reference}"/>
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasReasonCode}" th:each="reasonCode : ${resource.reasonCode}" >
+                <td>Reason code</td>
+                <td>
+                    <th:block th:if="${reasonCode.hasCoding}">
+                        <th:block th:if="${reasonCode.codingFirstRep.hasDisplay}" th:text="${reasonCode.codingFirstRep.display}"/>
+                        <th:block th:if="${not reasonCode.codingFirstRep.hasDisplay} and ${reasonCode.hasText}" th:text="${code.text}"/>
+                        <th:block th:if="${not reasonCode.codingFirstRep.hasDisplay} and ${not reasonCode.hasText} and ${reasonCode.codingFirstRep.hasCode}" th:text="${reasonCode.codingFirstRep.code}"/>
+                    </th:block>
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasOccurrenceTiming}">
+                <td>Occurrence timing</td>
+                <td>
+                    <th:block th:if="${resource.occurrenceTiming.hasRepeat}">
+                        <th:block th:if="${resource.occurrenceTiming.repeat.hasFrequency}">
+                            Frequency: <th:block th:text="${resource.occurrenceTiming.repeat.frequency}"/><br/>
+                        </th:block>
+                        <th:block th:if="${resource.occurrenceTiming.repeat.hasPeriod}">
+                            Period: <th:block th:text="${resource.occurrenceTiming.repeat.period}"/><br/>
+                        </th:block>
+                        <th:block th:if="${resource.occurrenceTiming.repeat.hasPeriodUnit}">
+                            Period unit: <th:block th:text="${resource.occurrenceTiming.repeat.periodUnit}"/><br/>
+                        </th:block>
+                        <th:block th:if="${resource.occurrenceTiming.repeat.hasDuration}">
+                            Duration: <th:block th:text="${resource.occurrenceTiming.repeat.duration}"/><br/>
+                        </th:block>
+                        <th:block th:if="${resource.occurrenceTiming.repeat.hasDurationUnit}">
+                            Duration unit: <th:block th:text="${resource.occurrenceTiming.repeat.durationUnit}"/><br/>
+                        </th:block>
+                        <th:block th:if="${resource.occurrenceTiming.repeat.hasCountMax}">
+                            Count max: <th:block th:text="${resource.occurrenceTiming.repeat.countMax}"/><br/>
+                        </th:block>
+                        <th:block th:if="${resource.occurrenceTiming.repeat.hasCount}">
+                            Count: <th:block th:text="${resource.occurrenceTiming.repeat.count}"/>
+                        </th:block>
+                    </th:block>
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasEncounter}">
+                <td>Encounter</td>
+                <td>
+                    <th:block th:if="${resource.encounter.hasReference}" th:text="${resource.encounter.reference}"/>
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasPerformer}" th:each="performer : ${resource.performer}">
+                <td>Performer</td>
+                <td>
+                    <th:block th:if="${performer.actor.hasDisplay}" th:text="${performer.actor.display}"/>
+                    <th:block th:if="(not ${performer.actor.hasDisplay}) and ${performer.actor.hasIdentifier}" >
+                        <th:block th:if="(${performer.actor.identifier.hasValue})" th:text="${performer.actor.identifier.value}" />
+                        <th:block th:if="(${performer.actor.identifier.hasSystem})" th:text="' (' + ${performer.actor.identifier.system} + ')'" />
+                    </th:block>
+                    <th:block th:if="${performer.actor.hasReference}" th:text="${performer.actor.reference}"/>
+                </td>
+            </tr>
+
+            <tr th:if="${resource.hasNote}" th:each="note : ${resource.note}">
+                <td>Note</td>
+                <td th:narrative="${note}"></td>
+            </tr>
+
+        </tbody>
+
+    </table>
+</div>
+
+<!--/*-->
+</body>
+</html>
+<!--*/-->
