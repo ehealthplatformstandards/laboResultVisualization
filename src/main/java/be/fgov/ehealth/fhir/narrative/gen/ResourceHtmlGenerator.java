@@ -42,7 +42,7 @@ public class ResourceHtmlGenerator {
     }
 
     public String generateDivRepresentation(FhirContext fhirContext, Resource resource, String css) {
-        IParser parser = null;
+        IParser parser;
 
         switch (resource.getResourceType().toString()) {
             case "Bundle":
@@ -52,23 +52,21 @@ public class ResourceHtmlGenerator {
                 generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/diagnosticreport/narrative.properties");
                 fhirContext.setNarrativeGenerator(this.generator);
                 parser = fhirContext.newJsonParser().setPrettyPrint(true).setSuppressNarratives(false);
-                if ("Bundle".equals(bundle.getEntryFirstRep().getResource().getResourceType().toString())) {
-                    for (Bundle.BundleEntryComponent bundleEntryComponent : bundle.getEntry()) {
-                        final Bundle bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(bundleEntryComponent.getResource())));
 
-                        narrative.append(((DiagnosticReport) bundleParse.getEntry().stream()
-                                .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
-                                .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
-                                .getResource()).getText().getDiv().toString()).append("<br/>");
+                if ("Bundle".equals(bundle.getEntryFirstRep().getResource().getResourceType().toString())) {
+                    do {
+                        for (Bundle.BundleEntryComponent bundleEntryComponent : bundle.getEntry()) {
+                            final Bundle bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(bundleEntryComponent.getResource())));
+                            narrative = getDiagnosticNarrative(bundleParse, narrative);
+                        }
+                        bundle = (Bundle) bundle.getEntryFirstRep().getResource();
                     }
+                    while ("Bundle".equals(bundle.getEntryFirstRep().getResource().getResourceType().toString()));
                     return narrative.toString();
                 } else {
                     final Bundle bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
 
-                    return ((DiagnosticReport) bundleParse.getEntry().stream()
-                            .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
-                            .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
-                            .getResource()).getText().getDiv().toString();
+                    return getDiagnosticNarrative(bundleParse, narrative).toString();
                 }
 
             case "Immunization":
@@ -87,6 +85,13 @@ public class ResourceHtmlGenerator {
 
                 return allergyParse.getText().getDiv().toString();
 
+            case "ServiceRequest":
+                generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/servicerequest/narrative.properties");
+                fhirContext.setNarrativeGenerator(this.generator);
+                parser = fhirContext.newJsonParser().setPrettyPrint(true).setSuppressNarratives(false);
+                final ServiceRequest serviceRequestParse = parser.parseResource(ServiceRequest.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
+                return serviceRequestParse.getText().getDiv().toString();
+
             default:
                 //
                 return "";
@@ -95,5 +100,13 @@ public class ResourceHtmlGenerator {
 
     }
 
+    public StringBuilder getDiagnosticNarrative(Bundle bundleParse, StringBuilder narrative) {
+        return narrative.append(((DiagnosticReport) bundleParse.getEntry().stream()
+                .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
+                .getResource()).getText().getDiv().toString()).append("<br/>");
+
+
+    }
 
 }
