@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
 import org.hl7.fhir.r5.terminologies.CodeSystemUtilities;
-import org.hl7.fhir.r5.context.TerminologyCache;
 import org.hl7.fhir.r5.model.OperationOutcome;
 import org.hl7.fhir.r5.utils.ToolingExtensions;
 import org.hl7.fhir.utilities.TimeTracker;
@@ -26,50 +25,6 @@ public class BeValidationService extends ValidationService {
     public BeValidationEngine initializeValidator(CliContext cliContext, String definitions, TimeTracker tt) throws Exception {
         return buildValidationEngine(cliContext, definitions, tt);
 
-        /*
-        tt.milestone();
-
-        ps.print("  Load FHIR v" + cliContext.getSv() + " from " + definitions);
-        BeValidationEngine validator = new BeValidationEngine(ps, definitions, cliContext.getSv(), tt);
-        FhirPublication ver = FhirPublication.fromCode(cliContext.getSv());
-        IgLoader igLoader = new IgLoader(validator.getPcm(), validator.getContext(), validator.getVersion(), validator.isDebug());
-        ps.println(" - " + validator.getContext().countAllCaches() + " resources (" + tt.milestone() + ")");
-        igLoader.loadIg(validator.getIgs(), validator.getBinaries(), "hl7.terminology", false);
-        ps.print("  Terminology server " + cliContext.getTxServer());
-        String txver = validator.setTerminologyServer(cliContext.getTxServer(), cliContext.getTxLog(), ver);
-        ps.println(" - Version " + txver + " (" + tt.milestone() + ")");
-        validator.setDebug(cliContext.isDoDebug());
-
-        for(String src: cliContext.getIgs()) {
-            igLoader.loadIg(validator.getIgs(), validator.getBinaries(), src, cliContext.isRecursive());
-        }
-
-        ps.print("  Get set... ");
-        validator.setQuestionnaireMode(cliContext.getQuestionnaireMode());
-        validator.setDoNative(cliContext.isDoNative());
-        validator.setHintAboutNonMustSupport(cliContext.isHintAboutNonMustSupport());
-        //validator.setAnyExtensionsAllowed(cliContext.isAnyExtensionsAllowed());
-        validator.setLanguage(cliContext.getLang());
-        validator.setLocale(cliContext.getLocale());
-        validator.setSnomedExtension(cliContext.getSnomedCTCode());
-        validator.setAssumeValidRestReferences(cliContext.isAssumeValidRestReferences());
-        validator.setNoExtensibleBindingMessages(cliContext.isNoExtensibleBindingMessages());
-        validator.setNoInvariantChecks(cliContext.isNoInvariants());
-        validator.setWantInvariantInMessage(cliContext.isWantInvariantsInMessages());
-        validator.setSecurityChecks(cliContext.isSecurityChecks());
-        validator.setCrumbTrails(cliContext.isCrumbTrails());
-        validator.setShowTimes(cliContext.isShowTimes());
-        validator.setAllowExampleUrls(cliContext.isAllowExampleUrls());
-        StandAloneValidatorFetcher fetcher = new StandAloneValidatorFetcher(validator.getPcm(), validator.getContext(), validator);
-        validator.setFetcher(fetcher);
-        validator.getContext().setLocator(fetcher);
-        validator.getBundleValidationRules().addAll(cliContext.getBundleValidationRules());
-        TerminologyCache.setNoCaching(cliContext.isNoInternalCaching());
-        validator.prepare();
-        ps.println(" go (" + tt.milestone() + ")");
-
-        return validator;
-        */
     }
 
     protected BeValidationEngine buildValidationEngine( CliContext cliContext, String definitions, TimeTracker timeTracker) throws IOException, URISyntaxException {
@@ -114,7 +69,7 @@ public class BeValidationService extends ValidationService {
     validationEngine.getContext().setLocator(fetcher);
     validationEngine.getBundleValidationRules().addAll(cliContext.getBundleValidationRules());
     validationEngine.setJurisdiction(CodeSystemUtilities.readCoding(cliContext.getJurisdiction()));
-    TerminologyCache.setNoCaching(cliContext.isNoInternalCaching());
+    //TerminologyCache.setNoCaching(cliContext.isNoInternalCaching());
     validationEngine.prepare(); // generate any missing snapshots
     System.out.println(" go (" + timeTracker.milestone() + ")");
     return validationEngine;
