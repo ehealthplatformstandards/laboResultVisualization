@@ -77,7 +77,7 @@
         </tr>
 
         <tr th:if="${resource.hasOccurrenceDateTimeType} or ${resource.hasOccurrenceStringType}">
-            <td>Occurence</td>
+            <td>Occurrence</td>
             <td>
                 <th:block th:if="${resource.hasOccurrenceDateTimeType}" th:text="${#dates.format(resource.occurrenceDateTimeType.value,'dd MMMM yyyy HH:mm:ss')}"/>
                 <th:block th:if="${resource.hasOccurrenceStringType}">
