@@ -154,9 +154,15 @@
         <td>Language</td>
         <td th:text="${result.resource.language}"/>
     </tr>
-    <tr th:if="${result.resource.hasCategory}">
+    <tr th:if="${result.resource.hasCategory}" th:each="category : ${resource.category}">
         <td>Category</td>
-        <td th:text="${result.resource.category}"/>
+        <td>
+            <th:block th:if="${category.hasCoding}">
+                <th:block th:if="${category.codingFirstRep.hasDisplay}" th:text="${category.codingFirstRep.display}"/>
+                <th:block th:if="${not category.codingFirstRep.hasDisplay} and ${category.hasText}" th:text="${category.text}"/>
+                <th:block th:if="${not category.codingFirstRep.hasDisplay} and ${not category.hasText} and ${category.codingFirstRep.hasCode}" th:text="${category.codingFirstRep.code}"/>
+            </th:block>
+        </td>
     </tr>
     <tr th:if="${result.resource.hasEffectiveDateTimeType}">
         <td>Effective date (datetime)</td>
