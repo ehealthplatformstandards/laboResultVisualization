@@ -67,17 +67,17 @@
                 <!-- ratio -->
                 <th:block th:if="${result.resource.hasValueRatio}">
                     <th:block th:if="${result.resource.valueRatio.hasNumerator}">
-                        <th:block th:if="${result.resource.numerator.hasComparatorElement}" th:text="${result.resource.numerator.comparatorElement.code}"/>
-                        <th:block th:if="${result.resource.numerator.hasValueElement}" th:text="${result.resource.numerator.valueElement.valueAsString}"/>
-                        <th:block th:if="${result.resource.numerator.hasUnit}" th:text="${result.resource.numerator.unit}"/>
-                        <th:block th:if="${not result.resource.numerator.hasUnit} and ${result.resource.numerator.hasCode}" th:text="${result.resource.numerator.code}"/>
+                        <th:block th:if="${result.resource.valueRatio.numerator.hasComparatorElement}" th:text="${result.resource.valueRatio.numerator.comparatorElement.code}"/>
+                        <th:block th:if="${result.resource.valueRatio.numerator.hasValueElement}" th:text="${result.resource.valueRatio.numerator.valueElement.valueAsString}"/>
+                        <th:block th:if="${result.resource.valueRatio.numerator.hasUnit}" th:text="${result.resource.valueRatio.numerator.unit}"/>
+                        <th:block th:if="${not result.resource.valueRatio.numerator.hasUnit} and ${result.resource.valueRatio.numerator.hasCode}" th:text="${result.resource.valueRatio.numerator.code}"/>
                     </th:block>
                     /
                     <th:block th:if="${result.resource.valueRatio.hasDenominator}">
-                        <th:block th:if="${result.resource.denominator.hasComparatorElement}" th:text="${result.resource.denominator.comparatorElement.code}"/>
-                        <th:block th:if="${result.resource.denominator.hasValueElement}" th:text="${result.resource.denominator.valueElement.valueAsString}"/>
-                        <th:block th:if="${result.resource.denominator.hasUnit}" th:text="${result.resource.denominator.unit}"/>
-                        <th:block th:if="${not result.resource.denominator.hasUnit} and ${result.resource.denominator.hasCode}" th:text="${result.resource.denominator.code}"/>
+                        <th:block th:if="${result.resource.valueRatio.denominator.hasComparatorElement}" th:text="${result.resource.valueRatio.denominator.comparatorElement.code}"/>
+                        <th:block th:if="${result.resource.valueRatio.denominator.hasValueElement}" th:text="${result.resource.valueRatio.denominator.valueElement.valueAsString}"/>
+                        <th:block th:if="${result.resource.valueRatio.denominator.hasUnit}" th:text="${result.resource.valueRatio.denominator.unit}"/>
+                        <th:block th:if="${not result.resource.valueRatio.denominator.hasUnit} and ${result.resource.valueRatio.denominator.hasCode}" th:text="${result.resource.valueRatio.denominator.code}"/>
                     </th:block>
                 </th:block>
                 <!-- sample data, what is this in a lab context? -->
@@ -144,7 +144,8 @@
                         <th:block th:if="${result.resource.hasPerformer}" th:each="performer : ${result.resource.performer}">
                             <th:block th:if="${performer.resource.resourceType.name() == 'Organization'}" th:include="@{organization} :: organization (organization=${performer}, title='Performer', id='ObservationPerformer')" />
                             <th:block th:if="${performer.resource.resourceType.name() == 'Practitioner'}" th:include="@{practitioner} :: practitioner (practitioner=${performer}, title='Performer', id='ObservationPerformer')" />
-                        </th:block>
+                         <!--   <th:block th:if="${performer.resource.resourceType.name() == 'Patient'}" th:include="@{patient} :: patient (patient=${performer}, title='Performer', id='ObservationPerformer')" />
+                       --> </th:block>
                         <th:block th:if="${result.resource.hasderivedFrom}">
                             <th:block th:each="derivedFrom : ${result.resource.derivedFrom}">
                                 <th:block th:if="${derivedFrom.resource.resourceType.name()} == 'Media'">
@@ -154,6 +155,9 @@
                                     <th:block th:include="@{details} :: detailsDerivedFrom (${derivedFrom})"/>
                                 </th:block>
                             </th:block>
+                        </th:block>
+                        <th:block th:if="${result.resource.hasBasedOn}" th:each="basedOn : ${result.resource.basedOn}">
+                            <th:block th:include="@{serviceRequest} :: serviceRequest (basedOn=${basedOn})" />
                         </th:block>
                 </table>
             </td>
