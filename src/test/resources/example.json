@@ -15,7 +15,7 @@
         "meta": {
           "versionId": "1",
           "profile": [
-            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-laboratory-report"
+            "https://www.ehealth.fgov.be/standards/fhir/lab/StructureDefinition/be-laboratory-report"
           ]
         },
         "language": "en",
@@ -100,7 +100,7 @@
         "meta": {
           "versionId": "1",
           "profile": [
-            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-specimen-laboratory"
+            "https://www.ehealth.fgov.be/standards/fhir/lab/StructureDefinition/be-specimen-laboratory"
           ]
         },
         "text": {
@@ -139,7 +139,7 @@
         "id": "mac60",
         "meta": {
           "profile": [
-            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-observation-laboratory"
+            "https://www.ehealth.fgov.be/standards/fhir/lab/StructureDefinition/be-observation-laboratory"
           ]
         },
         "text": {
@@ -177,7 +177,7 @@
         "id": "cult60",
         "meta": {
           "profile": [
-            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-observation-laboratory"
+            "https://www.ehealth.fgov.be/standards/fhir/lab/StructureDefinition/be-observation-laboratory"
           ]
         },
         "text": {
@@ -215,7 +215,7 @@
         "id": "organization10",
         "meta": {
           "profile": [
-            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-organization"
+            "https://www.ehealth.fgov.be/standards/fhir/core/StructureDefinition/be-organization"
           ]
         },
         "text": {
@@ -234,7 +234,7 @@
                 }
               ]
             },
-            "system": "https://www.ehealth.fgov.be/standards/fhir/NamingSystem/nihdi",
+            "system": "https://www.ehealth.fgov.be/standards/fhir/core/NamingSystem/nihdi",
             "value": "81165343998"
           }
         ],
@@ -243,7 +243,7 @@
           {
             "coding": [
               {
-                "system": "https://www.ehealth.fgov.be/standards/fhir/CodeSystem/cd-hcparty",
+                "system": "https://www.ehealth.fgov.be/standards/fhir/core/CodeSystem/cd-hcparty",
                 "code": "orglaboratory"
               }
             ]
@@ -299,7 +299,7 @@
         "id": "practitioner11",
         "meta": {
           "profile": [
-            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-practitioner"
+            "https://www.ehealth.fgov.be/standards/fhir/core/StructureDefinition/be-practitioner"
           ]
         },
         "text": {
@@ -309,7 +309,7 @@
         "identifier": [
           {
             "use": "official",
-            "system": "https://www.ehealth.fgov.be/standards/fhir/NamingSystem/nihdi",
+            "system": "https://www.ehealth.fgov.be/standards/fhir/core/NamingSystem/nihdi",
             "value": "554488997"
           }
         ],
@@ -348,7 +348,7 @@
         "id": "patient1",
         "meta": {
           "profile": [
-            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-patient"
+            "https://www.ehealth.fgov.be/standards/fhir/core/StructureDefinition/be-patient"
           ]
         },
         "text": {
@@ -358,7 +358,7 @@
         "identifier": [
           {
             "use": "official",
-            "system": "https://www.ehealth.fgov.be/standards/fhir/NamingSystem/ssin",
+            "system": "https://www.ehealth.fgov.be/standards/fhir/core/NamingSystem/ssin",
             "value": "79121137740"
           }
         ],
@@ -467,7 +467,7 @@
         "id": "practitioner1",
         "meta": {
           "profile": [
-            "https://www.ehealth.fgov.be/standards/fhir/StructureDefinition/be-practitioner"
+            "https://www.ehealth.fgov.be/standards/fhir/core/StructureDefinition/be-practitioner"
           ]
         },
         "text": {
@@ -477,7 +477,7 @@
         "identifier": [
           {
             "use": "official",
-            "system": "https://www.ehealth.fgov.be/standards/fhir/NamingSystem/nihdi",
+            "system": "https://www.ehealth.fgov.be/standards/fhir/core/NamingSystem/nihdi",
             "value": "18749704477"
           }
         ],
