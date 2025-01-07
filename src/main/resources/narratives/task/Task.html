@@ -1,0 +1,90 @@
+<!--/*-->
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="narrative.css"/>
+</head>
+<body>
+<!--*/-->
+
+<div>
+    <div class="hapiHeaderText">
+        <th:block th:text="Task"/>
+    </div>
+
+    <table class="hapiPropertyTable">
+
+        <thead><tr><td colspan="2">Information</td></tr></thead>
+        <tbody>
+
+        <tr th:if="${resource.hasStatus}">
+            <td>Status</td>
+            <td>
+                <th:block th:text="${resource.status}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasIntent}">
+            <td>Intent</td>
+            <td>
+                <th:block th:text="${resource.intent}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasBasedOn}"  th:each="basedOn : ${resource.basedOn}">
+            <td>Based on</td>
+            <td>
+                <th:block th:if="${basedOn.hasReference}" th:text="${basedOn.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasPartOf}"  th:each="partOf : ${resource.partOf}">
+            <td>Part of</td>
+            <td>
+                <th:block th:if="${partOf.hasReference}" th:text="${partOf.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.focus.hasReference}">
+            <td>Focus</td>
+            <td>
+                <th:block th:if="${resource.focus.hasReference}" th:text="${resource.focus.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasAuthoredOn}">
+            <td>Authored on</td>
+            <td>
+                <th:block th:text="${#dates.format(resource.authoredOn,'dd MMMM yyyy HH:mm:ss')}" />
+            </td>
+        </tr>
+
+        <tr th:if="${resource.owner.hasReference}">
+            <td>Owner</td>
+            <td>
+                <th:block th:if="${resource.owner.hasIdentifier}" th:text="${resource.owner.identifier.value} + ' (' + ${resource.owner.identifier.system} + ')'"/>
+                <th:block th:if="${resource.owner.hasReference}" th:text="${resource.owner.reference}"/>
+            </td>
+        </tr>
+
+        <tr th:if="${resource.hasExecutionPeriod}">
+            <td>Execution period</td>
+            <td>
+                <th:block  th:if="${resource.executionPeriod.hasStartElement}"
+                           th:text="${#dates.format(resource.executionPeriod.startElement.value,'dd MMMM yyyy')}">...</th:block>
+                <th:block  th:if="${resource.executionPeriod.hasStartElement and resource.executionPeriod.hasEndElement}">-</th:block>
+                <th:block
+                        th:if="${resource.executionPeriod.hasEndElement}"
+                        th:text="${#dates.format(resource.executionPeriod.endElement.value,'dd MMMM yyyy')}">...</th:block>
+                <th:block th:if="${resource.executionPeriod.hasId}" th:text="${resource.executionPeriod.id}"/>
+            </td>
+        </tr>
+
+        </tbody>
+
+    </table>
+</div>
+
+<!--/*-->
+</body>
+</html>
+<!--*/-->
