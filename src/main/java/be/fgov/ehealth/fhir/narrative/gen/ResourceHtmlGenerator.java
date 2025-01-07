@@ -53,10 +53,11 @@ public class ResourceHtmlGenerator {
                 fhirContext.setNarrativeGenerator(this.generator);
                 parser = fhirContext.newJsonParser().setPrettyPrint(true).setSuppressNarratives(false);
 
+                Bundle bundleParse;
                 if ("Bundle".equals(bundle.getEntryFirstRep().getResource().getResourceType().toString())) {
                     do {
                         for (Bundle.BundleEntryComponent bundleEntryComponent : bundle.getEntry()) {
-                            final Bundle bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(bundleEntryComponent.getResource())));
+                            bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(bundleEntryComponent.getResource())));
                             narrative = getDiagnosticNarrative(bundleParse, narrative);
                         }
                         bundle = (Bundle) bundle.getEntryFirstRep().getResource();
@@ -64,7 +65,12 @@ public class ResourceHtmlGenerator {
                     while ("Bundle".equals(bundle.getEntryFirstRep().getResource().getResourceType().toString()));
                     return narrative.toString();
                 } else {
-                    final Bundle bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
+                    try {
+                        bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
+                    } catch (Exception e) {
+                        System.out.println("Error while parsing Bundle: " + e);
+                        return "";
+                    }
 
                     return getDiagnosticNarrative(bundleParse, narrative).toString();
                 }
@@ -91,6 +97,13 @@ public class ResourceHtmlGenerator {
                 parser = fhirContext.newJsonParser().setPrettyPrint(true).setSuppressNarratives(false);
                 final ServiceRequest serviceRequestParse = parser.parseResource(ServiceRequest.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
                 return serviceRequestParse.getText().getDiv().toString();
+
+            case "Task":
+                generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/task/narrative.properties");
+                fhirContext.setNarrativeGenerator(this.generator);
+                parser = fhirContext.newJsonParser().setPrettyPrint(true).setSuppressNarratives(false);
+                final Task taskParse = parser.parseResource(Task.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
+                return taskParse.getText().getDiv().toString();
 
             default:
                 //
