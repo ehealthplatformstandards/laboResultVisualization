@@ -5,6 +5,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.*;
 import picocli.CommandLine.*;
 import picocli.CommandLine.Model.CommandSpec;
@@ -30,9 +31,9 @@ public class Visualization implements Callable<Integer> {
     //TODO rendre mandatory l'IG
     @Option(names = { "-v", "--validate" }, arity = "1..1",
             description = {
-            "Validate the resource.",
-            "If absent, validation is not performed.",
-            "Optionally specify a list of URLs, seperated by a comma, to implementation guides to be used for validation. (fallback: ${FALLBACK-VALUE})." },
+                    "Validate the resource.",
+                    "If absent, validation is not performed.",
+                    "Optionally specify a list of URLs, separated by a comma, to implementation guides to be used for validation. (fallback: ${FALLBACK-VALUE})." },
             split = ",")
     protected String[] implementationGuideUrls;
 
@@ -80,20 +81,29 @@ public class Visualization implements Callable<Integer> {
             parser = ctx.newXmlParser();
         }
 
+        IBaseResource resource = parser.parseResource(new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8));
 
-        switch (profile){
-            case "immunization":
-                final Immunization immunization = (Immunization) stripNarratives(parser.parseResource(Immunization.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
+        switch (resource.fhirType()){
+            case "Immunization":
+                Immunization immunization = (Immunization) stripNarratives((Resource) resource);
                 return action.execute(this, ctx, immunization);
-            case "lab":
-                final Bundle lab = (Bundle) stripNarratives(parser.parseResource(Bundle.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
-                return action.execute(this, ctx, lab);
-            case "allergy":
-                final AllergyIntolerance allergy = (AllergyIntolerance) stripNarratives(parser.parseResource(AllergyIntolerance.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
+
+            case "Bundle":
+                Bundle bundle = (Bundle) stripNarratives((Resource)resource);
+                return action.execute(this, ctx, bundle);
+
+            case "AllergyIntolerance":
+                AllergyIntolerance allergy = (AllergyIntolerance) stripNarratives((Resource)resource);
                 return action.execute(this, ctx, allergy);
-            case "referral":
-                final ServiceRequest serviceRequest = (ServiceRequest) stripNarratives(parser.parseResource(ServiceRequest.class, new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8)));
+
+            case "ServiceRequest":
+                ServiceRequest serviceRequest = (ServiceRequest) stripNarratives((Resource)resource);
                 return action.execute(this, ctx, serviceRequest);
+
+            case "Task":
+                Task task = (Task) stripNarratives((Resource)resource);
+                return action.execute(this, ctx, task);
+
             default:
                 return 0;
         }
