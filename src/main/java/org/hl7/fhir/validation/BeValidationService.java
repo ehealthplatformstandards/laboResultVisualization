@@ -12,6 +12,7 @@ import org.hl7.fhir.utilities.validation.ValidationMessage;
 import org.hl7.fhir.validation.cli.model.CliContext;
 import org.hl7.fhir.validation.cli.services.StandAloneValidatorFetcher;
 import org.hl7.fhir.validation.cli.services.ValidationService;
+import org.jetbrains.annotations.NotNull;
 
 public class BeValidationService extends ValidationService {
     private final PrintStream ps;
@@ -27,7 +28,8 @@ public class BeValidationService extends ValidationService {
 
     }
 
-    protected BeValidationEngine buildValidationEngine( CliContext cliContext, String definitions, TimeTracker timeTracker) throws IOException, URISyntaxException {
+    @NotNull
+    protected BeValidationEngine buildValidationEngine(CliContext cliContext, String definitions, TimeTracker timeTracker) throws IOException, URISyntaxException {
         System.out.print("  Load FHIR v" + cliContext.getSv() + " from " + definitions);
     ValidationEngine tmpValidationEngine = getValidationEngineBuilder().withTHO(false).withVersion(cliContext.getSv()).withTimeTracker(timeTracker).withUserAgent("fhir/validator").fromSource(definitions);
     BeValidationEngine validationEngine = new  BeValidationEngine(ps, tmpValidationEngine);
