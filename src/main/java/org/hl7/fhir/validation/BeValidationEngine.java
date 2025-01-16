@@ -61,7 +61,7 @@ public class BeValidationEngine extends ValidationEngine {
     @Override
     public Resource validate(List<String> sources, List<String> profiles, List<ValidatorUtils.SourceFile> refs, List<ValidationRecord> record, IValidationEngineLoader loader, boolean all, int delay, boolean first) throws FHIRException, IOException {
 
-        if (profiles.size() > 0) {
+        if (!profiles.isEmpty()) {
             ps.println("  Profiles: " + profiles);
         }
 
@@ -89,6 +89,6 @@ public class BeValidationEngine extends ValidationEngine {
             }
         }
 
-        return (Resource)(asBundle ? results : results.getEntryFirstRep().getResource());
+        return asBundle ? results : results.getEntryFirstRep().getResource();
     }
 }
