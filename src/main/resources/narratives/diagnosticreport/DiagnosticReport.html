@@ -9,9 +9,9 @@
 <div>
     <div class="hapiHeaderText">
         <!--/*
-        Show the DiagnosticReport's name.text value, or if that isn't populated, show the
-        display value on the first coding, and if that's missing too show a default "Untitled"
-        value
+        Display the DiagnosticReport.name.text value if it exists.
+        If not, display the DiagnosticReport.name.coding[0].display value.
+        If neither is available, display the default text "Untitled".
         */-->
         <th:block th:if="${resource.hasCode} and (${resource.code.hasText} or ${not resource.code.hasCoding})"
                   th:text="${resource.code.text}"/>
