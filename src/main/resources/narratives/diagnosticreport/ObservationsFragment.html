@@ -55,10 +55,10 @@
                         <th:block th:narrative="${result.resource.valueRange.low}">--</th:block>&nbsp;-&nbsp;<th:block th:narrative="${result.resource.valueRange.high}">--</th:block>
                     </th:block>
                     <th:block th:if="${result.resource.valueRange.low.empty} and ${not result.resource.valueRange.high.empty}">
-                        &lt;&nbsp;<th:block th:narrative="${result.resource.valueRange.high}"></th:block>
+                        &lt;=&nbsp;<th:block th:narrative="${result.resource.valueRange.high}"></th:block>
                     </th:block>
                     <th:block th:if="${not result.resource.valueRange.low.empty} and ${result.resource.valueRange.high.empty}">
-                        &gt;&nbsp;<th:block th:narrative="${result.resource.valueRange.low}"></th:block>
+                        &gt;=&nbsp;<th:block th:narrative="${result.resource.valueRange.low}"></th:block>
                     </th:block>
                     <th:block th:if="${result.resource.valueRange.hasText}">
                         <th:block th:include="@{inlinetext} :: inlinetext (${result.resource.valueRange.text)"></th:block>
@@ -109,10 +109,10 @@
                         <th:block th:narrative="${ref.low}">--</th:block>&nbsp;-&nbsp;<th:block th:narrative="${ref.high}">--</th:block>
                     </th:block>
                     <th:block th:if="${not ref.hasLow} and ${ref.hasHigh}">
-                        &lt;&nbsp;<th:block th:narrative="${ref.high}"></th:block>
+                        &lt;=&nbsp;<th:block th:narrative="${ref.high}"></th:block>
                     </th:block>
                     <th:block th:if="${ref.hasLow} and ${not ref.hasHigh}">
-                        &gt;&nbsp;<th:block th:narrative="${ref.low}"></th:block>
+                        &gt;=&nbsp;<th:block th:narrative="${ref.low}"></th:block>
                     </th:block>
                     <th:block th:if="${ref.hasText}">
                         <th:block th:include="@{inlinetext} :: inlinetext (${ref.text})"></th:block>
