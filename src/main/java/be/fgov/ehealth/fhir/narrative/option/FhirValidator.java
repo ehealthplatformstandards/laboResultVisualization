@@ -31,6 +31,7 @@ public class FhirValidator {
         cliContext.setIgs(implementationGuideUrls);
         cliContext.setDisplayWarnings(true);
         cliContext.setAllowExampleUrls(true);
+        cliContext.setAssumeValidRestReferences(true);
 
         final String definitions = VersionUtilities.packageForVersion(cliContext.getSv()) + "#" + VersionUtilities.getCurrentVersion(cliContext.getSv());
         validator = validationService.initializeValidator(cliContext, definitions, tt);
