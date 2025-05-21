@@ -68,9 +68,11 @@ public class BeValidationService extends ValidationService {
     validationEngine.setAllowExampleUrls(cliContext.isAllowExampleUrls());
     StandAloneValidatorFetcher fetcher = new StandAloneValidatorFetcher(validationEngine.getPcm(), validationEngine.getContext(), validationEngine);
     validationEngine.setFetcher(fetcher);
+    validationEngine.setPolicyAdvisor(fetcher.getPolicyAdvisor());
     validationEngine.getContext().setLocator(fetcher);
     validationEngine.getBundleValidationRules().addAll(cliContext.getBundleValidationRules());
     validationEngine.setJurisdiction(CodeSystemUtilities.readCoding(cliContext.getJurisdiction()));
+
     //TerminologyCache.setNoCaching(cliContext.isNoInternalCaching());
     validationEngine.prepare(); // generate any missing snapshots
     System.out.println(" go (" + timeTracker.milestone() + ")");
