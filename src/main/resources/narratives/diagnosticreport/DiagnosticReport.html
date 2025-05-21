@@ -30,16 +30,28 @@
         <tbody>
         <tr th:if="${resource.hasStatusElement}">
             <td>Status</td>
-            <td th:text="${resource.statusElement.value}">Final</td>
+            <td th:text="${resource.statusElement.value}"></td>
         </tr>
         <tr th:if="${resource.hasIssuedElement}">
             <td>Issued</td>
-            <td th:narrative="${resource.issuedElement}">--</td>
+            <td th:narrative="${resource.issuedElement}"></td>
         </tr>
         <tr th:if="${resource.hasConclusionElement}">
             <td>Conclusion</td>
-            <td th:narrative="${resource.conclusionElement}">No conclusion was integrated in this report</td>
+            <td th:narrative="${resource.conclusionElement}"></td>
         </tr>
+        <tr th:if="${resource.hasConclusionCode}" th:each="conclusionCode : ${resource.conclusionCode}">
+            <td>ConclusionCode</td>
+            <td>
+                <span th:if="${conclusionCode.hasCoding}" th:switch="${true}">
+                    <span th:case="${conclusionCode.codingFirstRep.hasDisplay}" th:text="${conclusionCode.codingFirstRep.display}"></span>
+                    <span th:case="${conclusionCode.hasText}" th:text="${conclusionCode.text}"></span>
+                    <span th:case="${conclusionCode.codingFirstRep.hasCode}" th:text="${conclusionCode.codingFirstRep.code}"></span>
+                </span>
+            </td>
+        </tr>
+
+
         <tr th:if="${resource.hasMeta} and ${resource.meta.hasVersionId}">
             <td>Version Id</td>
             <td th:text="${resource.meta.versionId}"></td>
