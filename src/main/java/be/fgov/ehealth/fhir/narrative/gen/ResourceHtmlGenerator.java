@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
 
 public class ResourceHtmlGenerator {
@@ -48,6 +49,9 @@ public class ResourceHtmlGenerator {
             case "Bundle":
                 Bundle bundle = (Bundle) resource;
 
+                List<CanonicalType> profiles = bundle.getMeta().getProfile();
+                String mainProfile = profiles.isEmpty() ? "" : profiles.get(0).getValue();
+
                 StringBuilder narrative = new StringBuilder();
                 generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/diagnosticreport/narrative.properties");
                 fhirContext.setNarrativeGenerator(this.generator);
@@ -66,13 +70,20 @@ public class ResourceHtmlGenerator {
                     return narrative.toString();
                 } else {
                     try {
-                        bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
+
+                        switch (mainProfile) {
+                            case "https://www.ehealth.fgov.be/standards/fhir/pss/StructureDefinition/PSSResponseBundle":
+                            case "https://www.ehealth.fgov.be/standards/fhir/pss/StructureDefinition/PSSRequestBundle":
+                                //No visualization at moment
+                                return "";
+                            default:
+                                bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
+                                return getDiagnosticNarrative(bundleParse, narrative).toString();
+                        }
                     } catch (Exception e) {
                         System.out.println("Error while parsing Bundle: " + e);
                         return "";
                     }
-
-                    return getDiagnosticNarrative(bundleParse, narrative).toString();
                 }
 
             case "Immunization":
