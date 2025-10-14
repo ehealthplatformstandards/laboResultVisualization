@@ -18,38 +18,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BeValidationEngine extends ValidationEngine {
+
     private final PrintStream ps;
 
-    public BeValidationEngine(PrintStream ps, ValidationEngine ve) throws FHIRException, IOException {
+    public BeValidationEngine(final PrintStream ps, final ValidationEngine ve) throws FHIRException, IOException {
         super(ve);
         this.ps = ps;
     }
 
-    public Resource validateContent(List<byte[]> sources, List<String> profiles, List<ValidationRecord> record) throws FHIRException, IOException {
+    public Resource validateContent(final List<byte[]> sources, final List<String> profiles, final List<ValidationRecord> record) throws FHIRException, IOException {
         int idx = 0;
-        boolean asBundle = sources.size() > 1;
-        Bundle results = new Bundle();
+        final boolean asBundle = sources.size() > 1;
+        final Bundle results = new Bundle();
         results.setType(Bundle.BundleType.COLLECTION);
 
-        for (byte[] data: sources) {
-            List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
+        for (final byte[] data : sources) {
+            final List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
 
-            String mimeType = new String(data, 0, 1);
+            final String mimeType = new String(data, 0, 1);
 
             Manager.FhirFormat fhirFormat = Manager.FhirFormat.JSON;
             if (mimeType.equals("<")) {
                 fhirFormat = Manager.FhirFormat.XML;
             }
-            InstanceValidator validator = getValidator(fhirFormat);
+            final InstanceValidator validator = getValidator(fhirFormat);
             validator.validate(null, messages, new ByteArrayInputStream(data), fhirFormat, asSdList(profiles));
             if (record != null) {
                 record.add(new ValidationRecord("--", messages));
             }
             try {
-                OperationOutcome outcome =  ValidatorUtils.messagesToOutcome(messages, getContext(), getFhirPathEngine());
-                ToolingExtensions.addStringExtension(outcome, "http://hl7.org/fhir/StructureDefinition/operationoutcome-file", "data-"+idx);
+                final OperationOutcome outcome = ValidatorUtils.messagesToOutcome(messages, getContext(), getFhirPathEngine());
+                ToolingExtensions.addStringExtension(outcome, "http://hl7.org/fhir/StructureDefinition/operationoutcome-file", "data-" + idx);
                 results.addEntry().setResource(outcome);
-            } catch (EOperationOutcome eOperationOutcome) {
+            } catch (final EOperationOutcome eOperationOutcome) {
                 ps.println("Validation Infrastructure fail validating element " + idx + ": " + eOperationOutcome.getMessage());
                 throw new FHIRException(eOperationOutcome);
             }
@@ -59,30 +60,30 @@ public class BeValidationEngine extends ValidationEngine {
     }
 
     @Override
-    public Resource validate(List<String> sources, List<String> profiles, List<ValidatorUtils.SourceFile> refs, List<ValidationRecord> record, IValidationEngineLoader loader, boolean all, int delay, boolean first) throws FHIRException, IOException {
+    public Resource validate(final List<String> sources, final List<String> profiles, List<ValidatorUtils.SourceFile> refs, final List<ValidationRecord> record, final IValidationEngineLoader loader, final boolean all, final int delay, final boolean first) throws FHIRException, IOException {
 
         if (!profiles.isEmpty()) {
             ps.println("  Profiles: " + profiles);
         }
 
         refs = new ArrayList<>();
-        boolean asBundle = ValidatorUtils.parseSources(sources, refs, this.getContext());
-        Bundle results = new Bundle();
+        final boolean asBundle = ValidatorUtils.parseSources(sources, refs, this.getContext());
+        final Bundle results = new Bundle();
         results.setType(Bundle.BundleType.COLLECTION);
 
-        for(ValidatorUtils.SourceFile ref : refs) {
-            TimeTracker.Session tts = this.getContext().clock().start("validation");
+        for (final ValidatorUtils.SourceFile ref : refs) {
+            final TimeTracker.Session tts = this.getContext().clock().start("validation");
             this.getContext().clock().milestone();
             ps.print("  Validate " + ref);
-            Content cnt = this.getIgLoader().loadContent(ref.getRef(), "validate", false, false);
+            final Content cnt = this.getIgLoader().loadContent(ref.getRef(), "validate", false, false);
 
             try {
-                OperationOutcome outcome = this.validate(ref.getRef(), cnt.getFocus(), cnt.getCntType(), profiles, record);
+                final OperationOutcome outcome = this.validate(ref.getRef(), cnt.getFocus(), cnt.getCntType(), profiles, record);
                 ToolingExtensions.addStringExtension(outcome, "http://hl7.org/fhir/StructureDefinition/operationoutcome-file", ref.getRef());
                 ps.println(" " + this.getContext().clock().milestone());
                 results.addEntry().setResource(outcome);
                 tts.end();
-            } catch (Exception eOperationOutcome) {
+            } catch (final Exception eOperationOutcome) {
                 ps.println("Validation Infrastructure fail validating " + ref + ": " + eOperationOutcome.getMessage());
                 tts.end();
                 throw new FHIRException(eOperationOutcome);

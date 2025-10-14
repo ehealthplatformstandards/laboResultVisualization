@@ -5,32 +5,29 @@ import ca.uhn.fhir.context.FhirContext;
 import org.apache.commons.io.IOUtils;
 import org.hl7.fhir.r4.model.Resource;
 
-import java.awt.Desktop;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.awt.*;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class HtmlPreview implements ResourceProcessor {
+
     private final Visualization visualization;
     private final FhirContext ctx;
     private final ResourceHtmlGenerator htmlGenerator = new ResourceHtmlGenerator();
 
-    public HtmlPreview(Visualization visualization, FhirContext ctx) {
+    public HtmlPreview(final Visualization visualization, final FhirContext ctx) {
         this.visualization = visualization;
         this.ctx = ctx;
     }
 
-    public Integer process(Resource resource) {
-        byte[] html;
+    @Override
+    public Integer process(final Resource resource) {
+        final byte[] html;
         try {
             html = htmlGenerator.generateHtmlRepresentation(ctx, resource, visualization.css != null ?
                     new String(IOUtils.toByteArray(new FileInputStream(visualization.css)), StandardCharsets.UTF_8)
                     : null);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IllegalArgumentException("Invalid css");
         }
 
@@ -38,12 +35,12 @@ public class HtmlPreview implements ResourceProcessor {
 
         if (visualization.display) {
             try {
-                File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.report", ".html");
-                try (OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
+                final File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.report", ".html");
+                try (final OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
                     os.write(html);
                 }
                 Desktop.getDesktop().browse(tmpFile.toURI());
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 //Ignore
             }
         }

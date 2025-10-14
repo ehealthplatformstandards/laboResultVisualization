@@ -7,18 +7,19 @@ import ca.uhn.fhir.parser.IParser;
 import org.hl7.fhir.r4.model.Resource;
 
 public class HtmlNarrativeEmbed implements ResourceProcessor {
+
     private final Visualization visualization;
     private final FhirContext ctx;
-    private INarrativeGenerator generator;
+    private final INarrativeGenerator generator;
 
-    public HtmlNarrativeEmbed(Visualization visualization, FhirContext ctx) {
+    public HtmlNarrativeEmbed(final Visualization visualization, final FhirContext ctx) {
         this.generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/diagnosticreport/narrative.properties");
         this.visualization = visualization;
         this.ctx = ctx;
     }
 
     @Override
-    public Integer process(Resource resource) {
+    public Integer process(final Resource resource) {
         final IParser parser = ctx.newJsonParser().setPrettyPrint(true);
         ctx.setNarrativeGenerator(this.generator);
         final String output = parser

@@ -15,20 +15,28 @@ import java.util.List;
 import java.util.Objects;
 
 public class ResourceHtmlGenerator {
+
     private INarrativeGenerator generator;
 
     public ResourceHtmlGenerator() {
         //this.generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/diagnosticreport/narrative.properties");
     }
 
-    public ResourceHtmlGenerator(INarrativeGenerator generator) {
+    public ResourceHtmlGenerator(final INarrativeGenerator generator) {
         this.generator = generator;
     }
 
+    public static StringBuilder getDiagnosticNarrative(final Bundle bundleParse, final StringBuilder narrative) {
+        return narrative.append(((DiagnosticReport) bundleParse.getEntry().stream()
+                .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
+                .getResource()).getText().getDiv().toString()).append("<br/>");
+    }
+
     //TODO change for other messages
-    public byte[] generateHtmlRepresentation(FhirContext fhirContext, Resource resource, String css) {
+    public byte[] generateHtmlRepresentation(final FhirContext fhirContext, final Resource resource, final String css) {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try(OutputStreamWriter sw = new OutputStreamWriter(bos, StandardCharsets.UTF_8)) {
+        try (final OutputStreamWriter sw = new OutputStreamWriter(bos, StandardCharsets.UTF_8)) {
             sw.append("<html><head><style>");
             sw.append(css != null ? css :
                     new String(IOUtils.toByteArray(Objects.requireNonNull(this.getClass().getResourceAsStream("/narratives/diagnosticreport/narrative.css"))), StandardCharsets.UTF_8)
@@ -36,21 +44,21 @@ public class ResourceHtmlGenerator {
             sw.append("</style></head><body>\r\n");
             sw.append(generateDivRepresentation(fhirContext, resource, css));
             sw.append("</body></html>\r\n");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         return bos.toByteArray();
     }
 
-    public String generateDivRepresentation(FhirContext fhirContext, Resource resource, String css) {
-        IParser parser;
+    public String generateDivRepresentation(final FhirContext fhirContext, final Resource resource, final String css) {
+        final IParser parser;
 
         switch (resource.getResourceType().toString()) {
             case "Bundle":
                 Bundle bundle = (Bundle) resource;
 
-                List<CanonicalType> profiles = bundle.getMeta().getProfile();
-                String mainProfile = profiles.isEmpty() ? "" : profiles.get(0).getValue();
+                final List<CanonicalType> profiles = bundle.getMeta().getProfile();
+                final String mainProfile = profiles.isEmpty() ? "" : profiles.get(0).getValue();
 
                 StringBuilder narrative = new StringBuilder();
                 generator = new CustomThymeleafNarrativeGenerator("classpath:/narratives/diagnosticreport/narrative.properties");
@@ -60,7 +68,7 @@ public class ResourceHtmlGenerator {
                 Bundle bundleParse;
                 if ("Bundle".equals(bundle.getEntryFirstRep().getResource().getResourceType().toString())) {
                     do {
-                        for (Bundle.BundleEntryComponent bundleEntryComponent : bundle.getEntry()) {
+                        for (final Bundle.BundleEntryComponent bundleEntryComponent : bundle.getEntry()) {
                             bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(bundleEntryComponent.getResource())));
                             narrative = getDiagnosticNarrative(bundleParse, narrative);
                         }
@@ -80,7 +88,7 @@ public class ResourceHtmlGenerator {
                                 bundleParse = parser.parseResource(Bundle.class, parser.encodeResourceToString(FhirNarrativeUtils.stripNarratives(resource)));
                                 return getDiagnosticNarrative(bundleParse, narrative).toString();
                         }
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         System.out.println("Error while parsing Bundle: " + e);
                         return "";
                     }
@@ -120,15 +128,6 @@ public class ResourceHtmlGenerator {
                 //
                 return "";
         }
-
-
-    }
-
-    public StringBuilder getDiagnosticNarrative(Bundle bundleParse, StringBuilder narrative) {
-        return narrative.append(((DiagnosticReport) bundleParse.getEntry().stream()
-                .filter(e -> e.getResource().fhirType().equals("DiagnosticReport")).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Bundle must contain a DiagnosticReport"))
-                .getResource()).getText().getDiv().toString()).append("<br/>");
 
 
     }

@@ -22,31 +22,30 @@ import static org.hl7.fhir.r4.model.FhirNarrativeUtils.stripNarratives;
 
 @Command(name = "fhirpreview", mixinStandardHelpOptions = true)
 public class Visualization implements Callable<Integer> {
-    @Option(names = { "-s", "--style" }, description = "Style")
+
+    private final PrintStream output;
+    @Option(names = {"-s", "--style"}, description = "Style")
     protected File css;
-
-    @Option(names = { "-d", "--display" }, description = "Display generated document in visualizer")
+    @Option(names = {"-d", "--display"}, description = "Display generated document in visualizer")
     protected Boolean display = false;
-
     //TODO rendre mandatory l'IG
-    @Option(names = { "-v", "--validate" }, arity = "1..1",
+    @Option(names = {"-v", "--validate"}, arity = "1..1",
             description = {
                     "Validate the resource.",
                     "If absent, validation is not performed.",
-                    "Optionally specify a list of URLs, separated by a comma, to implementation guides to be used for validation. (fallback: ${FALLBACK-VALUE})." },
+                    "Optionally specify a list of URLs, separated by a comma, to implementation guides to be used for validation. (fallback: ${FALLBACK-VALUE})."},
             split = ",")
     protected String[] implementationGuideUrls;
+    @Parameters(description = "Action to perform on file. May be one of ${COMPLETION-CANDIDATES}", index = "0")
+    private Action action;
+    @Parameters(index = "1")
+    private File file;
+    @Parameters(index = "2")
+    private String profile;
+    @Spec
+    private CommandSpec spec;
 
-    @Parameters(description = "Action to perform on file. May be one of ${COMPLETION-CANDIDATES}", index = "0") private Action action;
-    @Parameters(index = "1") private File file;
-
-    @Parameters(index = "2") private String profile;
-
-    @Spec private CommandSpec spec;
-
-    private final PrintStream output;
-
-    public Visualization(PrintStream output) {
+    public Visualization(final PrintStream output) {
         this.output = output;
     }
 
@@ -63,7 +62,7 @@ public class Visualization implements Callable<Integer> {
                 if (display) {
                     final String html = validated.getRight();
                     final File tmpFile = File.createTempFile("be.fgov.ehealth.fhir.validation", ".html");
-                    try (OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
+                    try (final OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
                         os.write(html.getBytes());
                     }
                     Desktop.getDesktop().browse(tmpFile.toURI());
@@ -76,32 +75,32 @@ public class Visualization implements Callable<Integer> {
         IParser parser = null;
 
         if (FilenameUtils.getExtension(file.getAbsolutePath()).equals("json")) {
-            parser  = ctx.newJsonParser();
-        } else if (FilenameUtils.getExtension(file.getAbsolutePath()).equals("xml") ) {
+            parser = ctx.newJsonParser();
+        } else if (FilenameUtils.getExtension(file.getAbsolutePath()).equals("xml")) {
             parser = ctx.newXmlParser();
         }
 
-        IBaseResource resource = parser.parseResource(new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8));
+        final IBaseResource resource = parser.parseResource(new String(readAllBytes(file.toPath()), StandardCharsets.UTF_8));
 
-        switch (resource.fhirType()){
+        switch (resource.fhirType()) {
             case "Immunization":
-                Immunization immunization = (Immunization) stripNarratives((Resource) resource);
+                final Immunization immunization = (Immunization) stripNarratives((Resource) resource);
                 return action.execute(this, ctx, immunization);
 
             case "Bundle":
-                Bundle bundle = (Bundle) stripNarratives((Resource)resource);
+                final Bundle bundle = (Bundle) stripNarratives((Resource) resource);
                 return action.execute(this, ctx, bundle);
 
             case "AllergyIntolerance":
-                AllergyIntolerance allergy = (AllergyIntolerance) stripNarratives((Resource)resource);
+                final AllergyIntolerance allergy = (AllergyIntolerance) stripNarratives((Resource) resource);
                 return action.execute(this, ctx, allergy);
 
             case "ServiceRequest":
-                ServiceRequest serviceRequest = (ServiceRequest) stripNarratives((Resource)resource);
+                final ServiceRequest serviceRequest = (ServiceRequest) stripNarratives((Resource) resource);
                 return action.execute(this, ctx, serviceRequest);
 
             case "Task":
-                Task task = (Task) stripNarratives((Resource)resource);
+                final Task task = (Task) stripNarratives((Resource) resource);
                 return action.execute(this, ctx, task);
 
             default:
@@ -120,16 +119,17 @@ public class Visualization implements Callable<Integer> {
 
         private final ActionLambda executor;
 
-        Action(ActionLambda executor) {
+        Action(final ActionLambda executor) {
             this.executor = executor;
         }
 
-        public Integer execute(Visualization visualization, FhirContext ctx, Resource resource) throws Exception {
+        public Integer execute(final Visualization visualization, final FhirContext ctx, final Resource resource) throws Exception {
             return executor.execute(visualization, ctx, resource);
         }
 
         public interface ActionLambda {
-            Integer execute(Visualization visualization, FhirContext ctx,  Resource resource) throws Exception;
+
+            Integer execute(Visualization visualization, FhirContext ctx, Resource resource) throws Exception;
         }
     }
 }
