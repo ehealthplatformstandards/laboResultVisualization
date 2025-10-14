@@ -37,13 +37,17 @@ public class FhirValidator {
         validator = validationService.initializeValidator(cliContext, definitions, tt);
     }
 
+    private static String toHml(final List<ValidationRecord> records) {
+        return (new HTMLOutputGenerator(records)).generate(System.currentTimeMillis());
+    }
+
     public Pair<Integer, String> validate(final String source) throws Exception {
         // add source
         cliContext.setSources(singletonList(source));
 
         // validate
         final List<ValidationRecord> records = new ArrayList<>();
-        final Resource resource = validator.validate(cliContext.getSources(), cliContext.getProfiles(), null, records,null,false,0,false);
+        final Resource resource = validator.validate(cliContext.getSources(), cliContext.getProfiles(), null, records, null, false, 0, false);
         final int errors = validationService.displayOperationOutcome((OperationOutcome) resource, false, cliContext.isCrumbTrails());
 
         // return hasErrors and html
@@ -58,9 +62,5 @@ public class FhirValidator {
 
         // return hasErrors and html
         return Pair.of(errors, toHml(records));
-    }
-
-    private String toHml(final List<ValidationRecord> records) {
-        return (new HTMLOutputGenerator(records)).generate(System.currentTimeMillis());
     }
 }

@@ -4,14 +4,15 @@ import org.hl7.fhir.r4.model.FhirNarrativeUtils;
 import org.hl7.fhir.r4.model.Resource;
 
 public class HtmlNarrativeExtract implements ResourceProcessor {
+
     private final Visualization visualization;
 
-    public HtmlNarrativeExtract(Visualization visualization) {
+    public HtmlNarrativeExtract(final Visualization visualization) {
         this.visualization = visualization;
     }
 
     @Override
-    public Integer process(Resource resource) {
+    public Integer process(final Resource resource) {
         FhirNarrativeUtils.collectNarratives(resource).forEach(x -> {
             visualization.getOutput().println(x.getLeft());
             visualization.getOutput().println(x.getRight());

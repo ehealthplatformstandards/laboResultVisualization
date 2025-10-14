@@ -5,14 +5,14 @@ import picocli.CommandLine;
 
 import java.io.PrintStream;
 
-public class App
-{
-    public static void main(String[] args ) {
-        PrintStream out = System.out;
+public class App {
+
+    public static void main(final String[] args) {
+        final PrintStream out = System.out;
         System.exit(commandLine(args, out));
     }
 
-    public static int commandLine(String[] args, PrintStream out) {
+    public static int commandLine(final String[] args, final PrintStream out) {
         return new CommandLine(new Visualization(out)).execute(args);
     }
 }
